@@ -1,18 +1,22 @@
 # Git
 ## Account & Connection
-1. Setting the mailbox
+1. Initialize your folder as the local repo
+   ```git
+   git init
+   ```
+2. Setting the mailbox
     ```git
    git config --global user.email xxxx
     ```
-2. Display all the Git setting lists and their origins
+3. Display all the Git setting lists and their origins
    ```git
    git config --list --show-origin
    ```
-3. Test the connection
+4. Test the connection
    ```git
    ssh -T git@github.com
    ```
-4. Change an interface
+5. Change an interface
    ```git
    git config --global http.proxy "http://127.0.0.1:8080"
    ```
@@ -69,14 +73,14 @@
    ```git
    git branch --delete dev 
    ```
-8. Trace back\
+6. Trace back\
 Please be cautious when using **--hard** as it will **PERMANENTLY delete any uncommitted changes.**\
 It's best to back up a file somewhere else first. This is based on my painful experience.
    * To a certain version(versionNumber).
    ```git
    git reset --hard versionNumber
-    ```
+   ```
    * To the latest version.
-    ```git
+   ```git
    git reset --hard
-    ```
+   ```

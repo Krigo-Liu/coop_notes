@@ -6,3 +6,4 @@ This is a cooperated repository for computer science notes in markdown files.
 ## Future work: 
 1. maintenance
 2. autodl or some other servers commands, maybe.
+3. notes in other disciplines.

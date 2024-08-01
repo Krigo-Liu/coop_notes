@@ -1,3 +1,16 @@
+---
+title: Git
+icon: file
+order: 1
+author: Doris
+category:
+  - CS
+tags:
+  - Computer
+footer: 
+copyright: free
+date: 2024-08-01
+---
 # Git
 ## Account & Connection
 1. Initialize your folder as the local repo

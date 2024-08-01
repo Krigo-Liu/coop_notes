@@ -1,3 +1,16 @@
+---
+title: Anaconda
+icon: file
+order: 2
+author: Doris
+category:
+  - CS
+tags:
+  - Computer
+footer: 
+copyright: free
+date: 2024-08-01
+---
 # Anaconda
 
 1. Display all the environments

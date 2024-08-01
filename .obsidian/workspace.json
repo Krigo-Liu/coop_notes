@@ -1,0 +1,161 @@
+{
+  "main": {
+    "id": "2eb1e88ea6e98cac",
+    "type": "split",
+    "children": [
+      {
+        "id": "171f0aa1434c19c8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "892acd5f6fe8b2e3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Fin/Trading on MT5.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "9cab770db2453d11",
+    "type": "split",
+    "children": [
+      {
+        "id": "64f55d4db2f079fb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "40f24cc90c115771",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "1b3983cde7a29d5d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:CS",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "86213ff5f068606a",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "30286b4d406d184a",
+    "type": "split",
+    "children": [
+      {
+        "id": "6f2d8a7e97224d86",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ee3973fc3f055ed0",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Fin/Trading on MT5.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "133347cf4ddec8b1",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Fin/Trading on MT5.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "f9c01625b37ac15b",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "76a800fc80085770",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Fin/Trading on MT5.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "40f24cc90c115771",
+  "lastOpenFiles": [
+    "Fin/Macroeconomy.md",
+    "Fin/Trading on MT5.md",
+    "CS/cmd.md",
+    "CS/git.md",
+    "CS/conda.md",
+    "CS",
+    "Fin",
+    "README.md",
+    "2024-05-30.md"
+  ]
+}

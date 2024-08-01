@@ -14,28 +14,31 @@ date: 2024-08-01
 ## Terms
 
 Price & Order
-- **Ask Price**: The lowest price a seller is willing to accept for an asset.
+- **Ask Price(卖价)**: The lowest price a seller is willing to accept for an asset.
     
-- **Bid Price**: The highest price a buyer is willing to pay for an asset.
+- **Bid Price(买价)**: The highest price a buyer is willing to pay for an asset.
     
-- **Spread**: The difference between the bid price and the ask price.
+- **Spread(价差)**: The difference between the bid price and the ask price.
     
-- **Bull Market**: A market condition where prices are rising or are expected to rise.
+- **Bull Market(牛市)**: A market condition where prices are rising or are expected to rise.
     
-- **Bear Market**: A market condition where prices are falling or are expected to fall.
+- **Bear Market(熊市)**: A market condition where prices are falling or are expected to fall.
     
-- **Volatility**: A statistical measure of the dispersion of returns for a given security or market index.
+- **Volatility(波动性)**: A statistical measure of the dispersion of returns for a given security or market index.
     
-- **Liquidity**: The ease with which an asset can be converted into cash without affecting its market price.
+- **Liquidity(流动性)**: The ease with which an asset can be converted into cash without affecting its market price.
 
 Order
-- **Market Order**: An order to buy or sell a security immediately at the best available current price.
+- **Market Order(市价单)**: An order to buy or sell a security immediately at the best available current price.
     
-- **Limit Order**: An order to buy or sell a security at a specific price or better.
+- **Limit Order(限价单)**: An order to buy or sell a security at a specific price or better.
     
-- **Stop-Loss Order**: An order placed to sell a security
-    
+- **Stop-Loss Order(止损单)**: An order placed to sell a security
+
+Amount
 - **Lot (手)**: A standard unit of trading in financial markets, representing a fixed quantity of an asset.
+    
+- **Lot Size (手数)**: The number of units of an asset in one lot.
     
 - **Standard Lot (标准手)**: In forex trading, a standard lot is typically 100,000 units of the base currency.
     
@@ -48,8 +51,6 @@ Order
 - **Round Lot (整手)**: A quantity of shares that is a multiple of 100.
     
 - **Odd Lot (零股)**: A quantity of shares that is less than a round lot, typically less than 100 shares.
-    
-- **Lot Size (手数)**: The number of units of an asset in one lot.
     
 - **Contract Size (合约规模)**: The deliverable quantity of commodities or financial instruments underlying futures contracts in one lot.
     

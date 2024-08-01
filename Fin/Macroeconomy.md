@@ -13,26 +13,27 @@ date: 2024-08-01
 ---
 ## 1 Big concepts
 
-1. Asset 资产
+1. Asset 资产\
 	An asset is something of value of the owner.
     
 2. Security
     
     A security is a document which entitles the holder to some asset of another person. Almost all securities can be considered an **asset of the holder** ("securitize an asset"), but not all assets are securities. 
-    > 3 categories:
-	    debt securities (bonds)  债券
-		equity securities (stocks) 股票
-		derivative securities 衍生证券
-    > There are 3 options if you own a business and needing money ($1,000,000), except for getting a loan from a bank [1]：
+    > 3 categories:\
+	    - debt securities (bonds)  债券\
+		- equity securities (stocks) 股票\
+		- derivative securities 衍生证券
 
-	- Bond
+    There are 3 options if you own a business and needing money ($1,000,000), except for getting a loan from a bank [1]:
+
+	- **Bond**\
 		An investment bank helps you issue a $1,000,000 bond with a fixed interest rate. If you can't repay, creditors can *take control of your company and sell assets*. Bonds are safer than stocks because creditors have priority. Bondholders might get something back if the company goes bankrupt.
 
-	- Equity Security (Stock)
+	- **Equity Security (Stock)**\
 	  You sell 10,000 shares at $100 each, raising $1,000,000. Stockholders own part of the company but don’t get fixed interest. They might receive dividends. Stockholders won’t be liable beyond their investment if the company goes bankrupt.
 
-	- Derivative Securities  
-		These include forwards（远期）, swaps（掉期）, futures（期货）, and options（期权）, used to hedge against price changes in commodities, currencies, and interest rates.These are basically **bets on the price a commodity** (anything from milk to corn to oil to cows to stocks to bets on interest rates and currencies, etc.). Companies use these to protect themselves against future price changes. Companies like McDonald's and Southwest Airlines use derivatives to stabilize costs for inputs like beef and oil. Multinational companies use them to manage currency exchange risks.
+	- **Derivative Securities**  
+    These include forwards（远期）, swaps（掉期）, futures（期货）, and options（期权）, used to hedge against price changes in commodities, currencies, and interest rates.These are basically **bets on the price a commodity** (anything from milk to corn to oil to cows to stocks to bets on interest rates and currencies, etc.). Companies use these to protect themselves against future price changes. Companies like McDonald's and Southwest Airlines use derivatives to stabilize costs for inputs like beef and oil. Multinational companies use them to manage currency exchange risks.
 	
 
 ## 2 Particular Products
@@ -50,13 +51,13 @@ date: 2024-08-01
 				2) . 黄金期货Futures(远大于ETF，ETF只占零头)：主要的交易：纽约COMEX, 上海期货交易所。
 				3) . ETF: _exchange-traded fund_  is a basket of securities that tracks or seeks to outperform an underlying index [3].
 		4. **Others 15%** 电子器件、镶牙、食品……
-	3. Price：由于黄金不产生现金流，也没有估值
+	3. Price：由于黄金不产生现金流，也没有估值，所以从供需上考虑。
 		1. Supply：较为稳定，忽略
-		2. Demand：珠宝和投资负相关。市场信心不好，买黄金。长周期15年以上黄金的确可以起到一定的抗通胀和避险的功能，短期内失灵。中短期内左右金价剧烈波动的原因3) 、4).
-			1) . Inflation hedge抗通胀。黄金美元负相关。
-			2) . Risk hedge避险。黄金和其它资产（e.g.股票）负相关
+		2. Demand：珠宝和投资负相关。市场信心不好，买黄金。长周期15年以上黄金的确可以起到一定的抗通胀和避险的功能，短期内失灵：中短期内左右金价剧烈波动的原因3) 、4).
+			1) . Inflation hedge 抗通胀。黄金美元负相关。
+			2) . Risk hedge 避险。黄金和其它资产（e.g.股票）负相关
 			3) . 人对黄金的偏好喜爱。gold bug（喜爱黄金的人）
-			4) . speculation投机。散户多，追涨杀跌，金价快长慢跌。
+			4) . speculation 投机。散户多，追涨杀跌，金价快长慢跌。
 	4. Why recent rally(sustained increase in prices over a period of time)：结合全球政治，市场普遍避险预期；黄金在社会圈讨论度上升，一定程度上激发了人的偏爱和投机心理。
 	5. investment tips：金价波动不小于股票；希望避险的话需要站在10年以上的尺度考虑；实体黄金交易成本较高（5%~20%）；长期、大量资金配置在（重仓）黄金不是最优解；难量化影响因素，谨慎相信技术分析。
 

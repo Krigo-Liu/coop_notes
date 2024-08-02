@@ -8,12 +8,12 @@
         "type": "tabs",
         "children": [
           {
-            "id": "892acd5f6fe8b2e3",
+            "id": "f6d653823d9f49a1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Fin/Trading on MT5.md",
+                "file": "Fin/Direction.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Fin/Trading on MT5.md",
+                "file": "Fin/Direction.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Fin/Trading on MT5.md",
+                "file": "Fin/Direction.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Fin/Trading on MT5.md"
+                "file": "Fin/Direction.md"
               }
             }
           }
@@ -146,14 +146,17 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "40f24cc90c115771",
+  "active": "f6d653823d9f49a1",
   "lastOpenFiles": [
-    "Fin/Macroeconomy.md",
-    "Fin/Trading on MT5.md",
-    "CS/cmd.md",
-    "CS/git.md",
-    "CS/conda.md",
-    "CS",
+    "Fin/Finance.md",
+    "Fin/Statistics.md",
+    "Fin/Direction.md",
+    "Fin/Maths.md",
+    "Fin/CS.md",
+    "others/cmd.md",
+    "others/git.md",
+    "others/conda.md",
+    "others",
     "Fin",
     "README.md",
     "2024-05-30.md"

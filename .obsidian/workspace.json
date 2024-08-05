@@ -4,19 +4,15 @@
     "type": "split",
     "children": [
       {
-        "id": "9441a52c3d180c9c",
+        "id": "2a918ec6768efbc4",
         "type": "tabs",
         "children": [
           {
-            "id": "acb943307c118bc1",
+            "id": "7b14b5c2828e162c",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Fin/Statistics.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           }
         ]
@@ -48,7 +44,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:CS",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -85,7 +81,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Fin/Statistics.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +97,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Fin/Statistics.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -124,9 +118,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "Fin/Statistics.md"
-              }
+              "state": {}
             }
           }
         ]
@@ -146,17 +138,25 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "acb943307c118bc1",
+  "active": "7b14b5c2828e162c",
   "lastOpenFiles": [
-    "Pasted image 20240803223049.png",
-    "Fin/df.png",
-    "Pasted image 20240803223033.png",
-    "Fin/Statistics.md",
-    "Fin/CS.md",
-    "others/qf formulas.md",
     "Fin/Finance.md",
     "Fin/Maths.md",
+    "Fin/Pasted image 20240803223049.png",
     "Fin/Direction.md",
+    "Fin/df.png",
+    "Fin/CS.md",
+    "Fin/Statistics.md",
+    "Fin/Pasted image 20240805151510.png",
+    "Fin/Pasted image 20240805144951.png",
+    "Fin/Pasted image 20240804224633.png",
+    "Fin/Pasted image 20240804224532.png",
+    "Fin/Pasted image 20240804224435.png",
+    "Fin/Pasted image 20240804223726.png",
+    "Fin/Pasted image 20240804145903.png",
+    "2024-08-01.md",
+    "Pasted image 20240803223033.png",
+    "others/qf formulas.md",
     "others/git.md",
     "others/conda.md",
     "others/cmd.md",

@@ -13,8 +13,8 @@ date: 2024-08-01
 ---
 ## Contents to be updated [1]
 1. Statistics
-	1. Regression: OLS, GLM, logistic, and etc.
-	2. Time-series : ARIMA, GARCH, ECM
+	~~1. Regression: OLS, GLM, logistic, and etc.~~
+	~~2. Time-series : ARIMA, GARCH, ECM~~
 	3. Nonparametric Regression: Splines, Kernel, Locally Weighted Regression
 	4. Data exploration: Density, estimation, normality, tests, monte carlo copulas
 	5. Data Cleaning and reduction: Cluster analysis, and stats theory
@@ -33,7 +33,7 @@ date: 2024-08-01
 	1. Equity: stock analysis, diversification,~~technical analysis~~, finance theory
 	2. fixed income: rate curves, pricing duration, TVM
 	3. derivatives: black scholes, BDT, stochastic volatility model, volatitlity sailes and theory
-	4. portfolio optimization: CVaR, effticient frontier
+	4. portfolio optimization: CVaR, efficient frontier
 	5. arbitrage theory and statistical, arbitrage
 	6. risk management: VaR, statistics, credit risk, market risk, liquidity
 # References:

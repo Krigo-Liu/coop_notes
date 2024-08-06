@@ -13,8 +13,8 @@ date: 2024-08-01
 ---
 ## Contents to be updated [1]
 1. Statistics
-	~~1. Regression: OLS, GLM, logistic, and etc.~~
-	~~2. Time-series : ARIMA, GARCH, ECM~~
+	1. ~~Regression: OLS, GLM, logistic, and etc.~~
+	2. ~~Time-series : ARIMA, GARCH, ECM~~
 	3. Nonparametric Regression: Splines, Kernel, Locally Weighted Regression
 	4. Data exploration: Density, estimation, normality, tests, monte carlo copulas
 	5. Data Cleaning and reduction: Cluster analysis, and stats theory

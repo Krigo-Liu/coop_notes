@@ -11,8 +11,12 @@
             "id": "7b14b5c2828e162c",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "Fin/Statistics.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -65,7 +69,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "30286b4d406d184a",
@@ -81,6 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Fin/Statistics.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Fin/Statistics.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +125,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "Fin/Statistics.md"
+              }
             }
           }
         ]
@@ -140,12 +149,14 @@
   },
   "active": "7b14b5c2828e162c",
   "lastOpenFiles": [
+    "nonpar.pdf",
+    "nonpar.pdf.crdownload",
     "Fin/Finance.md",
     "Fin/Maths.md",
+    "Fin/CS.md",
     "Fin/Pasted image 20240803223049.png",
     "Fin/Direction.md",
     "Fin/df.png",
-    "Fin/CS.md",
     "Fin/Statistics.md",
     "Fin/Pasted image 20240805151510.png",
     "Fin/Pasted image 20240805144951.png",

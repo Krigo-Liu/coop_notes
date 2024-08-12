@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "2a918ec6768efbc4",
+        "id": "8e32dac80abd22f1",
         "type": "tabs",
         "children": [
           {
-            "id": "7b14b5c2828e162c",
+            "id": "698458053c397c3c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Fin/Statistics.md",
+                "file": "Fin/Finance.md",
                 "mode": "source",
                 "source": false
               }
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Fin/Statistics.md",
+                "file": "Fin/Finance.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Fin/Statistics.md",
+                "file": "Fin/Finance.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Fin/Statistics.md"
+                "file": "Fin/Finance.md"
               }
             }
           }
@@ -147,17 +147,21 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "7b14b5c2828e162c",
+  "active": "698458053c397c3c",
   "lastOpenFiles": [
+    "others/cmd.md",
+    "Fin/Finance.md",
+    "others/conda.md",
+    "others/git.md",
+    "Fin/Statistics.md",
+    "Fin/tradingtimeline.drawio",
     "nonpar.pdf",
     "nonpar.pdf.crdownload",
-    "Fin/Finance.md",
     "Fin/Maths.md",
     "Fin/CS.md",
     "Fin/Pasted image 20240803223049.png",
     "Fin/Direction.md",
     "Fin/df.png",
-    "Fin/Statistics.md",
     "Fin/Pasted image 20240805151510.png",
     "Fin/Pasted image 20240805144951.png",
     "Fin/Pasted image 20240804224633.png",
@@ -168,9 +172,6 @@
     "2024-08-01.md",
     "Pasted image 20240803223033.png",
     "others/qf formulas.md",
-    "others/git.md",
-    "others/conda.md",
-    "others/cmd.md",
     "others",
     "Fin",
     "README.md",

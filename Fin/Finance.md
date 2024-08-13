@@ -37,25 +37,24 @@ date: 2024-08-12
 
    A security is a document which entitles the holder to some asset of another person. Almost all securities can be considered an **asset of the holder** ("securitize an asset"), but not all assets are securities.
 
-   > 3 categories:
-   >
-   > - debt securities (bonds)  债券：Bonds, Treasury bills, and certificates of deposit.
-   > - equity securities (stocks) 股票：Common stocks, preferred stocks, index funds, and ETFs.
-   > - derivative securities 衍生证券:
-   > - stock index futures(股指期货)：buy or sell the value of a specific stock index at a predetermined future date and price.
-   > - stock index options(股指期权):These are options that give the holder the right, but not the obligation, to buy or sell the value of a specific stock index at a predetermined price before or at the expiration date.
-   > -
-   >
+   > 4 categories:
+   > - Debt securities (bonds)  债券：Bonds, Treasury bills, and certificates of deposit.
+   > - Equity securities (stocks) 股票：Common stocks, preferred stocks, index funds, and ETFs.
+   > - Derivative securities 衍生证券:
+   >   - stock index futures(股指期货)：buy or sell the value of a specific stock index at a predetermined future date and price.
+   >   - stock index options(股指期权):These are options that give the holder the right, but not the obligation, to buy or sell the value of a specific stock index at a predetermined price before or at the expiration date.
+   > - Hybrid securities: convertible bonds, preferred shares, equity-linked notes(ELNs) 
+
 
    There are 3 options if you own a business and needing money ($1,000,000), except for getting a loan from a bank [1]:
-
    - **Bond**
      An investment bank helps you issue a $1,000,000 bond with a fixed interest rate. If you can't repay, creditors can *take control of your company and sell assets*. Bonds are safer than stocks because creditors have priority. Bondholders might get something back if the company goes bankrupt.
    - **Equity Security (Stock)**
      You sell 10,000 shares at $100 each, raising $1,000,000. Stockholders own part of the company but don’t get fixed interest. They might receive dividends (amout varies from y to y.). Stockholders won’t be liable beyond their investment if the company goes bankrupt. //From the market view: stock prices are det. by the value & expected performance of the company -> bid and ask behavior. The future price is uncertain. Volatility determines the amount of stock price differ from the expected value.
    - **Derivative Securities**
      These include forwards（远期）, swaps（掉期）, futures（期货）, and options（期权）, used to hedge against price changes in commodities, currencies, and interest rates.These are basically **bets on the price a commodity** (anything from milk to corn to oil to cows to stocks to bets on interest rates and currencies, etc.). Companies use these to protect themselves against future price changes. Companies like McDonald's and Southwest Airlines use derivatives to stabilize costs for inputs like beef and oil. Multinational companies use them to manage currency exchange risks.
-4. stock index is not tradable. A stock index is a **statistical measure** that reflects the **composite value of a selected group of stocks**. It is used to represent the performance of a specific section of the stock market, or the market as a whole, and is often used by investors to compare the performance of their investments.
+
+5. stock index is not tradable. A stock index is a **statistical measure** that reflects the **composite value of a selected group of stocks**. It is used to represent the performance of a specific section of the stock market, or the market as a whole, and is often used by investors to compare the performance of their investments.
    But there are some primary tradable instruments **based on** stock indices:
 
    1. **Index Funds**:
@@ -76,12 +75,33 @@ Players:
 
 1. Issuers(发行人): entities seeking to raise capital. companies, governments,...
 2. Underwriters (承销商): help to price & sell the new securities: investment banks
+
+| **Criteria**             |   **Investment Banking (IB)**                              |
+| ------------------------ |----------------------------------------------------------- |
+| **Stage of Investment**  |Assists companies at various stages (e.g., IPO, M&A)        |
+| **Investment Size**      | No direct investment; earns fees for services              |
+| **Risk Level**           |  No direct risk; focuses on advisory roles                 |
+| **Investment Horizon**   |Focuses on transactions, often short-term engagements       |
+| **Ownership Stake**      |No ownership; provides financial advisory services          |
+| **Level of Involvement** |  Advisory role, facilitating transactions                  |
+| **Return Expectations**  |  Fee-based, with no direct return on investments           |
+| **Target Companies**     | Companies looking to raise capital, merge, or go public    |
+| **Exit Strategy**        | Varies by service, including IPOs, M&A, and capital raising|
+
+
 3. Investors (institutional and individual): who purchase the newly issued securities. Retail investors are less common in primary markets.
 
-   |                      | stage              | size            | risk & return     | ownership       |
-   | -------------------- | ------------------ | --------------- | ----------------- | --------------- |
-   | venture capital (VC) | seed stage         | smaller(rounds) | high,high         | minority stakes |
-   | private equity (PE)  | mature(profitable) | bigger          | lower,more steady | majority stakes |
+| **Criteria**             | **Angel Investors**                                   | **Venture Capital (VC)**                            | **Private Equity (PE)**                                |
+| ------------------------ |-------------------------------------------------------|-----------------------------------------------------| ------------------------------------------------------ |
+| **Stage of Investment**  | Early-stage startups, often at the idea or seed stage | Early to growth-stage companies                     | Established companies, often mature businesses         |
+| **Investment Size**      | Smaller amounts, typically \$10,000  to \$100,000     | Larger amounts, often \$1 million to \$100+ million | Very large amounts, can be in billions                 |
+| **Risk Level**           | Very high, with a high chance of failure              | High, but with structured diligence and portfolio   | Lower than VC; targets companies with proven models    |
+| **Investment Horizon**   | Short to medium-term (3-7 years)                      | Medium-term (5-10 years)                            | Medium to long-term (5-10+ years)                      |
+| **Ownership Stake**      | Minority stake, often non-controlling                 | Significant minority or majority stake              | Majority or full ownership                             |
+| **Level of Involvement** | Hands-on, often mentoring and guiding the startup     | Active involvement in strategic decisions           | Active in management, restructuring, or strategy       |
+| **Return Expectations**  | Extremely high returns, sometimes 10x or more         | High returns, typically 3-10x on investment         | Stable returns, often focused on long-term growth      |
+| **Target Companies**     | Innovative startups with high growth potential        | High-growth companies, often in tech or biotech     | Established businesses, often underperforming          |
+| **Exit Strategy**        | IPO, acquisition by larger company                    | IPO, acquisition, or secondary sale                 | Sale of the company, IPO, or dividend recapitalization |
 
 Events:
 
@@ -163,7 +183,9 @@ OTC:"over-the-counter" generally refers to stocks that are not trading on a stoc
    5. investment tips：金价波动不小于股票；希望避险的话需要站在10年以上的尺度考虑；实体黄金交易成本较高（5%~20%）；长期、大量资金配置在（重仓）黄金不是最优解；难量化影响因素，谨慎相信技术分析。
 
 ## 3 Trading on MT5
+
 ### 3.1 Time
+
 1. Time zone: UTC+x. 东x区。UTC-x。西x区。
 2. 美国东部时区：
    - EST (Eastern Standard Time)，UTC-5
@@ -171,12 +193,14 @@ OTC:"over-the-counter" generally refers to stocks that are not trading on a stoc
    - EDT (Eastern Daylight Time), UTC-4。夏令时，比标准时间早一个小时
      - 从3月的第二个星期日到11月的第一个星期日。
 3. my broker server: UTC+3
+
 ### 3.2  Trading Times Overview (UTC+8)
 
 #### 1. Trading Times for Stocks
 
+
 | **Market** | **Country** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
-|------------|-------------|--------------------------------|--------------------------------|
+| ---------- | ----------- | ------------------------------ | ------------------------------ |
 | NYSE       | US          | 21:30                          | 04:00 (next day)               |
 | NASDAQ     | US          | 21:30                          | 04:00 (next day)               |
 | SSE        | China       | 09:30                          | 15:00                          |
@@ -184,36 +208,37 @@ OTC:"over-the-counter" generally refers to stocks that are not trading on a stoc
 
 #### 2. Trading Times for Stock Index Futures
 
-| **Market** | **Country** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
-|------------|-------------|--------------------------------|--------------------------------|
-| CME (S&P 500, Dow Jones, etc.) | US   | 06:00                          | 05:00 (next day)               |
-| SGX (FTSE China A50 Index Futures) | China  | 09:00                          | 18:00                          |
+
+| **Market**                         | **Country** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
+| ---------------------------------- | ----------- | ------------------------------ | ------------------------------ |
+| CME (S&P 500, Dow Jones, etc.)     | US          | 06:00                          | 05:00 (next day)               |
+| SGX (FTSE China A50 Index Futures) | China       | 09:00                          | 18:00                          |
 
 #### 3. Trading Times for Commodities and Options
 
 #### US Commodities
 
+
 | **Commodity** | **Market** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
-|---------------|------------|--------------------------------|--------------------------------|
+| ------------- | ---------- | ------------------------------ | ------------------------------ |
 | Crude Oil     | NYMEX      | 06:00                          | 05:00 (next day)               |
 | Gold          | COMEX      | 06:00                          | 05:00 (next day)               |
 
 #### China Commodities
 
+
 | **Commodity** | **Market** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
-|---------------|------------|--------------------------------|--------------------------------|
+| ------------- | ---------- | ------------------------------ | ------------------------------ |
 | Iron Ore      | DCE        | 09:00                          | 11:30                          |
 | Soybean       | DCE        | 09:00                          | 11:30                          |
 
 #### Options
 
+
 | **Market** | **Country** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
-|------------|-------------|--------------------------------|--------------------------------|
+| ---------- | ----------- | ------------------------------ | ------------------------------ |
 | CBOE       | US          | 21:30                          | 04:00 (next day)               |
 | SHFE       | China       | 09:00                          | 15:00                          |
-
-
-
 
 ### 3.2 Terms
 

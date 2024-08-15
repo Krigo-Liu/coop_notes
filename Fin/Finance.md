@@ -9,7 +9,7 @@ tags:
   - Fin
 footer: Wondering the architecture of this world in the aspect of finance...
 copyright: 无版权
-date: 2024-08-12
+date: 2024-08-14
 ---
 ## 1 Big concepts
 
@@ -38,23 +38,24 @@ date: 2024-08-12
    A security is a document which entitles the holder to some asset of another person. Almost all securities can be considered an **asset of the holder** ("securitize an asset"), but not all assets are securities.
 
    > 4 categories:
+   >
    > - Debt securities (bonds)  债券：Bonds, Treasury bills, and certificates of deposit.
    > - Equity securities (stocks) 股票：Common stocks, preferred stocks, index funds, and ETFs.
    > - Derivative securities 衍生证券:
    >   - stock index futures(股指期货)：buy or sell the value of a specific stock index at a predetermined future date and price.
    >   - stock index options(股指期权):These are options that give the holder the right, but not the obligation, to buy or sell the value of a specific stock index at a predetermined price before or at the expiration date.
-   > - Hybrid securities: convertible bonds, preferred shares, equity-linked notes(ELNs) 
-
+   > - Hybrid securities: convertible bonds, preferred shares, equity-linked notes(ELNs)
+   >
 
    There are 3 options if you own a business and needing money ($1,000,000), except for getting a loan from a bank [1]:
+
    - **Bond**
      An investment bank helps you issue a $1,000,000 bond with a fixed interest rate. If you can't repay, creditors can *take control of your company and sell assets*. Bonds are safer than stocks because creditors have priority. Bondholders might get something back if the company goes bankrupt.
    - **Equity Security (Stock)**
      You sell 10,000 shares at $100 each, raising $1,000,000. Stockholders own part of the company but don’t get fixed interest. They might receive dividends (amout varies from y to y.). Stockholders won’t be liable beyond their investment if the company goes bankrupt. //From the market view: stock prices are det. by the value & expected performance of the company -> bid and ask behavior. The future price is uncertain. Volatility determines the amount of stock price differ from the expected value.
    - **Derivative Securities**
      These include forwards（远期）, swaps（掉期）, futures（期货）, and options（期权）, used to hedge against price changes in commodities, currencies, and interest rates.These are basically **bets on the price a commodity** (anything from milk to corn to oil to cows to stocks to bets on interest rates and currencies, etc.). Companies use these to protect themselves against future price changes. Companies like McDonald's and Southwest Airlines use derivatives to stabilize costs for inputs like beef and oil. Multinational companies use them to manage currency exchange risks.
-
-5. stock index is not tradable. A stock index is a **statistical measure** that reflects the **composite value of a selected group of stocks**. It is used to represent the performance of a specific section of the stock market, or the market as a whole, and is often used by investors to compare the performance of their investments.
+4. stock index is not tradable. A stock index is a **statistical measure** that reflects the **composite value of a selected group of stocks**. It is used to represent the performance of a specific section of the stock market, or the market as a whole, and is often used by investors to compare the performance of their investments.
    But there are some primary tradable instruments **based on** stock indices:
 
    1. **Index Funds**:
@@ -76,32 +77,33 @@ Players:
 1. Issuers(发行人): entities seeking to raise capital. companies, governments,...
 2. Underwriters (承销商): help to price & sell the new securities: investment banks
 
-| **Criteria**             |   **Investment Banking (IB)**                              |
-| ------------------------ |----------------------------------------------------------- |
-| **Stage of Investment**  |Assists companies at various stages (e.g., IPO, M&A)        |
-| **Investment Size**      | No direct investment; earns fees for services              |
-| **Risk Level**           |  No direct risk; focuses on advisory roles                 |
-| **Investment Horizon**   |Focuses on transactions, often short-term engagements       |
-| **Ownership Stake**      |No ownership; provides financial advisory services          |
-| **Level of Involvement** |  Advisory role, facilitating transactions                  |
-| **Return Expectations**  |  Fee-based, with no direct return on investments           |
-| **Target Companies**     | Companies looking to raise capital, merge, or go public    |
-| **Exit Strategy**        | Varies by service, including IPOs, M&A, and capital raising|
 
+| **Criteria**             | **Investment Banking (IB)**                                 |
+| ------------------------ | ----------------------------------------------------------- |
+| **Stage of Investment**  | Assists companies at various stages (e.g., IPO, M&A)        |
+| **Investment Size**      | No direct investment; earns fees for services               |
+| **Risk Level**           | No direct risk; focuses on advisory roles                   |
+| **Investment Horizon**   | Focuses on transactions, often short-term engagements       |
+| **Ownership Stake**      | No ownership; provides financial advisory services          |
+| **Level of Involvement** | Advisory role, facilitating transactions                    |
+| **Return Expectations**  | Fee-based, with no direct return on investments             |
+| **Target Companies**     | Companies looking to raise capital, merge, or go public     |
+| **Exit Strategy**        | Varies by service, including IPOs, M&A, and capital raising |
 
 3. Investors (institutional and individual): who purchase the newly issued securities. Retail investors are less common in primary markets.
 
-| **Criteria**             | **Angel Investors**                                   | **Venture Capital (VC)**                            | **Private Equity (PE)**                                |
-| ------------------------ |-------------------------------------------------------|-----------------------------------------------------| ------------------------------------------------------ |
-| **Stage of Investment**  | Early-stage startups, often at the idea or seed stage | Early to growth-stage companies                     | Established companies, often mature businesses         |
-| **Investment Size**      | Smaller amounts, typically \$10,000  to \$100,000     | Larger amounts, often \$1 million to \$100+ million | Very large amounts, can be in billions                 |
-| **Risk Level**           | Very high, with a high chance of failure              | High, but with structured diligence and portfolio   | Lower than VC; targets companies with proven models    |
-| **Investment Horizon**   | Short to medium-term (3-7 years)                      | Medium-term (5-10 years)                            | Medium to long-term (5-10+ years)                      |
-| **Ownership Stake**      | Minority stake, often non-controlling                 | Significant minority or majority stake              | Majority or full ownership                             |
-| **Level of Involvement** | Hands-on, often mentoring and guiding the startup     | Active involvement in strategic decisions           | Active in management, restructuring, or strategy       |
-| **Return Expectations**  | Extremely high returns, sometimes 10x or more         | High returns, typically 3-10x on investment         | Stable returns, often focused on long-term growth      |
-| **Target Companies**     | Innovative startups with high growth potential        | High-growth companies, often in tech or biotech     | Established businesses, often underperforming          |
-| **Exit Strategy**        | IPO, acquisition by larger company                    | IPO, acquisition, or secondary sale                 | Sale of the company, IPO, or dividend recapitalization |
+
+| **Criteria**             | **Angel Investors**                                   | **Venture Capital (VC)**                           | **Private Equity (PE)**                                |
+| ------------------------ | ----------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------ |
+| **Stage of Investment**  | Early-stage startups, often at the idea or seed stage | Early to growth-stage companies                    | Established companies, often mature businesses         |
+| **Investment Size**      | Smaller amounts, typically\$10,000  to \$100,000      | Larger amounts, often\$1 million to \$100+ million | Very large amounts, can be in billions                 |
+| **Risk Level**           | Very high, with a high chance of failure              | High, but with structured diligence and portfolio  | Lower than VC; targets companies with proven models    |
+| **Investment Horizon**   | Short to medium-term (3-7 years)                      | Medium-term (5-10 years)                           | Medium to long-term (5-10+ years)                      |
+| **Ownership Stake**      | Minority stake, often non-controlling                 | Significant minority or majority stake             | Majority or full ownership                             |
+| **Level of Involvement** | Hands-on, often mentoring and guiding the startup     | Active involvement in strategic decisions          | Active in management, restructuring, or strategy       |
+| **Return Expectations**  | Extremely high returns, sometimes 10x or more         | High returns, typically 3-10x on investment        | Stable returns, often focused on long-term growth      |
+| **Target Companies**     | Innovative startups with high growth potential        | High-growth companies, often in tech or biotech    | Established businesses, often underperforming          |
+| **Exit Strategy**        | IPO, acquisition by larger company                    | IPO, acquisition, or secondary sale                | Sale of the company, IPO, or dividend recapitalization |
 
 Events:
 
@@ -245,7 +247,7 @@ OTC:"over-the-counter" generally refers to stocks that are not trading on a stoc
 | CBOE       | US          | 21:30                          | 04:00 (next day)               |
 | SHFE       | China       | 09:00                          | 15:00                          |
 
-### 3.2 Terms
+### 3.3 Terms
 
 Price & Order
 
@@ -288,13 +290,108 @@ Amount
 - **Volumn (成交量)**：“Volume measures the number of shares traded in a stock or contracts traded in futures or options.Volume can indicate market strength, as rising markets on increasing volume are typically viewed as strong and healthy.When prices fall on increasing volume, the trend is gathering strength to the downside.When prices reach new highs (or no lows) on decreasing volume, watch out—a reversal might be taking shape.
   On-balance volume (OBV) and the Klinger oscillator are examples of charting tools that are based on volume.”[4]
 
+## 4 Trading system
+
+### 4.1 Finding a good strategy
+
+1. 看你需求：
+
+   - 有多少时间维护交易系统？
+   - 编程有多好？
+   - 有多少资金？
+   - 目标是每个月赚点钱，还是追求长期大额投资汇报？
+2. 策略灵感：
+
+   - 商学院和经济研究网站
+   - 个人独立交易者的金融网站和博客
+   - 交易员同行论坛
+
+   > 相信与否的问题：保持适度合理的怀疑。机密的东西不是策略本身，而是如何审时度势地调整策略。
+   > 回测前策略初筛：
+   >
+
+   - 策略是否比业绩标准好？
+   - 足够高的夏普比率？（考虑成本）。在能获得足够杠杆的前提下，最好的长期投资收益是通过寻找夏普比率最高的策略实现的。[9]Chap6
+   - 回撤够小吗？回撤持续时间够短吗？
+   - 回测过程有幸存者偏差吗？
+   - 策略近几年表现和历史差距很大吗？
+   - 策略有自己的盈利空间，以避免和大型机构投资者进行高强度竞争？
+
+   > Note:
+   >
+   > - 数据的幸存者偏差的数据库是不包含因为破产、退市、收购合并等原因小时的股票/基金。看到别人使用它做的回测结果要小心，它导致回测越早期表现越好。自己做的话，因为资金限制只能拿到幸存者偏差的数据不必灰心，如果充分了解它的局限性，也可以盈利。
+   > - Occam's razor (奥卡姆剃刀).策略规则越多，模型参数越多，策略越容易过拟合，经不起时间的考验[9]。很少有系统超过10个主要变量，大多5~7个重要变量就够用的。极少有过程基于4个或更多变量之间的相互作用[8]。
+   > - 金融时间序列是不平稳序列，因为规则和宏观经济在变。多数策略在10年前表现比现在好，因为那是没有很多对冲基金运行量化策略，买卖价差会大一些；做空取消...所以统计学思维（数据越多回测结果越有效）有局限性，只在金融数据符合平稳随机过程才正确。可以使用更厉害的模型，将市场结构的改变纳入现在考虑因素（[9]Chapter7）。只需策略在最近的数据表现良好。
+   >
+
+### 4.2 Backtest 回测
+
+1. 回测平台：excel, matlab(所有量化交易人群最被广泛使用的). 后两个包含数据库：tradestation,alphacet discovery
+2. 各数据库优劣
+   **股票日线**
+
+
+   | src       | +                                                             | -                               |
+   | --------- | ------------------------------------------------------------- | ------------------------------- |
+   | Yahoo     | 免费，经过股票拆分/分红调整                                   | 幸存者偏差；每次只能下载1个股票 |
+   | HQuotes   | 便宜，数据=yahoo，同时下载多股票。对股票拆分已调整            | 幸存者偏差；没对分红调整        |
+   | CSIdata   | 便宜，数据=yahoo,google，同时下载多股票。                     | 幸存者偏差                      |
+   | TrackData | 便宜，经过股票拆分/分红调整，同时下载多股票，可下载基本面数据 | 幸存者偏差                      |
+   | CRSP      | 无幸存者偏差                                                  | 贵，月更                        |
+
+   **期货日线**
+
+
+   | src         | +                        | - |
+   | ----------- | ------------------------ | - |
+   | Quotes-plus | 便宜，可下载多个合约数据 |   |
+   | CSIdata     | 同上                     |   |
+
+   **外汇日线**：Oanda 免费
+   **股票日内**：HQuotes。免费，日内数据的历史时间较短
+   **期货日内数据**：DNT：可以获取买卖盘口数据，来自于NxCore。贵，需要购买实时数据
+   **外汇日内**：GainCapital免费，数据历史长。
+
+
+   > Note: Bloomberg, Dow Jones, FactSet, Thomson Reuters, TickData 数据库主要面向大型机构，使用费对个人过于昂贵
+
+
+3. 数据
+   1. 拆股/分红调整
+      - 公司进行1到N拆分（N < 1时是股票合并），并在T日除权，则股票所有T日前的价格数据都要除以N。
+      - 公司派发每股d美元分红，并在T日除权，那么股票所有T日以前价格数据，要乘以(T-1日收盘价-d)/T-1日收盘价。通过乘数调整可以保证历史数据收益在调整前后没有变。
+   2. 日数据最高价/最低价的噪声：很多时候，最高价，最低价的出现可能仅仅是因为有一个没有被正确记录，又没有被清洗掉的高频数据导致的。所以基于HIGH, LOW的回测没有基于OPEN, CLOSE的可靠。=、
+   3. 幸存者偏差：有幸存者偏差的数据库不会记载半中间退市的股票。我们会不选择退市的股票，造成虚假盈利。
+   解决办法之一：免除偏差：现在开始收集你每日实时的选股池中的全部股票数据用于将来的回测；减小偏差：基于最近的数据来回测，回测结果不会因历史消失的股票受到太大影响。
+   > 获取数据后，快速错误检查：计算数据导出的每日收益率。如果交易的收益数据距离平均值超过4倍标准差，那就应该注意。通常极端的收益可能因为一个重大的新闻，或者来之当太难视察过指数的大变动。如果不是，那可疑。
+
+5. 策略表现Evaluation
+
+   1. ==年化夏普比率、最大回撤和最大回撤时间。== 我们不应该从价值中性投资组合收益中减去市场的无风险利率。p51隔夜头寸？
+
+6. 未来数据偏差：使用实际交易不可获取的未来数据，来进行之前的交易决策。
+   > 解决方案：
+   > 1. 运行程序，使用全部历史数据（T日）产生并保存全部的策略目标持仓到文件夹A
+   > 2. 缩短历史数据，移除最近N个交易日。这样最后个交易日是T-N。N可以是10，也可以是100天
+   > 3. 运行程序，使用缩短的数据，产生保存目标的持仓存到文件夹B
+   > 4. 移除A最后N交易日的数据
+   > 5. 检查AB中持仓是否一致。不一致：历史回测程序由未来数据偏差，要改正（程序在决策时，使用了未来的数据决策）。
+7. 数据过拟合。使用的参数<= 5个。包括进场、出场条件、持仓时间、计算移动平均线的回看时间。通过使用足够大样本（参数个数*252每日交易1次，日K）、样本外测试、敏感性测试来减少。但是无法完全排除。
+8. 样本外测试。参考AI 的训练集+测试集。或者是交叉验证。
+9. 参数最优化：通过机组不同该参数产生交易的平均结果来综合制定策略。延申：无参数模型。
+10. 敏感性分析：如果对模型的参数改变后，除了最优参数，其它任何参数都是策略表现很差，那么这个模型可能就收到数据过拟合偏差的影响。
+11. 考虑交易成本：手续费、流动性成本、机会成本、市场冲击点和滑点。
+
+
 ### References:
 
 [1]. Hahn, L., K. https://www.quora.com/What-is-the-difference-between-a-security-and-an-asset#:~:text=A%20security%20is%20a%20type%20of%20asset.,bonds)%2C%20or%20structured%20products.
 [2]. https://www.bilibili.com/video/BV19r421u7af/?spm_id_from=333.999.0.0&vd_source=46e3ece8cab8651bbec1fb834bc573a7
 [3]. https://www.investopedia.com/terms/e/etf.asp
-[4]https://www.investopedia.com/articles/technical/02/010702.asp#:~:text=Volume%20measures%20the%20number%20of,gathering%20strength%20to%20the%20downside.
-[5]https://www.investopedia.com/investing/primary-and-secondary-markets/#:~:text=Participants%20in%20the%20primary%20market,purchase%20the%20newly%20issued%20securities.
-[6] https://www.investopedia.com/terms/b/broker-dealer.asp
-[7] Lee, R.S.T. (2020).Quantum finance: Intelligent forecast and trading systems. Springer Singapore.
+[4]. https://www.investopedia.com/articles/technical/02/010702.asp#:~:text=Volume%20measures%20the%20number%20of,gathering%20strength%20to%20the%20downside.
+[5]. https://www.investopedia.com/investing/primary-and-secondary-markets/#:~:text=Participants%20in%20the%20primary%20market,purchase%20the%20newly%20issued%20securities.
+[6]. https://www.investopedia.com/terms/b/broker-dealer.asp
+[7]. Lee, R.S.T. (2020).Quantum finance: Intelligent forecast and trading systems. Springer Singapore.
+[8]. Chande, T. (2021). How to develop and implement a winning trading system. Wiley.
+[9]. Chan, E. (2021). Quantitative trading: How to build your own algorithmic trading business. Wiley.
 []. Hull, J., C. (2018). Options, Futures, and Other Derivatives (10 e.d.). Pearson.

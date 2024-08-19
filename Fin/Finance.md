@@ -1,7 +1,7 @@
 ---
 title: Finance
 icon: file
-order: 5
+order: 2
 author: Doris
 category:
   - Fin
@@ -15,7 +15,7 @@ date: 2024-08-14
 
 钱从哪来：商品价值=货币总量。社会会自我校正。
 
-## 1.1 Trading items
+### 1.1 Trading items
 
 1. Different markets
 
@@ -35,7 +35,7 @@ date: 2024-08-14
    >
 3. Security
 
-   A security is a document which entitles the holder to some asset of another person. Almost all securities can be considered an **asset of the holder** ("securitize an asset"), but not all assets are securities.
+   A security is a document that entitles the holder to some asset of another person. Almost all securities can be considered an **asset of the holder** ("securitize an asset"), but not all assets are securities.
 
    > 4 categories:
    >
@@ -66,9 +66,9 @@ date: 2024-08-14
    4. index warrants:**Warrants**: These are similar to options but are typically issued by financial institutions and give the holder the right to buy or sell an index at a specified price before expiration.
    5. index CFDs(contracts for difference):**CFDs**: These are derivative products that allow traders to speculate on the price movements of a stock index without owning the underlying assets.
 
-## 1.2 Market Players
+### 1.2 Market Players
 
-### 1.2.1 Primary market (一级市场)[5]
+#### 1.2.1 Primary market (一级市场)[5]
 
 Where securities are created. Securities are purchased directly from an issuer.
 
@@ -115,7 +115,7 @@ Events:
 E.g.
 Businesses and governments that want to generate debt capital(债务资本) can choose to issue new short- and long-term bonds on the primary market. New bonds are issued with coupon rates(票面利率) that correspond to the current interest rates(利率) at the time of issuance, which may be higher or lower than pre-existing bonds.
 
-### 1.2.2 Secondary market (二级市场)
+#### 1.2.2 Secondary market (二级市场)
 
 Where securities are traded (Investors trade among themselves). It is basically the stock market and refers to the New York Stock Exchange, the Nasdaq, and other exchanges worldwide[5].
 
@@ -132,14 +132,21 @@ Players [7]:
 5. Investors(投资者):allocates capital with the expectation of a future financial
    return. types: individual(through traditional/ online brokerage firms or saving accounts (part 3)/private equity,hedge funds) and institutional.
 
-### 1.2.3 “Third” and "fourth" markets (三、四级市场)
+#### 1.2.3 “Third” and "fourth" markets (三、四级市场)
 
 Deals between broker-dealers经纪自营商 and institutions through over-the-counter electronic networks and are therefore not as relevant to individual investors [5].
 A broker-dealer (B-D) is a person or firm in the business of buying and selling securities for its own account or on behalf of its customers [6].
 
 OTC:"over-the-counter" generally refers to stocks that are not trading on a stock exchange such as the Nasdaq, NYSE, or American Stock Exchange (AMEX) [5].
 
-## 1.2 Numbers
+#### 1.2.4 Special: cryptocurrency exchange (加密货币交易所)
+
+既当裁判又当运动员。它既是交易所，又能提供传统金融买方和卖方服务。
+Centralized Exchange (CEX)中心化交易所: Binance, Huobi, OKX, Coinbase
+Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
+和传统金融相比，不再是一两个交易所一家独大的时代。
+
+### 1.3 Numbers
 
 1. basic points (BP) 基点/点子（香港）：1个基点是0.01%, 是万分比‱。这是个分比单位。基点换百分比退2位，换小数退4位。
    - 100‱ = 1%  一百基点=百分之一
@@ -189,124 +196,25 @@ OTC:"over-the-counter" generally refers to stocks that are not trading on a stoc
    4. Why recent rally(sustained increase in prices over a period of time)：结合全球政治，市场普遍避险预期；黄金在社会圈讨论度上升，一定程度上激发了人的偏爱和投机心理。
    5. investment tips：金价波动不小于股票；希望避险的话需要站在10年以上的尺度考虑；实体黄金交易成本较高（5%~20%）；长期、大量资金配置在（重仓）黄金不是最优解；难量化影响因素，谨慎相信技术分析。
 
-## 3 Trading on MT5
 
-### 3.1 Time
+## 3 Trading system[9]
 
-1. Time zone: UTC+x. 东x区。UTC-x。西x区。
-2. 美国东部时区：
-   - EST (Eastern Standard Time)，UTC-5
-     - 每年秋季至春季，从11月的第一个星期日到次年3月的第二个星期日.
-   - EDT (Eastern Daylight Time), UTC-4。夏令时，比标准时间早一个小时
-     - 从3月的第二个星期日到11月的第一个星期日。
-3. my broker server: UTC+3
+### 3.1 Finding a good strategy
 
-### 3.2  Trading Times Overview (UTC+8)
-
-#### 1. Trading Times for Stocks
-
-
-| **Market** | **Country** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
-| ---------- | ----------- | ------------------------------ | ------------------------------ |
-| NYSE       | US          | 21:30                          | 04:00 (next day)               |
-| NASDAQ     | US          | 21:30                          | 04:00 (next day)               |
-| SSE        | China       | 09:30                          | 15:00                          |
-| SZSE       | China       | 09:30                          | 15:00                          |
-
-#### 2. Trading Times for Stock Index Futures
-
-
-| **Market**                         | **Country** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
-| ---------------------------------- | ----------- | ------------------------------ | ------------------------------ |
-| CME (S&P 500, Dow Jones, etc.)     | US          | 06:00                          | 05:00 (next day)               |
-| SGX (FTSE China A50 Index Futures) | China       | 09:00                          | 18:00                          |
-
-#### 3. Trading Times for Commodities and Options
-
-#### US Commodities
-
-
-| **Commodity** | **Market** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
-| ------------- | ---------- | ------------------------------ | ------------------------------ |
-| Crude Oil     | NYMEX      | 06:00                          | 05:00 (next day)               |
-| Gold          | COMEX      | 06:00                          | 05:00 (next day)               |
-
-#### China Commodities
-
-
-| **Commodity** | **Market** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
-| ------------- | ---------- | ------------------------------ | ------------------------------ |
-| Iron Ore      | DCE        | 09:00                          | 11:30                          |
-| Soybean       | DCE        | 09:00                          | 11:30                          |
-
-#### Options
-
-
-| **Market** | **Country** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
-| ---------- | ----------- | ------------------------------ | ------------------------------ |
-| CBOE       | US          | 21:30                          | 04:00 (next day)               |
-| SHFE       | China       | 09:00                          | 15:00                          |
-
-### 3.3 Terms
-
-Price & Order
-
-- **Ask Price(卖价)**: The lowest price a seller is willing to accept for an asset.
-- **Bid Price(买价)**: The highest price a buyer is willing to pay for an asset.
-- **Spread(价差)**: The difference between the bid price and the ask price. The bigger, the lower the liquidity.
-- **Bull Market(牛市)**: A market condition where prices are rising or are expected to rise.
-- **Bear Market(熊市)**: A market condition where prices are falling or are expected to fall.
-- **Volatility(波动性)**: A statistical measure of the dispersion of returns for a given security or market index.
-- **Liquidity(流动性)**: The ease with which an asset can be converted into cash without affecting its market price.
-
-Order
-
-- **Market Order(市价单)**: An order to buy or sell a security immediately at the best available current price.
-- **Limit Order(限价单)**: An order to buy or sell a security at a specific price or better.
-- **Stop-Loss Order(止损单)**: An order placed to sell a security
-
-Amount
-
-- **Lot (手)**: A standard unit of trading in financial markets, representing a fixed quantity of an asset.
-- **Lot Size (手数)**: The number of units of an asset in one lot.
-- **Standard Lot (标准手)**: In forex trading, a standard lot is typically 100,000 units of the base currency.
-- **Mini Lot (迷你手)**: A mini lot is 10,000 units of the base currency in forex trading.
-- **Micro Lot (微型手)**: A micro lot is 1,000 units of the base currency in forex trading.
-- **Nano Lot (纳诺手)**: A nano lot is 100 units of the base currency in forex trading.
-- **Round Lot (整手)**: A quantity of shares that is a multiple of 100.
-- **Odd Lot (零股)**: A quantity of shares that is less than a round lot, typically less than 100 shares.
-- **Contract Size (合约规模)**: The deliverable quantity of commodities or financial instruments underlying futures contracts in one lot.
-- **Position (仓位)**: The amount of a particular security, commodity, or currency held by an investor or trader.
-- **Position Size (头寸规模)**: The total number of lots held by a trader in a particular asset.
-- **Long Position (多头仓位)**: Holding a security, commodity, or currency with the expectation that its price will rise.
-- **Short Position (空头仓位)**: Selling a security, commodity, or currency that the investor does not own, with the expectation that its price will fall.
-- **Open Position (未平仓位)**: A trade that has been established but not yet closed with an offsetting trade.
-- **Closed Position (平仓位)**: A trade that has been closed by executing an offsetting trade.
-- **Hedged Position (对冲仓位)**: A position that is protected against market risk by holding an offsetting position in a related security.
-- **Leveraged Position (杠杆仓位)**: A position established using borrowed funds to increase the potential return on investment.
-- **Net Position (净仓位)**: The difference between total long positions and total short positions in a particular asset.
-- **Position Sizing (仓位调整)**: The process of determining the number of units to trade in order to control risk and maximize returns.
-- **Position Limit (仓位限额)**: The maximum number of contracts or shares that a trader is allowed to hold in a particular asset.
-- **Volumn (成交量)**：“Volume measures the number of shares traded in a stock or contracts traded in futures or options.Volume can indicate market strength, as rising markets on increasing volume are typically viewed as strong and healthy.When prices fall on increasing volume, the trend is gathering strength to the downside.When prices reach new highs (or no lows) on decreasing volume, watch out—a reversal might be taking shape.
-  On-balance volume (OBV) and the Klinger oscillator are examples of charting tools that are based on volume.”[4]
-
-## 4 Trading system[9]
-
-### 4.1 Finding a good strategy
-
-1. 看你需求：
+1. Your demands：
 
    - 有多少时间维护交易系统？
    - 编程有多好？
    - 有多少资金？
    - 目标是每个月赚点钱，还是追求长期大额投资汇报？
-2. 策略灵感：
+2. Inspiration
 
    - 商学院和经济研究网站
    - 个人独立交易者的金融网站和博客
    - 交易员同行论坛
+     - https://hummingbot.org/
 
-   相信与否的问题：保持适度合理的怀疑。机密的东西不是策略本身，而是如何审时度势地调整策略。
+   相信与否的问题：保持适度合理的怀疑。机密的东西不是策略本身，而是如何审时度势地调整策略。Do your own research.
 
    > 回测前策略初筛：
    >
@@ -325,10 +233,11 @@ Amount
    > - 金融时间序列是不平稳序列，因为规则和宏观经济在变。多数策略在10年前表现比现在好，因为那是没有很多对冲基金运行量化策略，买卖价差会大一些；做空取消...所以统计学思维（数据越多回测结果越有效）有局限性，只在金融数据符合平稳随机过程才正确。可以使用更厉害的模型，将市场结构的改变纳入现在考虑因素（[9]Chapter7）。只需策略在最近的数据表现良好。
    >
 
-### 4.2 Backtest 回测
+### 3.2 Backtest 回测
 
-1. 回测平台：excel, matlab(所有量化交易人群最被广泛使用的). 后两个包含数据库：tradestation,alphacet discovery
-2. 各数据库优劣
+#### 3.2.1. Platform
+   excel, matlab(所有量化交易人群最被广泛使用的).MT5. 后两个包含数据库：tradestation,alphacet discovery
+#### 3.2.2. Database Pros and cons
    **股票日线**
 
 
@@ -356,19 +265,22 @@ Amount
 
    > Note: Bloomberg, Dow Jones, FactSet, Thomson Reuters, TickData 数据库主要面向大型机构，使用费对个人过于昂贵
    >
-3. 数据
+#### 3.2.3. Details of data
 
    1. 拆股/分红调整
       - 公司进行1到N拆分（N < 1时是股票合并），并在T日除权，则股票所有T日前的价格数据都要除以N。
       - 公司派发每股d美元分红，并在T日除权，那么股票所有T日以前价格数据，要乘以(T-1日收盘价-d)/T-1日收盘价。通过乘数调整可以保证历史数据收益在调整前后没有变。
-   2. 日数据最高价/最低价的噪声：很多时候，最高价，最低价的出现可能仅仅是因为有一个没有被正确记录，又没有被清洗掉的高频数据导致的。所以基于HIGH, LOW的回测没有基于OPEN, CLOSE的可靠。=、
+   2. 日数据最高价/最低价的噪声：很多时候，最高价，最低价的出现可能仅仅是因为有一个没有被正确记录，又没有被清洗掉的高频数据导致的。所以基于HIGH, LOW的回测没有基于OPEN, CLOSE的可靠。
    3. 幸存者偏差：有幸存者偏差的数据库不会记载半中间退市的股票。我们会不选择退市的股票，造成虚假盈利。
       解决办法之一：免除偏差：现在开始收集你每日实时的选股池中的全部股票数据用于将来的回测；减小偏差：基于最近的数据来回测，回测结果不会因历史消失的股票受到太大影响。
 
    > 获取数据后，快速错误检查：计算数据导出的每日收益率。如果交易的收益数据距离平均值超过4倍标准差，那就应该注意。通常极端的收益可能因为一个重大的新闻，或者来之当太难视察过指数的大变动。如果不是，那可疑。
    >
-4. 策略表现Evaluation ：==年化夏普比率、最大回撤和最大回撤时间。== 我们不应该从价值中性投资组合收益中减去市场的无风险利率。p51隔夜头寸？
-5. 未来数据偏差：使用实际交易不可获取的未来数据，来进行之前的交易决策。
+#### 3.2.4. Eva. of  Profit
+   ==年化夏普比率、最大回撤和最大回撤时间。== 我们不应该从价值中性投资组合收益中减去市场的无风险利率。p51隔夜头寸？
+#### 3.2.5. Eva. of Strategy
+1. Future data biases
+   使用实际交易不可获取的未来数据，来进行之前的交易决策。
 
    > 解决方案：
    >
@@ -378,24 +290,29 @@ Amount
    > 4. 移除A最后N交易日的数据
    > 5. 检查AB中持仓是否一致。不一致：历史回测程序由未来数据偏差，要改正（程序在决策时，使用了未来的数据决策）。
    >
-6. 数据过拟合。使用的参数<= 5个。包括进场、出场条件、持仓时间、计算移动平均线的回看时间。通过使用足够大样本（参数个数*252每日交易1次，日K）、样本外测试、敏感性测试来减少。但是无法完全排除。
-7. 样本外测试。参考AI 的训练集+测试集。或者是交叉验证。
-8. 参数最优化：通过机组不同该参数产生交易的平均结果来综合制定策略。延申：无参数模型。
-9. 敏感性分析：如果对模型的参数改变后，除了最优参数，其它任何参数都是策略表现很差，那么这个模型可能就收到数据过拟合偏差的影响。
-10. 考虑交易成本：手续费、流动性成本、机会成本、市场冲击点和滑点。
+2. Overfitting: 
+使用的参数<= 5个。包括进场、出场条件、持仓时间、计算移动平均线的回看时间。通过使用足够大样本（参数个数*252每日交易1次，日K）、样本外测试、敏感性测试来减少。但是无法完全排除。
+3. Out-of-sample testing: 
+参考AI 的训练集+测试集。或者是交叉验证。
+4. Parameter optimization: 
+通过机组不同该参数产生交易的平均结果来综合制定策略。延申：无参数模型。
+5. Sensitivity analysis：
+如果对模型的参数改变后，除了最优参数，其它任何参数都是策略表现很差，那么这个模型可能就收到数据过拟合偏差的影响。
+6. Transaction costs: 
+手续费、流动性成本、机会成本、市场冲击点和滑点。
 
-### 4.3 Hardware
+### 3.3 Hardware
 
 1. 独立交易账户or自营交易公司账户：法律、初始资金需求、可获得的杠杆和购买力、损失的责任、交易费手续费、中介公司破产风险、导师、交易风格的限制、风险管理。
 2. 每个账户：较低的手续费、可以交易一定品种的不同金融工具、可以获取到足够深的流动性、试试行情API、订单传递API
 3. 常用的硬件：双核/四核CPU电脑、无中断电源、告诉网络连接服务设施（光纤、DSL/T1网络）、试试数据和新闻源、订阅金融电视频道、电脑托管
 
-### 4.4 量化交易执行系统
+### 3.4 量化交易执行系统
 
 1. 全自动交易系统：程序可以在一个交易日甚至多个交易日自动更新数据和发送订单。半自动仍需要手工上传数据、下的那、
 2. 模拟交易要观察的：发现然间、交易策略、交易执行程序中的程序错误；发现数据的未来偏差、过拟合偏差；为交易流程做计划；估算交易成本；对交易的盈利亏损波动、资金使用程度、投资组合规模、交易频率产生大致感觉。
 
-### 4.5 资金&风险管理
+### 3.5 资金&风险管理
 
 1. 心态建设：稳。不向恐惧贪婪屈服。接受资金的起伏波动。
 2. 决定最优杠杆率
@@ -449,7 +366,7 @@ g: 复合收益率, r: 无风险利率
 > f=m/s^2
 > $$
 
-### 4.6 进阶讨论
+### 3.6 进阶讨论
 
 1. 一个周期内，市场会呈均值回归走势或者趋势走势（市场底层规律：通胀通缩、波动率(GARCH模型。波动率对期权交易很有价值，但对股票不是)、均值回归、趋势）。市场在不同的底层规律切换。
 
@@ -493,9 +410,109 @@ g: 复合收益率, r: 无风险利率
 6. 退出头寸的逻辑。实验
 7. 如何选择一种提高策略表现的方法：更高杠杆，还是交易beta值更高的股票。
 
----
+## 4 Trading on MT5
 
-## References:
+### 4.1 Time
+
+1. Time zone: UTC+x. 东x区。UTC-x。西x区。
+2. 美国东部时区：
+   - EST (Eastern Standard Time)，UTC-5
+     - 每年秋季至春季，从11月的第一个星期日到次年3月的第二个星期日.
+   - EDT (Eastern Daylight Time), UTC-4。夏令时，比标准时间早一个小时
+     - 从3月的第二个星期日到11月的第一个星期日。
+3. my broker server: UTC+3
+
+### 4.2  Trading Times Overview (UTC+8)
+
+#### 1. Trading Times for Stocks
+
+
+| **Market** | **Country** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
+| ---------- | ----------- | ------------------------------ | ------------------------------ |
+| NYSE       | US          | 21:30                          | 04:00 (next day)               |
+| NASDAQ     | US          | 21:30                          | 04:00 (next day)               |
+| SSE        | China       | 09:30                          | 15:00                          |
+| SZSE       | China       | 09:30                          | 15:00                          |
+
+#### 2. Trading Times for Stock Index Futures
+
+
+| **Market**                         | **Country** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
+| ---------------------------------- | ----------- | ------------------------------ | ------------------------------ |
+| CME (S&P 500, Dow Jones, etc.)     | US          | 06:00                          | 05:00 (next day)               |
+| SGX (FTSE China A50 Index Futures) | China       | 09:00                          | 18:00                          |
+
+#### 3. Trading Times for Commodities and Options
+
+#### US Commodities
+
+
+| **Commodity** | **Market** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
+| ------------- | ---------- | ------------------------------ | ------------------------------ |
+| Crude Oil     | NYMEX      | 06:00                          | 05:00 (next day)               |
+| Gold          | COMEX      | 06:00                          | 05:00 (next day)               |
+
+#### China Commodities
+
+
+| **Commodity** | **Market** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
+| ------------- | ---------- | ------------------------------ | ------------------------------ |
+| Iron Ore      | DCE        | 09:00                          | 11:30                          |
+| Soybean       | DCE        | 09:00                          | 11:30                          |
+
+#### Options
+
+
+| **Market** | **Country** | **Opening Time (Local UTC+8)** | **Closing Time (Local UTC+8)** |
+| ---------- | ----------- | ------------------------------ | ------------------------------ |
+| CBOE       | US          | 21:30                          | 04:00 (next day)               |
+| SHFE       | China       | 09:00                          | 15:00                          |
+
+### 4.3 Terms
+
+Price & Order
+
+- **Ask Price(卖价)**: The lowest price a seller is willing to accept for an asset.
+- **Bid Price(买价)**: The highest price a buyer is willing to pay for an asset.
+- **Spread(价差)**: The difference between the bid price and the ask price. The bigger, the lower the liquidity.
+- **Bull Market(牛市)**: A market condition where prices are rising or are expected to rise.
+- **Bear Market(熊市)**: A market condition where prices are falling or are expected to fall.
+- **Volatility(波动性)**: A statistical measure of the dispersion of returns for a given security or market index.
+- **Liquidity(流动性)**: The ease with which an asset can be converted into cash without affecting its market price.
+
+Order
+
+- **Market Order(市价单)**: An order to buy or sell a security immediately at the best available current price.
+- **Limit Order(限价单)**: An order to buy or sell a security at a specific price or better.
+- **Stop-Loss Order(止损单)**: An order placed to sell a security
+
+Amount
+
+- **Lot (手)**: A standard unit of trading in financial markets, representing a fixed quantity of an asset.
+- **Lot Size (手数)**: The number of units of an asset in one lot.
+- **Standard Lot (标准手)**: In forex trading, a standard lot is typically 100,000 units of the base currency.
+- **Mini Lot (迷你手)**: A mini lot is 10,000 units of the base currency in forex trading.
+- **Micro Lot (微型手)**: A micro lot is 1,000 units of the base currency in forex trading.
+- **Nano Lot (纳诺手)**: A nano lot is 100 units of the base currency in forex trading.
+- **Round Lot (整手)**: A quantity of shares that is a multiple of 100.
+- **Odd Lot (零股)**: A quantity of shares that is less than a round lot, typically less than 100 shares.
+- **Contract Size (合约规模)**: The deliverable quantity of commodities or financial instruments underlying futures contracts in one lot.
+- **Position (仓位)**: The amount of a particular security, commodity, or currency held by an investor or trader.
+- **Position Size (头寸规模)**: The total number of lots held by a trader in a particular asset.
+- **Long Position (多头仓位)**: Holding a security, commodity, or currency with the expectation that its price will rise.
+- **Short Position (空头仓位)**: Selling a security, commodity, or currency that the investor does not own, with the expectation that its price will fall.
+- **Open Position (未平仓位)**: A trade that has been established but not yet closed with an offsetting trade.
+- **Closed Position (平仓位)**: A trade that has been closed by executing an offsetting trade.
+- **Hedged Position (对冲仓位)**: A position that is protected against market risk by holding an offsetting position in a related security.
+- **Leveraged Position (杠杆仓位)**: A position established using borrowed funds to increase the potential return on investment.
+- **Net Position (净仓位)**: The difference between total long positions and total short positions in a particular asset.
+- **Position Sizing (仓位调整)**: The process of determining the number of units to trade in order to control risk and maximize returns.
+- **Position Limit (仓位限额)**: The maximum number of contracts or shares that a trader is allowed to hold in a particular asset.
+- **Volumn (成交量)**：“Volume measures the number of shares traded in a stock or contracts traded in futures or options.Volume can indicate market strength, as rising markets on increasing volume are typically viewed as strong and healthy.When prices fall on increasing volume, the trend is gathering strength to the downside.When prices reach new highs (or no lows) on decreasing volume, watch out—a reversal might be taking shape.
+  On-balance volume (OBV) and the Klinger oscillator are examples of charting tools that are based on volume.”[4]
+
+
+## References
 
 [1]. Hahn, L., K. https://www.quora.com/What-is-the-difference-between-a-security-and-an-asset#:~:text=A%20security%20is%20a%20type%20of%20asset.,bonds)%2C%20or%20structured%20products.
 [2]. https://www.bilibili.com/video/BV19r421u7af/?spm_id_from=333.999.0.0&vd_source=46e3ece8cab8651bbec1fb834bc573a7
@@ -508,3 +525,4 @@ g: 复合收益率, r: 无风险利率
 [9]. Chan, E. (2021). Quantitative trading: How to build your own algorithmic trading business. Wiley.
 ？[10] Wayback Machine. https://web.archive.org/web/20130805154314/http://www.lucent.com/bstj/vol35-1956/articles/bstj35-4-917.pdf.
 []. Hull, J., C. (2018). Options, Futures, and Other Derivatives (10 e.d.). Pearson.
+Kelly's formula - YouTube

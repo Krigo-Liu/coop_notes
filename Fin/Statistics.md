@@ -1,7 +1,7 @@
 ---
 title: Statistics
 icon: file
-order: 2
+order: 5
 author: Doris
 category:
   - Fin
@@ -129,6 +129,7 @@ $$
    - $H_0 \text{ No regression relationship exists.}$
    - $H_1 \text{ Regression analyasis exists.}$
      Then do ==F-test==: test for the entire regression. Is the reg statistically significant?
+
      $$
      F_\text{k-1, n-k}=\dfrac{MSR}{MSE}=\dfrac{\frac{SSR}{k-1}}{\frac{SSE}{n-k}}
      $$
@@ -152,6 +153,7 @@ $$
    - $H_0 \text{ x has no impact on y.} E(y)=\beta_0$
      ==t-test== is a test for only $\beta_1$. Is there an evidence that x contributes information in the prediction of
      y?
+
      $$
      t_\text{n-k}=\dfrac{b_1}{\frac{\sqrt{MSE}}{\sqrt{\sum(x-\bar{x})^2}}}
      $$
@@ -174,7 +176,7 @@ $$
 The differences between linear models and GLM.
 **Standard linear model**:
 
-- systematic component: 
+- systematic component:
   $$
   y = \beta_0+\beta_1x+\epsilon_i
   $$
@@ -466,8 +468,8 @@ No more $e_\text{t-1}$
    MAPE=\frac{1}{n}\sum\limits_{t=1}^{n}|\dfrac{Y_t-\hat{Y_t}}{Y_t}|
    $$
 
-
    sMAPE. symmetric MAPE
+
    $$
    sMAPE=\frac{1}{n}\sum\limits_{t=1}^{n}\dfrac{|Y_t-\hat{Y_t}|}{(|Y_t|+|\hat{Y_t}|)}
    $$

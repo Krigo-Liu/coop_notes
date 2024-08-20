@@ -196,7 +196,6 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
    4. Why recent rally(sustained increase in prices over a period of time)：结合全球政治，市场普遍避险预期；黄金在社会圈讨论度上升，一定程度上激发了人的偏爱和投机心理。
    5. investment tips：金价波动不小于股票；希望避险的话需要站在10年以上的尺度考虑；实体黄金交易成本较高（5%~20%）；长期、大量资金配置在（重仓）黄金不是最优解；难量化影响因素，谨慎相信技术分析。
 
-
 ## 3 Trading system[9]
 
 ### 3.1 Finding a good strategy
@@ -236,49 +235,54 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
 ### 3.2 Backtest 回测
 
 #### 3.2.1. Platform
-   excel, matlab(所有量化交易人群最被广泛使用的).MT5. 后两个包含数据库：tradestation,alphacet discovery
+
+excel, matlab(所有量化交易人群最被广泛使用的).MT5. 后两个包含数据库：tradestation,alphacet discovery
+
 #### 3.2.2. Database Pros and cons
-   **股票日线**
+
+**股票日线**
 
 
-   | src       | +                                                             | -                               |
-   | --------- | ------------------------------------------------------------- | ------------------------------- |
-   | Yahoo     | 免费，经过股票拆分/分红调整                                   | 幸存者偏差；每次只能下载1个股票 |
-   | HQuotes   | 便宜，数据=yahoo，同时下载多股票。对股票拆分已调整            | 幸存者偏差；没对分红调整        |
-   | CSIdata   | 便宜，数据=yahoo,google，同时下载多股票。                     | 幸存者偏差                      |
-   | TrackData | 便宜，经过股票拆分/分红调整，同时下载多股票，可下载基本面数据 | 幸存者偏差                      |
-   | CRSP      | 无幸存者偏差                                                  | 贵，月更                        |
+| src       | +                                                             | -                               |
+| --------- | ------------------------------------------------------------- | ------------------------------- |
+| Yahoo     | 免费，经过股票拆分/分红调整                                   | 幸存者偏差；每次只能下载1个股票 |
+| HQuotes   | 便宜，数据=yahoo，同时下载多股票。对股票拆分已调整            | 幸存者偏差；没对分红调整        |
+| CSIdata   | 便宜，数据=yahoo,google，同时下载多股票。                     | 幸存者偏差                      |
+| TrackData | 便宜，经过股票拆分/分红调整，同时下载多股票，可下载基本面数据 | 幸存者偏差                      |
+| CRSP      | 无幸存者偏差                                                  | 贵，月更                        |
 
-   **期货日线**
-
-
-   | src         | +                        | - |
-   | ----------- | ------------------------ | - |
-   | Quotes-plus | 便宜，可下载多个合约数据 |   |
-   | CSIdata     | 同上                     |   |
-
-   **外汇日线**：Oanda 免费
-   **股票日内**：HQuotes。免费，日内数据的历史时间较短
-   **期货日内数据**：DNT：可以获取买卖盘口数据，来自于NxCore。贵，需要购买实时数据
-   **外汇日内**：GainCapital免费，数据历史长。
+**期货日线**
 
 
-   > Note: Bloomberg, Dow Jones, FactSet, Thomson Reuters, TickData 数据库主要面向大型机构，使用费对个人过于昂贵
-   >
+| src         | +                        | - |
+| ----------- | ------------------------ | - |
+| Quotes-plus | 便宜，可下载多个合约数据 |   |
+| CSIdata     | 同上                     |   |
+
+**外汇日线**：Oanda 免费
+**股票日内**：HQuotes。免费，日内数据的历史时间较短
+**期货日内数据**：DNT：可以获取买卖盘口数据，来自于NxCore。贵，需要购买实时数据
+**外汇日内**：GainCapital免费，数据历史长。
+
+> Note: Bloomberg, Dow Jones, FactSet, Thomson Reuters, TickData 数据库主要面向大型机构，使用费对个人过于昂贵
+
 #### 3.2.3. Details of data
 
-   1. 拆股/分红调整
-      - 公司进行1到N拆分（N < 1时是股票合并），并在T日除权，则股票所有T日前的价格数据都要除以N。
-      - 公司派发每股d美元分红，并在T日除权，那么股票所有T日以前价格数据，要乘以(T-1日收盘价-d)/T-1日收盘价。通过乘数调整可以保证历史数据收益在调整前后没有变。
-   2. 日数据最高价/最低价的噪声：很多时候，最高价，最低价的出现可能仅仅是因为有一个没有被正确记录，又没有被清洗掉的高频数据导致的。所以基于HIGH, LOW的回测没有基于OPEN, CLOSE的可靠。
-   3. 幸存者偏差：有幸存者偏差的数据库不会记载半中间退市的股票。我们会不选择退市的股票，造成虚假盈利。
-      解决办法之一：免除偏差：现在开始收集你每日实时的选股池中的全部股票数据用于将来的回测；减小偏差：基于最近的数据来回测，回测结果不会因历史消失的股票受到太大影响。
+1. 拆股/分红调整
+   - 公司进行1到N拆分（N < 1时是股票合并），并在T日除权，则股票所有T日前的价格数据都要除以N。
+   - 公司派发每股d美元分红，并在T日除权，那么股票所有T日以前价格数据，要乘以(T-1日收盘价-d)/T-1日收盘价。通过乘数调整可以保证历史数据收益在调整前后没有变。
+2. 日数据最高价/最低价的噪声：很多时候，最高价，最低价的出现可能仅仅是因为有一个没有被正确记录，又没有被清洗掉的高频数据导致的。所以基于HIGH, LOW的回测没有基于OPEN, CLOSE的可靠。
+3. 幸存者偏差：有幸存者偏差的数据库不会记载半中间退市的股票。我们会不选择退市的股票，造成虚假盈利。
+   解决办法之一：免除偏差：现在开始收集你每日实时的选股池中的全部股票数据用于将来的回测；减小偏差：基于最近的数据来回测，回测结果不会因历史消失的股票受到太大影响。
 
-   > 获取数据后，快速错误检查：计算数据导出的每日收益率。如果交易的收益数据距离平均值超过4倍标准差，那就应该注意。通常极端的收益可能因为一个重大的新闻，或者来之当太难视察过指数的大变动。如果不是，那可疑。
-   >
+> 获取数据后，快速错误检查：计算数据导出的每日收益率。如果交易的收益数据距离平均值超过4倍标准差，那就应该注意。通常极端的收益可能因为一个重大的新闻，或者来之当太难视察过指数的大变动。如果不是，那可疑。
+
 #### 3.2.4. Eva. of  Profit
-   ==年化夏普比率、最大回撤和最大回撤时间。== 我们不应该从价值中性投资组合收益中减去市场的无风险利率。p51隔夜头寸？
+
+==年化夏普比率、最大回撤和最大回撤时间。== 我们不应该从价值中性投资组合收益中减去市场的无风险利率。p51隔夜头寸？
+
 #### 3.2.5. Eva. of Strategy
+
 1. Future data biases
    使用实际交易不可获取的未来数据，来进行之前的交易决策。
 
@@ -290,16 +294,16 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
    > 4. 移除A最后N交易日的数据
    > 5. 检查AB中持仓是否一致。不一致：历史回测程序由未来数据偏差，要改正（程序在决策时，使用了未来的数据决策）。
    >
-2. Overfitting: 
-使用的参数<= 5个。包括进场、出场条件、持仓时间、计算移动平均线的回看时间。通过使用足够大样本（参数个数*252每日交易1次，日K）、样本外测试、敏感性测试来减少。但是无法完全排除。
-3. Out-of-sample testing: 
-参考AI 的训练集+测试集。或者是交叉验证。
-4. Parameter optimization: 
-通过机组不同该参数产生交易的平均结果来综合制定策略。延申：无参数模型。
+2. Overfitting:
+   使用的参数<= 5个。包括进场、出场条件、持仓时间、计算移动平均线的回看时间。通过使用足够大样本（参数个数*252每日交易1次，日K）、样本外测试、敏感性测试来减少。但是无法完全排除。
+3. Out-of-sample testing:
+   参考AI 的训练集+测试集。或者是交叉验证。
+4. Parameter optimization:
+   通过机组不同该参数产生交易的平均结果来综合制定策略。延申：无参数模型。
 5. Sensitivity analysis：
-如果对模型的参数改变后，除了最优参数，其它任何参数都是策略表现很差，那么这个模型可能就收到数据过拟合偏差的影响。
-6. Transaction costs: 
-手续费、流动性成本、机会成本、市场冲击点和滑点。
+   如果对模型的参数改变后，除了最优参数，其它任何参数都是策略表现很差，那么这个模型可能就收到数据过拟合偏差的影响。
+6. Transaction costs:
+   手续费、流动性成本、机会成本、市场冲击点和滑点。
 
 ### 3.3 Hardware
 
@@ -470,23 +474,17 @@ g: 复合收益率, r: 无风险利率
 
 ### 4.3 Terms
 
-Price & Order
+#### 4.3.1 Price & Order
 
 - **Ask Price(卖价)**: The lowest price a seller is willing to accept for an asset.
 - **Bid Price(买价)**: The highest price a buyer is willing to pay for an asset.
-- **Spread(价差)**: The difference between the bid price and the ask price. The bigger, the lower the liquidity.
+- **Spread(点差)**: The difference between the bid price and the ask price. The bigger, the lower the liquidity.
 - **Bull Market(牛市)**: A market condition where prices are rising or are expected to rise.
 - **Bear Market(熊市)**: A market condition where prices are falling or are expected to fall.
 - **Volatility(波动性)**: A statistical measure of the dispersion of returns for a given security or market index.
 - **Liquidity(流动性)**: The ease with which an asset can be converted into cash without affecting its market price.
 
-Order
-
-- **Market Order(市价单)**: An order to buy or sell a security immediately at the best available current price.
-- **Limit Order(限价单)**: An order to buy or sell a security at a specific price or better.
-- **Stop-Loss Order(止损单)**: An order placed to sell a security
-
-Amount
+#### 4.3.2 Amount
 
 - **Lot (手)**: A standard unit of trading in financial markets, representing a fixed quantity of an asset.
 - **Lot Size (手数)**: The number of units of an asset in one lot.
@@ -511,18 +509,48 @@ Amount
 - **Volumn (成交量)**：“Volume measures the number of shares traded in a stock or contracts traded in futures or options.Volume can indicate market strength, as rising markets on increasing volume are typically viewed as strong and healthy.When prices fall on increasing volume, the trend is gathering strength to the downside.When prices reach new highs (or no lows) on decreasing volume, watch out—a reversal might be taking shape.
   On-balance volume (OBV) and the Klinger oscillator are examples of charting tools that are based on volume.”[4]
 
+#### 4.3.3 Pending orders
+
+1. - I am expecting the market first coming down then going up.
+   - When buy price (enter the market) < actual price, ==BUY LIMIT==.
+   - The price hit and trigger the order, buy in.
+   - Set the large Take profit (TP), small Stop limit (SL).
+
+     ![image.png](assets/buylimit.png)
+2. - I am expecting the market to go up directly.
+
+- When buy price (enter the market) > actual price, ==BUY STOP==.
+- The price hit and trigger the order, buy in.
+- Set the large Take profit (TP), small Stop limit (SL).
+  ![img.png](img.png)
+
+3. - I am expecting the market first going up then going down.
+
+- When the buy price > actual price, ==SELL LIMIT==.
+- The price hit and trigger the order, sell.
+- Set large TP beneath, small SL
+  ![img_1.png](img_1.png)
+
+4. - I am expecting the maret to go down all the way.
+
+- When the buy price < actual price, ==SELL STOP==
+- The price hit and trigger the order, sell.
+- Set large TP beneath, small SL.
 
 ## References
 
 [1]. Hahn, L., K. https://www.quora.com/What-is-the-difference-between-a-security-and-an-asset#:~:text=A%20security%20is%20a%20type%20of%20asset.,bonds)%2C%20or%20structured%20products.
 [2]. https://www.bilibili.com/video/BV19r421u7af/?spm_id_from=333.999.0.0&vd_source=46e3ece8cab8651bbec1fb834bc573a7
 [3]. https://www.investopedia.com/terms/e/etf.asp
-[4]. https://www.investopedia.com/articles/technical/02/010702.asp#:~:text=Volume%20measures%20the%20number%20of,gathering%20strength%20to%20the%20downside.
+[4].https://www.investopedia.com/articles/technical/02/010702.asp#:~:text=Volume%20measures%20the%20number%20of,gathering%20strength%20to%20the%20downside.
 [5]. https://www.investopedia.com/investing/primary-and-secondary-markets/#:~:text=Participants%20in%20the%20primary%20market,purchase%20the%20newly%20issued%20securities.
 [6]. https://www.investopedia.com/terms/b/broker-dealer.asp
 [7]. Lee, R.S.T. (2020).Quantum finance: Intelligent forecast and trading systems. Springer Singapore.
 [8]. Chande, T. (2021). How to develop and implement a winning trading system. Wiley.
 [9]. Chan, E. (2021). Quantitative trading: How to build your own algorithmic trading business. Wiley.
-？[10] Wayback Machine. https://web.archive.org/web/20130805154314/http://www.lucent.com/bstj/vol35-1956/articles/bstj35-4-917.pdf.
+[10] ForexWizard.Buy Limit,Sell Limit,Buy Stop,Sell Stop : How To Place Pending Orders. YouTube. https://www.youtube.com/watch?v=9yVT2hTj74U
+
+Plan to add:
+[] Wayback Machine. https://web.archive.org/web/20130805154314/http://www.lucent.com/bstj/vol35-1956/articles/bstj35-4-917.pdf.
 []. Hull, J., C. (2018). Options, Futures, and Other Derivatives (10 e.d.). Pearson.
 Kelly's formula - YouTube

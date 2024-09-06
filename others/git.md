@@ -12,6 +12,9 @@ copyright: free
 date: 2024-08-01
 ---
 # Git
+
+#### Self-learning link: https://nulab.com/zh-cn/learn/software-development/git-tutorial/
+
 ## Account & Connection
 1. Initialize your folder as the local repo
    ```git

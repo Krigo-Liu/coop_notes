@@ -1,5 +1,5 @@
 ---
-title: Finance
+title: Macroeconomics
 icon: file
 order: 2
 author: Doris
@@ -14,6 +14,7 @@ date: 2024-08-14
 ## 1 Big concepts
 
 钱从哪来：商品价值=货币总量。社会会自我校正。
+You should be focusing on your risk before your reward.
 
 ### 1.1 Trading items
 
@@ -177,9 +178,9 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
       3. **Private instiment 22%.**
          1. Pysical gold金条金币：交易成本高. 商场交易可能高达10%。额外的成本保障黄金安全。
          2. digital gold. 交易黄金拥有权。每年净投资量小于实体黄金，但交易量巨大，甚至大于美国国债。2)、3)普通人可以接触到。
-            1) . OTC柜台交易，交易量接近一半。黄金供应商、开发商之间的大单交易，集中在伦敦金银市场协会（LBMA）完成。
-            2) . 黄金期货Futures(远大于ETF，ETF只占零头)：主要的交易：纽约COMEX, 上海期货交易所。
-            3) . ETF: _exchange-traded fund_  is a basket of securities that tracks or seeks to outperform an underlying index [3].
+            1) OTC柜台交易，交易量接近一半。黄金供应商、开发商之间的大单交易，集中在伦敦金银市场协会（LBMA）完成。
+            2) 黄金期货Futures(远大于ETF，ETF只占零头)：主要的交易：纽约COMEX, 上海期货交易所。
+            3) ETF: _exchange-traded fund_  is a basket of securities that tracks or seeks to outperform an underlying index [3].
       4. **Others 15%** 电子器件、镶牙、食品……
    3. Price：由于黄金不产生现金流，也没有估值，所以从供需上考虑。
       1. Supply：较为稳定，忽略
@@ -195,11 +196,25 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
          7. 品牌金：周大福、周生生。
    4. Why recent rally(sustained increase in prices over a period of time)：结合全球政治，市场普遍避险预期；黄金在社会圈讨论度上升，一定程度上激发了人的偏爱和投机心理。
    5. investment tips：金价波动不小于股票；希望避险的话需要站在10年以上的尺度考虑；实体黄金交易成本较高（5%~20%）；长期、大量资金配置在（重仓）黄金不是最优解；难量化影响因素，谨慎相信技术分析。
+2. Trade in FxPro.
+   1. basic info. Liquidation on Wed.
+      ![img_2.png](img_2.png)
+      ![img_3.png](img_3.png)
+   2. Calculation
+      ![img_4.png](img_4.png)
+      vertical axis: 5 digits price (dollar per ounce).
+      e.g.
+      buy 1 lot (100 ounce) of Gold at 1300.00(\$ per ounce).
+      Then the price goes up to 1301.00(\$ per ounce).
+      1 ounce of gold increases 1 dollar.
+      100 ounce of gold increases 100 dollar.
+
+
 
 ## 3 Trading system[9]
 
 ### 3.1 Finding a good strategy
-
+#### 3.1.1 Overview
 1. Your demands：
 
    - 有多少时间维护交易系统？
@@ -231,6 +246,18 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
    > - Occam's razor (奥卡姆剃刀).策略规则越多，模型参数越多，策略越容易过拟合，经不起时间的考验[9]。很少有系统超过10个主要变量，大多5~7个重要变量就够用的。极少有过程基于4个或更多变量之间的相互作用[8]。
    > - 金融时间序列是不平稳序列，因为规则和宏观经济在变。多数策略在10年前表现比现在好，因为那是没有很多对冲基金运行量化策略，买卖价差会大一些；做空取消...所以统计学思维（数据越多回测结果越有效）有局限性，只在金融数据符合平稳随机过程才正确。可以使用更厉害的模型，将市场结构的改变纳入现在考虑因素（[9]Chapter7）。只需策略在最近的数据表现良好。
    >
+
+#### 3.1.2 Strategies
+
+> Steps:
+> 1. higher time frame: weekly -> daily. to determine the overall trend & key levels
+> 2. Analysis timef: 4h -> 1h: market direction, supply and demand areas, liquidity zones, trading opportunities
+> 3. Entry Timeframe: M15 -> M5. confirmation and entry.
+
+important point: draw the levels where you could get the greatest number of touches. Second, drawing from the bodies of the candles has higher priority.
+Third, treat the levels as areas, not solid lines.
+
+
 
 ### 3.2 Backtest 回测
 
@@ -516,7 +543,7 @@ g: 复合收益率, r: 无风险利率
    - The price hit and trigger the order, buy in.
    - Set the large Take profit (TP), small Stop limit (SL).
 
-     ![image.png](assets/buylimit.png)
+     ![image.png](buylimit.png)
 2. - I am expecting the market to go up directly.
 
 - When buy price (enter the market) > actual price, ==BUY STOP==.
@@ -537,6 +564,17 @@ g: 复合收益率, r: 无风险利率
 - The price hit and trigger the order, sell.
 - Set large TP beneath, small SL.
 
+#### 4.3.5 Five rules for placing STOP LOSS
+1. Trend base rule: There's never going to be structures that are perfectly aligned. o.w.waiting for structures to be developed.
+2. 
+#### 4.3.4 Trailing orders
+1. Trailing stop-loss (trailing SL): a dynamic SL that moves with the market price.If the market price moves in favor of the trade 
+(e.g., up for a long position), the stop-loss adjusts accordingly to lock in profits. However, if the price moves against the trade, 
+the stop-loss remains fixed and the trade is closed if the price hits this level.
+2. HL (High-Low) Stop-Loss: a type of stop-loss that is set based on the highest high or the lowest low of a certain number 
+of previous periods (e.g., days, hours, minutes). For example, in a long position, the stop-loss might be set at the lowest low of the last 5 days, 
+ensuring that the position is closed if the price drops below this level.
+
 ## References
 
 [1]. Hahn, L., K. https://www.quora.com/What-is-the-difference-between-a-security-and-an-asset#:~:text=A%20security%20is%20a%20type%20of%20asset.,bonds)%2C%20or%20structured%20products.
@@ -549,6 +587,7 @@ g: 复合收益率, r: 无风险利率
 [8]. Chande, T. (2021). How to develop and implement a winning trading system. Wiley.
 [9]. Chan, E. (2021). Quantitative trading: How to build your own algorithmic trading business. Wiley.
 [10] ForexWizard.Buy Limit,Sell Limit,Buy Stop,Sell Stop : How To Place Pending Orders. YouTube. https://www.youtube.com/watch?v=9yVT2hTj74U
+[11]. 5 RULES You Must Follow When Placing Your STOP LOSS. https://www.youtube.com/watch?v=aJF5ZsKqewU
 
 Plan to add:
 [] Wayback Machine. https://web.archive.org/web/20130805154314/http://www.lucent.com/bstj/vol35-1956/articles/bstj35-4-917.pdf.

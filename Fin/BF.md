@@ -12,7 +12,8 @@ copyright: 无版权
 date: 2024-09
 ---
 
-### Aim: Learning how to report on economic events and trends in HK, China, and the broader Asia-Pacific region.
+### Aim: To learning how to report on economic events and trends in HK, China, and the broader Asia-Pacific region.
+
 # 1. Acquisition 收购
 ## 1.1 Outline
 1. 定目标公司：

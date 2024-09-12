@@ -198,10 +198,10 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
    5. investment tips：金价波动不小于股票；希望避险的话需要站在10年以上的尺度考虑；实体黄金交易成本较高（5%~20%）；长期、大量资金配置在（重仓）黄金不是最优解；难量化影响因素，谨慎相信技术分析。
 2. Trade in FxPro.
    1. basic info. Liquidation on Wed.
-      ![img_2.png](img_2.png)
-      ![img_3.png](img_3.png)
+      ![img_2.png](pic/img_2.png)
+      ![img_3.png](pic/img_3.png)
    2. Calculation
-      ![img_4.png](img_4.png)
+      ![img_4.png](pic/img_4.png)
       vertical axis: 5 digits price (dollar per ounce).
       e.g.
       buy 1 lot (100 ounce) of Gold at 1300.00(\$ per ounce).
@@ -543,20 +543,20 @@ g: 复合收益率, r: 无风险利率
    - The price hit and trigger the order, buy in.
    - Set the large Take profit (TP), small Stop limit (SL).
 
-     ![image.png](buylimit.png)
+     ![image.png](pic/buylimit.png)
 2. - I am expecting the market to go up directly.
 
 - When buy price (enter the market) > actual price, ==BUY STOP==.
 - The price hit and trigger the order, buy in.
 - Set the large Take profit (TP), small Stop limit (SL).
-  ![img.png](img.png)
+  ![img.png](pic/img.png)
 
 3. - I am expecting the market first going up then going down.
 
 - When the buy price > actual price, ==SELL LIMIT==.
 - The price hit and trigger the order, sell.
 - Set large TP beneath, small SL
-  ![img_1.png](img_1.png)
+  ![img_1.png](pic/img_1.png)
 
 4. - I am expecting the maret to go down all the way.
 

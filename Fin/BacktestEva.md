@@ -1,5 +1,5 @@
 ---
-title: Strategies
+title: BacktestEva
 icon: file
 order: 6
 author: Doris
@@ -11,9 +11,7 @@ footer: What is the meaning of data?
 copyright: 无版权
 date: 2024-09-04
 ---
-## Evaluation of strategies
-
-Here are some terms appeared in the package "backtesting".
+# Evaluation of Backtests
 
 1. exposure time [%]: The percentage of time that the strategy is in the market with an active position.
 2. Equity Final
@@ -33,6 +31,8 @@ $$
 $$
 
 8. Sharpe Ratio: A risk-adjusted performance metric that indicates **how much excess return you earn for the extra risk taken**, compared to a risk-free investment.
+ -  A high Sharpe Ratio suggests that the investment offers good returns for the amount of risk taken. It is a preferred metric for comparing the performance of different investments.
+ - High SR investments are typically favored for constructing efficient portfolios.
 
 $$
 \text{Sharpe Ratio} = \frac{R_p - R_f}{\sigma_p}
@@ -67,7 +67,8 @@ $$
 $$
 
 11. Max. Drawdown [%]: The largest percentage drop from the peak equity value to a subsequent low during the evaluation period.
-
+A high MDD signals higher risk, indicating that the investment has experienced significant drawdowns. This can be a red flag for risk-averse investors.
+Worst-case senarios.
 $$
 \text{Max Drawdown} = \frac{\text{Peak Equity} - \text{Trough Equity}}{\text{Peak Equity}} \times 100
 $$

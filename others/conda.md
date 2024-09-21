@@ -91,3 +91,28 @@ date: 2024-08-01
     ```cmd
     pip install package_name -i https://pypi.tuna.tsinghua.edu.cn/simple/
     ```
+### Export the current environment to filename.yaml
+- Export the packages installed by conda
+   - Non-base env, export directly
+      ```cmd
+      conda env export > filename.yaml
+      ```
+   - base env: first clone, enter the cloned env, then export.
+     ```cmd
+     conda create -n new_name --clone base
+     ```
+     You can delete the cloned env if necessary.
+     ```cmd
+     conda remove -n new_name --all
+     ```
+- Export the packages installed by pip
+     ```cmd
+      pip freeze > pipenv.txt
+     ```
+### Create a new environment using filename.yaml on the other machine
+  ``` cmd
+     conda env create -f filename.yaml
+  ```
+  ``` cmd
+     pip install -r pipenv.txt
+  ```

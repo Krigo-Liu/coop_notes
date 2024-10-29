@@ -209,12 +209,12 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
       1 ounce of gold increases 1 dollar.
       100 ounce of gold increases 100 dollar.
 
-
-
 ## 3 Trading system[9]
 
 ### 3.1 Finding a good strategy
+
 #### 3.1.1 Overview
+
 1. Your demands：
 
    - 有多少时间维护交易系统？
@@ -250,6 +250,7 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
 #### 3.1.2 Strategies
 
 > Steps:
+>
 > 1. higher time frame: weekly -> daily. to determine the overall trend & key levels
 > 2. Analysis timef: 4h -> 1h: market direction, supply and demand areas, liquidity zones, trading opportunities
 > 3. Entry Timeframe: M15 -> M5. confirmation and entry.
@@ -257,6 +258,67 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
 important point: draw the levels where you could get the greatest number of touches. Second, drawing from the bodies of the candles has higher priority.
 Third, treat the levels as areas, not solid lines.
 
+#### 3.1.3 Technical indicators
+##### quantitative indicators
+1. OK Relative Strength Index (RSI) 
+   - measure how quickly traders are bidding the price of the security up or down
+   - scale 0 to 100
+   - < 30: oversold. >70 overbought
+   - around 50 no strong trend
+
+2. OK Stochastic Oscillator (Stochastic)
+   - Value above 80: Indicates the asset is overbought, possibly signaling a reversal or pullback.
+   - Value below 20: Indicates the asset is oversold, possibly signaling a reversal upwards.
+   - Crossing of %K and %D lines: A %K line crossing above %D is bullish, while crossing below %D is bearish.
+
+##### Qualitative indicators
+1. Relative Vigor Index (RVI)
+   It measures the strength of a trend by comparing a security's closing price to its trading range while smoothing 
+   the results using a simple moving average (SMA).
+   - RVI Divergences: Divergence between the RVI indicator and price suggests there will be a near-term change in the trend 
+     in the direction of the RVI's trend. So, if a stock price is rising and the RVI indicator is falling, it predicts the stock will reverse over the near term.
+   - RVI Crossovers: Like many oscillators, the RVI has a signal line that's often calculated with price inputs. A crossover above the signal line is a bullish indicator,
+     while a crossover below the signal line is a bearish indicator. These crossovers are designed to be leading indicators of future price direction.
+
+2. Bollinger Bands (Bands)
+   - near/above the upper band: overbought
+   - near/below the lower band: oversold
+   - bands widening: increasing volatility <-> contracting.
+   
+3. Gator Oscillator (Gator)
+   - The Green Alligator’s lips is calculated as a 5-period Simple Moving Average and shifted 3 bars ahead.
+   - The Red Alligator’s teeth is calculated as a 9-period Simple Moving average and shifted 5 bars ahead.
+   - The Blue Alligator’s jaw is a 13-period Simple Moving Average and shifted 8 bars ahead.
+   
+     https://blueberrymarkets.com/en/academy/how-to-use-gator-oscillator-for-forex-trading/
+4. Awesome Oscillator (AO)
+   - One period = five period SMA – 34 period SMA
+   - + uptrend
+   - - downtrend
+   - crossing the 0 line. Can signal potential buy or sell points depending on the direction of the cross.
+   - the zero-line crossover, the twin peaks, and the saucer.
+   https://www.forex.com/en-us/news-and-analysis/what-is-the-awesome-oscillator/
+
+5. Ichimoku Kinko Hyo (Ichimoku)
+   - Tenkan-sen crossing Kijun-sen upwards: Indicates a potential bullish signal.
+   Tenkan-sen crossing Kijun-sen downwards: Indicates a potential bearish signal.
+   Price above the Cloud (Kumo): Indicates an uptrend.
+   Price below the Cloud (Kumo): Indicates a downtrend.
+   Price inside the Cloud (Kumo): Indicates a potential consolidation or indecision.
+
+6. Momentum (Momentum)
+   - + uptrend
+   - - downtrend
+   - momentum increase: accelerating price movement
+7. Moving Average Oscillator (OsMA)
+   - + uptrend
+   - - downtrend
+   - Zero crossing: Signals potential changes in the market trend.
+8. Moving average convergence/divergence (MACD)
+   MACD=12-Period EMA − 26-Period EMA
+   - MACD above zero: Indicates bullish momentum, with the short-term moving average above the long-term moving average.
+   - MACD below zero: Indicates bearish momentum, with the short-term moving average below the long-term moving average.
+   - Signal line cross: A cross of the MACD line above the signal line is bullish, while a cross below the signal line is bearish.
 
 
 ### 3.2 Backtest 回测
@@ -301,6 +363,18 @@ excel, matlab(所有量化交易人群最被广泛使用的).MT5. 后两个包�
 2. 日数据最高价/最低价的噪声：很多时候，最高价，最低价的出现可能仅仅是因为有一个没有被正确记录，又没有被清洗掉的高频数据导致的。所以基于HIGH, LOW的回测没有基于OPEN, CLOSE的可靠。
 3. 幸存者偏差：有幸存者偏差的数据库不会记载半中间退市的股票。我们会不选择退市的股票，造成虚假盈利。
    解决办法之一：免除偏差：现在开始收集你每日实时的选股池中的全部股票数据用于将来的回测；减小偏差：基于最近的数据来回测，回测结果不会因历史消失的股票受到太大影响。
+   在金融市场中，即使是相同时间段内的日线数据，不同的数据来源有时会显示差异，原因可能包括以下几点：
+
+- 为什么会出现：同样时间段内的日线数据，两个数据来源显示不同？
+
+1. **数据来源的时间区间差异**：不同的交易平台可能使用不同的时区来定义一个交易日的开始和结束。例如，某些平台可能以纽约时间定义一天，而另一些平台则使用伦敦或其他时区，这可能导致同一时间段内的日线数据不同。
+2. **数据清洗和处理方法**：数据供应商在处理和清洗数据时，可能采用不同的方法来处理异常数据、假设成交量和价格波动，或处理跳空和回补。某些数据源可能会忽略异常波动或修正历史数据，而其他数据源则可能不会，这也会造成差异。
+3. **时差与休市日**：一些市场可能在特定的时间或节假日休市，而其他市场仍然开放。交易日的定义可能会因为市场休假时间不同而有差异。
+4. **数据更新频率**：不同平台的数据刷新频率不同，有的平台可能在某些延迟的情况下提供数据，而另一些平台提供的是实时数据。这可能导致在短时间内的数据有所不同。
+5. **开盘价和收盘价的计算方式**：一些平台可能采用不同的规则来定义每日的开盘价和收盘价。例如，有些会基于特定交易时段的第一个和最后一个成交价，而另一些则可能采用加权平均值或其他方法。
+6. **市场数据提供商的算法**：有些数据来源基于撮合交易数据，有些可能基于来自流动性提供者的数据，导致价格和成交量等信息有所不同。
+
+这些因素都会导致即使是在同一时间段内，不同的数据源显示不同的日线数据。
 
 > 获取数据后，快速错误检查：计算数据导出的每日收益率。如果交易的收益数据距离平均值超过4倍标准差，那就应该注意。通常极端的收益可能因为一个重大的新闻，或者来之当太难视察过指数的大变动。如果不是，那可疑。
 
@@ -565,15 +639,18 @@ g: 复合收益率, r: 无风险利率
 - Set large TP beneath, small SL.
 
 #### 4.3.5 Five rules for placing STOP LOSS
+
 1. Trend base rule: There's never going to be structures that are perfectly aligned. o.w.waiting for structures to be developed.
-2. 
+2.
+
 #### 4.3.4 Trailing orders
-1. Trailing stop-loss (trailing SL): a dynamic SL that moves with the market price.If the market price moves in favor of the trade 
-(e.g., up for a long position), the stop-loss adjusts accordingly to lock in profits. However, if the price moves against the trade, 
-the stop-loss remains fixed and the trade is closed if the price hits this level.
-2. HL (High-Low) Stop-Loss: a type of stop-loss that is set based on the highest high or the lowest low of a certain number 
-of previous periods (e.g., days, hours, minutes). For example, in a long position, the stop-loss might be set at the lowest low of the last 5 days, 
-ensuring that the position is closed if the price drops below this level.
+
+1. Trailing stop-loss (trailing SL): a dynamic SL that moves with the market price.If the market price moves in favor of the trade
+   (e.g., up for a long position), the stop-loss adjusts accordingly to lock in profits. However, if the price moves against the trade,
+   the stop-loss remains fixed and the trade is closed if the price hits this level.
+2. HL (High-Low) Stop-Loss: a type of stop-loss that is set based on the highest high or the lowest low of a certain number
+   of previous periods (e.g., days, hours, minutes). For example, in a long position, the stop-loss might be set at the lowest low of the last 5 days,
+   ensuring that the position is closed if the price drops below this level.
 
 ## References
 

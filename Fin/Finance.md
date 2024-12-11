@@ -9,7 +9,7 @@ tags:
   - Fin
 footer: Wondering the architecture of this world in the aspect of finance...
 copyright: 无版权
-date: 2024-08-14
+date: 2024-11
 ---
 ## 1 Big concepts
 
@@ -245,12 +245,10 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
    > - 数据的幸存者偏差的数据库是不包含因为破产、退市、收购合并等原因小时的股票/基金。看到别人使用它做的回测结果要小心，它导致回测越早期表现越好。自己做的话，因为资金限制只能拿到幸存者偏差的数据不必灰心，如果充分了解它的局限性，也可以盈利。
    > - Occam's razor (奥卡姆剃刀).策略规则越多，模型参数越多，策略越容易过拟合，经不起时间的考验[9]。很少有系统超过10个主要变量，大多5~7个重要变量就够用的。极少有过程基于4个或更多变量之间的相互作用[8]。
    > - 金融时间序列是不平稳序列，因为规则和宏观经济在变。多数策略在10年前表现比现在好，因为那是没有很多对冲基金运行量化策略，买卖价差会大一些；做空取消...所以统计学思维（数据越多回测结果越有效）有局限性，只在金融数据符合平稳随机过程才正确。可以使用更厉害的模型，将市场结构的改变纳入现在考虑因素（[9]Chapter7）。只需策略在最近的数据表现良好。
-   >
 
 #### 3.1.2 Strategies
 
 > Steps:
->
 > 1. higher time frame: weekly -> daily. to determine the overall trend & key levels
 > 2. Analysis timef: 4h -> 1h: market direction, supply and demand areas, liquidity zones, trading opportunities
 > 3. Entry Timeframe: M15 -> M5. confirmation and entry.
@@ -584,6 +582,18 @@ g: 复合收益率, r: 无风险利率
 - **Bear Market(熊市)**: A market condition where prices are falling or are expected to fall.
 - **Volatility(波动性)**: A statistical measure of the dispersion of returns for a given security or market index.
 - **Liquidity(流动性)**: The ease with which an asset can be converted into cash without affecting its market price.
+- "When an `Order` is filled":
+  - **Buying**:  
+     If you place a buy order, it’s "filled" when someone sells you the asset at the specified price.  
+     - *Example*: If you set a buy order for a stock at $100, the order is filled when a seller agrees to sell to you at $100 or lower (for market orders or limit orders, depending on the type).
+
+   - **Selling**:  
+     If you place a sell order, it’s "filled" when a buyer purchases the asset at the price you specified.  
+     - *Example*: If you set a sell order at $100, it is filled once a buyer purchases it at $100 or higher.
+
+   - **Partial Fills**:  
+     if there aren’t enough shares or contracts available at the price specified. The remaining portion may be filled over time or canceled if not completed.
+
 
 #### 4.3.2 Amount
 
@@ -666,7 +676,7 @@ g: 复合收益率, r: 无风险利率
 [10] ForexWizard.Buy Limit,Sell Limit,Buy Stop,Sell Stop : How To Place Pending Orders. YouTube. https://www.youtube.com/watch?v=9yVT2hTj74U
 [11]. 5 RULES You Must Follow When Placing Your STOP LOSS. https://www.youtube.com/watch?v=aJF5ZsKqewU
 
-Plan to add:
+Plan to read:
 [] Wayback Machine. https://web.archive.org/web/20130805154314/http://www.lucent.com/bstj/vol35-1956/articles/bstj35-4-917.pdf.
 []. Hull, J., C. (2018). Options, Futures, and Other Derivatives (10 e.d.). Pearson.
 Kelly's formula - YouTube

@@ -116,3 +116,11 @@ date: 2024-08-01
   ``` cmd
      pip install -r pipenv.txt
   ```
+
+### Pip things
+  ``` cmd
+  pip install setuptools -U
+  ```
+  ``` cmd
+  pip install setuptools -U
+  ```

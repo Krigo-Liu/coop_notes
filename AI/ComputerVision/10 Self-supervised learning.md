@@ -101,3 +101,6 @@
 - Memorize key architectures and loss functions (e.g., contrastive loss, InfoNCE).
 - Practice explaining applications like CLIP and masked autoencoders in simple terms.
 - Be ready to critique SSL methods, especially around scalability and bias.
+
+### References
+https://web.eecs.umich.edu/~justincj/teaching/eecs498/WI2022/

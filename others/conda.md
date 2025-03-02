@@ -118,9 +118,17 @@ date: 2024-08-01
   ```
 
 ### Pip things
+1.
   ``` cmd
   pip install setuptools -U
   ```
+2.
   ``` cmd
   pip install setuptools -U
+  ```
+3. Using the Command Line to Install Packages from GitHub directly
+Before running the command below, please make sure your virtual environment installed packages: git and pip.
+If not, conda install git, conda install pip.
+  ``` cmd
+  pip install git+https://github.com/kernc/backtesting.py.git
   ```

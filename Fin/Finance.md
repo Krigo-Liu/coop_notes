@@ -116,6 +116,9 @@ Events:
 E.g.
 Businesses and governments that want to generate debt capital(债务资本) can choose to issue new short- and long-term bonds on the primary market. New bonds are issued with coupon rates(票面利率) that correspond to the current interest rates(利率) at the time of issuance, which may be higher or lower than pre-existing bonds.
 
+投行岗位分布：IBD投行部(债务融资和股权发行、并购咨询)，S&T销售与交易（fixed income,equity），AM资产管理部，。。，中控风险
+7月开，准备1-2年（香港）、1月开（大陆）、（5月）北美
+
 #### 1.2.2 Secondary market (二级市场)
 
 Where securities are traded (Investors trade among themselves). It is basically the stock market and refers to the New York Stock Exchange, the Nasdaq, and other exchanges worldwide[5].
@@ -245,10 +248,12 @@ Decentralized Exchange (DEX)去中心化交易所：Uniswap, dYdX, Curve
    > - 数据的幸存者偏差的数据库是不包含因为破产、退市、收购合并等原因小时的股票/基金。看到别人使用它做的回测结果要小心，它导致回测越早期表现越好。自己做的话，因为资金限制只能拿到幸存者偏差的数据不必灰心，如果充分了解它的局限性，也可以盈利。
    > - Occam's razor (奥卡姆剃刀).策略规则越多，模型参数越多，策略越容易过拟合，经不起时间的考验[9]。很少有系统超过10个主要变量，大多5~7个重要变量就够用的。极少有过程基于4个或更多变量之间的相互作用[8]。
    > - 金融时间序列是不平稳序列，因为规则和宏观经济在变。多数策略在10年前表现比现在好，因为那是没有很多对冲基金运行量化策略，买卖价差会大一些；做空取消...所以统计学思维（数据越多回测结果越有效）有局限性，只在金融数据符合平稳随机过程才正确。可以使用更厉害的模型，将市场结构的改变纳入现在考虑因素（[9]Chapter7）。只需策略在最近的数据表现良好。
+   >
 
 #### 3.1.2 Strategies
 
 > Steps:
+>
 > 1. higher time frame: weekly -> daily. to determine the overall trend & key levels
 > 2. Analysis timef: 4h -> 1h: market direction, supply and demand areas, liquidity zones, trading opportunities
 > 3. Entry Timeframe: M15 -> M5. confirmation and entry.
@@ -257,67 +262,74 @@ important point: draw the levels where you could get the greatest number of touc
 Third, treat the levels as areas, not solid lines.
 
 #### 3.1.3 Technical indicators
+
 ##### quantitative indicators
-1. OK Relative Strength Index (RSI) 
+
+1. OK Relative Strength Index (RSI)
+
    - measure how quickly traders are bidding the price of the security up or down
    - scale 0 to 100
    - < 30: oversold. >70 overbought
    - around 50 no strong trend
-
 2. OK Stochastic Oscillator (Stochastic)
+
    - Value above 80: Indicates the asset is overbought, possibly signaling a reversal or pullback.
    - Value below 20: Indicates the asset is oversold, possibly signaling a reversal upwards.
    - Crossing of %K and %D lines: A %K line crossing above %D is bullish, while crossing below %D is bearish.
 
 ##### Qualitative indicators
+
 1. Relative Vigor Index (RVI)
-   It measures the strength of a trend by comparing a security's closing price to its trading range while smoothing 
+   It measures the strength of a trend by comparing a security's closing price to its trading range while smoothing
    the results using a simple moving average (SMA).
-   - RVI Divergences: Divergence between the RVI indicator and price suggests there will be a near-term change in the trend 
+
+   - RVI Divergences: Divergence between the RVI indicator and price suggests there will be a near-term change in the trend
      in the direction of the RVI's trend. So, if a stock price is rising and the RVI indicator is falling, it predicts the stock will reverse over the near term.
    - RVI Crossovers: Like many oscillators, the RVI has a signal line that's often calculated with price inputs. A crossover above the signal line is a bullish indicator,
      while a crossover below the signal line is a bearish indicator. These crossovers are designed to be leading indicators of future price direction.
-
 2. Bollinger Bands (Bands)
+
    - near/above the upper band: overbought
    - near/below the lower band: oversold
    - bands widening: increasing volatility <-> contracting.
-   
 3. Gator Oscillator (Gator)
+
    - The Green Alligator’s lips is calculated as a 5-period Simple Moving Average and shifted 3 bars ahead.
    - The Red Alligator’s teeth is calculated as a 9-period Simple Moving average and shifted 5 bars ahead.
    - The Blue Alligator’s jaw is a 13-period Simple Moving Average and shifted 8 bars ahead.
-   
+
      https://blueberrymarkets.com/en/academy/how-to-use-gator-oscillator-for-forex-trading/
 4. Awesome Oscillator (AO)
+
    - One period = five period SMA – 34 period SMA
    - + uptrend
    - - downtrend
    - crossing the 0 line. Can signal potential buy or sell points depending on the direction of the cross.
    - the zero-line crossover, the twin peaks, and the saucer.
-   https://www.forex.com/en-us/news-and-analysis/what-is-the-awesome-oscillator/
-
+     https://www.forex.com/en-us/news-and-analysis/what-is-the-awesome-oscillator/
 5. Ichimoku Kinko Hyo (Ichimoku)
-   - Tenkan-sen crossing Kijun-sen upwards: Indicates a potential bullish signal.
-   Tenkan-sen crossing Kijun-sen downwards: Indicates a potential bearish signal.
-   Price above the Cloud (Kumo): Indicates an uptrend.
-   Price below the Cloud (Kumo): Indicates a downtrend.
-   Price inside the Cloud (Kumo): Indicates a potential consolidation or indecision.
 
+   - Tenkan-sen crossing Kijun-sen upwards: Indicates a potential bullish signal.
+     Tenkan-sen crossing Kijun-sen downwards: Indicates a potential bearish signal.
+     Price above the Cloud (Kumo): Indicates an uptrend.
+     Price below the Cloud (Kumo): Indicates a downtrend.
+     Price inside the Cloud (Kumo): Indicates a potential consolidation or indecision.
 6. Momentum (Momentum)
+
    - + uptrend
    - - downtrend
    - momentum increase: accelerating price movement
 7. Moving Average Oscillator (OsMA)
+
    - + uptrend
    - - downtrend
    - Zero crossing: Signals potential changes in the market trend.
 8. Moving average convergence/divergence (MACD)
    MACD=12-Period EMA − 26-Period EMA
+
    - MACD above zero: Indicates bullish momentum, with the short-term moving average above the long-term moving average.
    - MACD below zero: Indicates bearish momentum, with the short-term moving average below the long-term moving average.
    - Signal line cross: A cross of the MACD line above the signal line is bullish, while a cross below the signal line is bearish.
-
 
 ### 3.2 Backtest 回测
 
@@ -583,17 +595,14 @@ g: 复合收益率, r: 无风险利率
 - **Volatility(波动性)**: A statistical measure of the dispersion of returns for a given security or market index.
 - **Liquidity(流动性)**: The ease with which an asset can be converted into cash without affecting its market price.
 - "When an `Order` is filled":
-  - **Buying**:  
-     If you place a buy order, it’s "filled" when someone sells you the asset at the specified price.  
-     - *Example*: If you set a buy order for a stock at $100, the order is filled when a seller agrees to sell to you at $100 or lower (for market orders or limit orders, depending on the type).
+  - **Buying**:If you place a buy order, it’s "filled" when someone sells you the asset at the specified price.
 
-   - **Selling**:  
-     If you place a sell order, it’s "filled" when a buyer purchases the asset at the price you specified.  
-     - *Example*: If you set a sell order at $100, it is filled once a buyer purchases it at $100 or higher.
+    - *Example*: If you set a buy order for a stock at $100, the order is filled when a seller agrees to sell to you at $100 or lower (for market orders or limit orders, depending on the type).
+  - **Selling**:If you place a sell order, it’s "filled" when a buyer purchases the asset at the price you specified.
 
-   - **Partial Fills**:  
-     if there aren’t enough shares or contracts available at the price specified. The remaining portion may be filled over time or canceled if not completed.
-
+    - *Example*: If you set a sell order at $100, it is filled once a buyer purchases it at $100 or higher.
+  - **Partial Fills**:
+    if there aren’t enough shares or contracts available at the price specified. The remaining portion may be filled over time or canceled if not completed.
 
 #### 4.3.2 Amount
 

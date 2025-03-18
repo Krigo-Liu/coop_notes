@@ -3,6 +3,7 @@
 1. Capital letters: random variables
 2. Lowercase letters: values of random variables & for scalar functions.
 3. **Quantities** that are required to be real-valued vectors are written in **bold** and in **lowercase** (even if random variables). Matrices are bold capitals.
+4. Abbreviations: - for disadvantages, + for advantages, sol for solution, nw for network
 
 ## Symbols
 
@@ -95,18 +96,27 @@ $\color{orange}\text{Expected return }G_t$
     G_t=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k+1}=\sum_{k=0}^{\infty}\gamma^k = \frac{1}{1-\gamma}
     $$
 
-$\color {orange}\pi \text{'s Value Functions}$ 给s, (s,a), exp return from that sate, (s,a)|$\pi$赋值
+$\color {orange}\pi \text{'s Value Functions}$ assign values to: s, (s,a), exp return from that sate, (s,a)|$\pi$
 
 - $ v_\pi(s) $: value of state $ s $ under policy $ \pi $ (expected return)
 - $ v_*(s) $: value of state $ s $ under the **optimal policy** (its value functions are optimal).
   - optimal value f for s & (s,a) are unique for a MDP, but there can be many optimal $\pi$
   - Any policy that is greedy with respect to  the optimal value functions must be an optimal policy.
-- $ q_\pi(s, a) $: value of taking action $ a $ in state $ s $ under policy $ \pi $
-- $ q_*(s, a) $: value of taking action $ a $ in state $ s $ under the optimal policy
+- $ q_\pi(s, a) $: value of taking action $ a $ in state $ s $ while following policy $ \pi $
+- $ q_*(s, a) $: value of taking action $ a $ in state $ s $ while following the optimal policy
+  ```
+  q statnds for quality, distinguised from state-value f
+  ```
 
 $\color{orange}\text{Bellman equation for state values } v_\pi$ The value function $v_\pi$ s Bellman equation.
 
 ![image.png](pic/image.png)
+
+```text
+Starting from state s, the root node at the top, the agent could take any of some set of actions (e.g.3) based on its policy pi. 
+From each of these, the environment could respond with one of several next states, s0 (e.g.2), 
+along with a reward, r, depending on its dynamics given by the function p.
+```
 
 $$
 v_\pi(s)=E_\pi[G_t|s]
@@ -114,10 +124,23 @@ v_\pi(s)=E_\pi[G_t|s]
 =\sum_a\pi(a|s)\sum_\text{s',r}p(s',r|s,a)[r+\gamma v_\pi(s')] \text{   for all s} \in S
 $$
 
+![q pi.png](pic/qpi.png)
+
+```text
+If we were to take action 𝑎 in state 𝑠, what is the expected return if we then follow 𝜋 afterward?
+```
+
+$$
+q_\pi(s,a)
+=E_\pi[G_t|s,a]
+=E_\pi[R_\text{t+1}+\gamma G_\text{t+1}|S=s, A=a]
+=\sum_rp(s',r|s,a)[r+\gamma v_\pi(s')]\sum_\text{s',a}\pi(a'|s')
+$$
+
 $\color{orange}\text{Bellman optimality equation}$ :the value of a state under an optimal policy must equal the expected return for  the best action from that state
 
 $$
-v_*(s)=max_a q\pi_*(s,a) 
+v_*(s)=\max_a q\pi_*(s,a) 
 =E_\pi[G_t|s]
 =E_\pi[R_\text{t+1}+\gamma G_\text{t+1}|S=s]
 =\sum_a\pi(a|s)\sum_\text{s',r}p(s',r|s,a)[r+\gamma v_\pi(s')]
@@ -127,7 +150,103 @@ $\color{orange}\text{Apporximations for value f, policy, models}$
 
 Even if the agent has a complete and accurate environment model, the agent is typically unable to perform enough computation (memory) per time step to fully use it.
 
----
+### 4 Value-based DRL
+
+$\large \color{violet}\text{DQN family}$
+
+Q-Learning: learns a function $Q_\theta(s,a)$ with para $\theta$
+
+- given a segment {(s,a,s',r)}
+- $\color{turquoise}\text{target }$$y=r+\gamma max_\text{a'}Q_\theta(s',a')$
+- update:
+
+  $$
+  Q_\theta(s,a) \leftarrow Q_\theta(s,a)+\alpha(r+\gamma \max\limits_{a'}Q_\theta(s',a')-Q_\theta(s,a))
+  $$
+
+  α后面类似梯度下降
+- optimization objective:
+
+  $$
+  \theta^* \leftarrow arg \min_\theta E_\text{(s,a,s',r) ∼ U(D)} \frac{1}{2}[(r+\gamma \max\limits_{a'}Q_\theta(s',a'))-Q_\theta(s,a)]^2
+  $$
+
+  - $(r+\gamma max_\text{a'}Q_\theta(s',a')$ TD target, no gradient here???
+  - $\text{(s,a,s',r) ∼ U(D)}$: a transition **(state, action, next state, reward)** is **randomly sampled** from the replay buffer D using a **uniform distribution** **U**.
+  - $Q_\theta(s',a')$ 如果不固定，会连续更新，不稳定
+
+$\color{orange}\text{Deep Q-Networks (DQN)}$ represents Q function $Q_\theta(s,a)$ by using neural networks.
+
+- Input:s.   Not（s,a), because too large
+- Last layer: a.  #of elements $|A|$
+- Output:(s,a)
+
+-:
+
+- unstable
+  - continuously sampled (s,a,s',r) is not IID
+  - $Q_\theta(s',a')$ updates freq
+- output is discrete (only fit for discrete action space)
+
+sol:
+
+- Experience replay: non IID data -> IID data
+  - Store sample $e_t = (s_t, a_t, s_\text{t+1}, r_t)$ in each step of training INTO replay buffer D.
+  - Sampling, uniformly distributed
+- Build 2 nw:
+  - Evaluations nw: $Q_\theta(s,a)$
+  - Target nw $Q_{\theta^-}(s,a)$ to compute TD target: synchronize with the evaluation nw every C step
+    - $\color{turquoise}\text{target }$ $y=r+\gamma max_\text{a'}Q_{\theta^-}(s',a')$
+
+Algorithm:
+
+![image.png](pic/DQN.png)
+
+$\color{orange}\text{Double DQN (DDQN)}$ ,improved version of DQN
+
+Due to the Jensen's inequality, max operation makes the est Q always larger than real Q value. And it will be more serious when #candidate actions increase.
+
+$$
+E[\hat Q(s,a)]=Q(s,a) \\E[\max\limits_{a} \hat Q(s,a)] \ge \max\limits_{a} Q(s,a)
+$$
+
+$$
+\max\limits_{a'}Q_{\theta^-}(s',a')=Q_{\theta^{-}}(s', arg \max\limits_{a'}Q_{\theta^-}(s',a')) \\=E[R|s', arg \max\limits_{a'}Q_{\theta^-}(s',a'),{\theta^-}] \\ \ge \max(E[R|s', a_1,{\theta^-}], E[R|s', a_2,{\theta^-}],...  a_i \in A
+$$
+
+$$
+\text{Where } E[\max(X_1, X_2)] \ge \max(E[X_1], E[X_2])
+$$
+
+In DDQN, $Q_\theta$ is used to select next action.
+
+![image.png](pic/DDQN.png)
+
+$\color{pink}\text{Prioritized Experience Replay}$ : find more experience samples
+
+Calculate the priority $p_t$ (value of learning)
+
+$$
+p_t = |r_t + \gamma Q_{\theta^-}(s_{t+1}, arg \max\limits_{a'}Q_\theta(s_\text{t+1},a'))-Q_\theta(s_t,a_t)|
+$$
+
+Store experience $e_t = (s_t, a_t,s_\text{t+1},r_t, p_t+\epsilon)$ , $\epsilon$ is the noise for randomness, in replay buffer to give each sample a chance to be sampled.
+
+Prob of $e_t$ being selected is $P(t)=(p_t^\alpha)/(\sum_kp_k^\alpha)$. α for smoothing. (=0 in uniform sampling)
+
+Weight in importance sampling $w_t=(N\times P(t))^{-\beta}/(\max\limits_{i} w_i)$
+
+![image.png](pic/DDQN+pp.png)
+
+$\color{orange}\text{Dueling DQN}$, improved version of DQN. parallel with DDQN
+
+![image.png](pic/DuelingDQN1.png)
+
+![image.png](pic/DuelingDQN2.png)
+
++ +:
+  + Fine capture of the subtle relationship between value and action.
+  + effective in learning state-value f: one state  value function corresponds to multiple Advantage functions. Share the same state-value function; Easy Training, fast convergence.
 
 # dft
 

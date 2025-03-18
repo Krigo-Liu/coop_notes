@@ -1,14 +1,18 @@
-# Doris branch - Plan in 1 year
-This is a personal note.
-Fields: AI(ML, DL), Finance(macroeconics, microeconomics,)... 
+# Doris's branch
 
-## Future work in next 3 months (ver. 2024.9.12)
-Priority: 
-1. AI folder: deep learning and algorithms
-2. Fin folder: BF (related to microeconomics).
-3. Commands
+I am trying to synthesize knowledge I have learned to help people generate new insights.
 
-## Files that have relatively enough materials to read
+Fields: AI,Finance
+
+## Update Priority:
+
+1. AI folder: Deep Reinforcement Learning
+2. Fin folder
+
+### Content-rich files or folders
+
 1. Fin/Finance.md
 2. Fin/statistics.md
 3. Fin/Strategies.md
+4. AI/ComputerVision/
+5. AI/DeepReinforcementLearning/Formula.md

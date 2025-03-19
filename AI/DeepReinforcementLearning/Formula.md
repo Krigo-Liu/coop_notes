@@ -29,9 +29,9 @@
 - $ \lambda $: decay-rate parameter for eligibility traces
 - $ \mathbb{1}_\text{predicate} $:  indicator function. = 1 if the predicate is true, else 0.
 
-## 1 Introduction
+# 1 Introduction
 
-## 2 Multi-Armed Bandit Problem
+# 2 Multi-Armed Bandit Problem
 
 - $ k $: number of actions (arms)
 - $ t $: discrete time step or play number
@@ -42,27 +42,36 @@
 - $ \pi_t(a) $: probability of selecting action $ a $ at time $ t $
 - $ \bar{R}_t $: estimate at time $ t $ of the expected reward given $ \pi_t $
 
-## 3 Markov Decision Process
+# 3 Markov Decision Process
 
-The reinforcement learning agent and its environment interact over a sequence of discrete time steps. Everything inside the agent is completely known and controllable by the agent; everything outside is incompletely controllable but may or may not be completely known.The agent’s objective is to maximize the amount of reward it receives over time. ****Markov Decision Process**** is a mathematical framework used to describe an environment in decision-making scenarios where outcomes are partly random and partly under the control of a decision-maker.
+TODO: 寻找最优pi的方法。
+The reinforcement learning agent and its environment interact over a sequence of discrete time steps. Everything inside the agent is completely known and controllable by the agent; everything outside is incompletely controllable but may or may not be completely known.The agent’s objective is to maximize the amount of reward it receives over time.
+
+**Markov Process** is a stochastic process with Markov property:  The future is independent of the past given the present.
 
 - $t$: discrete time step.
 - $\color{turquoise}\text{s, s' : current state, next state}$,  $\color{turquoise}\text{basis for making the choices}$
-- $ a $: an action made my the agent
+- $a$: an action made my the agent
 - $\color{turquoise}\text{ r} $: a reward, $\color{turquoise}\text{basis for evaluating the choices}$
-- $ S $: set of all nonterminal states
-- $ S^+ $: set of all states, including the **terminal state**
-- $ A(s) $: set of all actions available in state $ s $
-- $ R $: set of all possible rewards, a finite subset of $ \mathbb{R} $
-- $ \rho \subseteq \mathbb{R} $: subset of $ \mathbb{R} $
-- $ |S| $: number of elements in set $ S $
-- $ T, T(t)$ final time step of an episode; the episode including time step t.
-- $ A(t)$ : Action at t
-- $ S(t)$ : state at t
-- $ R(t)$ : reward at t
+- $S$: set of all nonterminal states
+- $S^+$: set of all states, including the **terminal state**
+- $A(s)$: set of all actions available in state $ s $
+- $R$: set of all possible rewards, a finite subset of $ \mathbb{R} $
+- $\rho \subseteq \mathbb{R}$: subset of $ \mathbb{R} $
+- $|S|$: number of elements in set $ S $
+- $T, T(t)$ final time step of an episode; the episode including time step t.
+- $A(t)$ : Action at t
+- $S(t)$ : state at t
+- $R(t)$ : reward at t
 - $\color{turquoise} \pi  $ : policy (stochastic decision-making rule),is a $\color{turquoise}\text{mapping from states to actions}$
 - $\pi(s)$ : action taken in state s under deterministic policy $\pi$
 - $\pi(a|s)$ : <mark> probability </mark> of taking action a in state s under stochastic policy $\pi$
+
+$\color{yellow}\text{Markov Decision Process (MDP)}$ is a mathematical framework used to describe an environment in decision-making scenarios where outcomes are partly random and partly under the control of a decision-maker.
+
+$$
+P[S_\text{t+1}=P[S_\text{t+1}|S_1,...,S_t]\\P[S_\text{t+1}|S_t,A_t]
+$$
 
 $\color{orange}\text{Finite Markov dynamics:}$ probability of transition to state $ s' $ with reward $ r $, from state $ s $ and action $ a $
 
@@ -74,13 +83,14 @@ $$
 \sum_{s'\in S} \sum_{r\in R} p(s', r | s, a)=1, \text{for all s} \in S, a \in A(s)
 $$
 
-- $ p(s' | s, a) $: **state**-transition prob. probability of transition to state $ s' $, from state $ s $ taking action $ a $
-- $ r(s, a) $: expected immediate reward from state $ s $ after action $ a $. 从上个状态采取行动后的即时回报
+- $p(s' | s, a)$: **state**-transition prob. probability of transition to state $ s' $, from state $s$ taking action $a$
+- $r(s, a)$: expected immediate reward from state $s$ after action $a$. 从上个状态采取行动后的即时回报
 
   $$
   r(s,a) = E[R_t| S_\text{t-1}=s, A_\text{t-1}=a]=\sum_{r\in R}r\sum_{s'\in S}p(s',r|s,a)
   $$
-- $ r(s, a, s') $: expected immediate reward on transition from $ s $ to $ s' $ under action $ a. $ 在行动a下，两个状态转化的即时回报
+- $r(s, a, s')$: expected immediate reward on transition from $ s $ to $ s' $ under action $ a. $ 在行动a下，两个状态转化的即时回报
+
 
   $$
   r(s,a,s') = E[R_t| S_\text{t-1}=s, A_\text{t-1}=a, S_t=s']=\sum_{r\in R}r \frac{p(s',r|s,a)}{p(s'|s,a)}
@@ -96,14 +106,16 @@ $\color{orange}\text{Expected return }G_t$
     G_t=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k+1}=\sum_{k=0}^{\infty}\gamma^k = \frac{1}{1-\gamma}
     $$
 
+$\color {yellow} G_t \text{ Def in lecture } $$G_t=R_t+\gamma R_\text{t+1}+\gamma^2R_\text{t+2}+...=\sum_{k=0}^{\infty}\gamma^kR_\text{t+k} $
+
 $\color {orange}\pi \text{'s Value Functions}$ assign values to: s, (s,a), exp return from that sate, (s,a)|$\pi$
 
-- $ v_\pi(s) $: value of state $ s $ under policy $ \pi $ (expected return)
-- $ v_*(s) $: value of state $ s $ under the **optimal policy** (its value functions are optimal).
+- $v_\pi(s)$: value of state $ s $ under policy $ \pi $ (expected return)
+- $v_*(s)$: value of state $ s $ under the **optimal policy** (its value functions are optimal).
   - optimal value f for s & (s,a) are unique for a MDP, but there can be many optimal $\pi$
   - Any policy that is greedy with respect to  the optimal value functions must be an optimal policy.
-- $ q_\pi(s, a) $: value of taking action $ a $ in state $ s $ while following policy $ \pi $
-- $ q_*(s, a) $: value of taking action $ a $ in state $ s $ while following the optimal policy
+- $q_\pi(s, a)$: value of taking action $ a $ in state $ s $ while following policy $ \pi $
+- $q_*(s, a)$: value of taking action $ a $ in state $ s $ while following the optimal policy
   ```
   q statnds for quality, distinguised from state-value f
   ```
@@ -150,14 +162,26 @@ $\color{orange}\text{Apporximations for value f, policy, models}$
 
 Even if the agent has a complete and accurate environment model, the agent is typically unable to perform enough computation (memory) per time step to fully use it.
 
-### 4 Value-based DRL
+# 4 Model-free method
+
+2 methods:
+MC: 从头到尾全部episode 采样完了才更新
+TD  只采样一部就更新
+
+# 5 Multi-step bootsr
+
+折中4, 采样几步就更新几次，剩下的值函数估计
+
+# 6 Value-based DRL
+
+这一讲终于跳脱出了前面传统的强化学习（解决相对简单的问题），用神经网络拟合Q, V函数，适用于更大的状态空间。
 
 $\large \color{violet}\text{DQN family}$
 
 Q-Learning: learns a function $Q_\theta(s,a)$ with para $\theta$
 
 - given a segment {(s,a,s',r)}
-- $\color{turquoise}\text{target }$$y=r+\gamma max_\text{a'}Q_\theta(s',a')$
+- $\color{turquoise}\text{target }$ $y=r+\gamma max_\text{a'}Q_\theta(s',a')$
 - update:
 
   $$
@@ -246,24 +270,24 @@ $\color{orange}\text{Dueling DQN}$, improved version of DQN. parallel with DDQN
 
 + +:
   + Fine capture of the subtle relationship between value and action.
-  + effective in learning state-value f: one state  value function corresponds to multiple Advantage functions. Share the same state-value function; Easy Training, fast convergence.
+  + effective in learning state-value f: one state  value function corresponds to multiple Advantage. functions. Share the same state-value function; Easy Training, fast convergence.
 
 # dft
 
 Approximate Value Functions
 
-- $ v_\theta(s) $: approximate value of state $ s $ given parameter vector $ \theta $
-- $ q_\theta(s, a) $: approximate value of state-action pair $ (s, a) $ given parameter vector $ \theta $
-- $ \nabla v_\theta(s) $: column vector of partial derivatives of $ v_\theta(s) $ with respect to $ \theta $
-- $ \nabla q_\theta(s, a) $: column vector of partial derivatives of $ q_\theta(s, a) $ with respect to $ \theta $
+- $v_\theta(s)$: approximate value of state $ s $ given parameter vector $ \theta $
+- $q_\theta(s, a)$: approximate value of state-action pair $ (s, a) $ given parameter vector $ \theta $
+- $\nabla v_\theta(s)$: column vector of partial derivatives of $ v_\theta(s) $ with respect to $ \theta $
+- $\nabla q_\theta(s, a)$: column vector of partial derivatives of $ q_\theta(s, a) $ with respect to $ \theta $
 
 #### Bellman Operators
 
-- $ B_\pi $: Bellman operator for value functions
-- $ P $: state-transition probability matrix under $ \pi $
-- $ D $: diagonal matrix with on-policy state distribution on its diagonal
-- $ X $: feature matrix, with $ x(s) $ as its rows
-- $ \Pi $: projection operator for value functions
+- $B_\pi$: Bellman operator for value functions
+- $P$: state-transition probability matrix under $ \pi $
+- $D$: diagonal matrix with on-policy state distribution on its diagonal
+- $X$: feature matrix, with $ x(s) $ as its rows
+- $\Pi$: projection operator for value functions
 
 ## Missing Symbols and Notation
 
@@ -316,3 +340,8 @@ Below are the missing symbols and notation that were not properly formatted in t
 - $BE(w)$: mean square Bellman error
 - $PBE(w)$: mean square projected Bellman error
 - $TDE(w)$: mean square temporal-difference error
+
+# References
+
+1. Sutton, R.,S. & Barto, A.,G. (2018). Reinforcement learning: An introduction. (2 e.d.)
+2. Lecture notes by Jianxiong Guo.

@@ -12,35 +12,35 @@
 - $\propto$: proportional to
 - $Pr\{X = x\}$: probability that a random variable $X$ takes on the value $x$
 - $X \sim p$: random variable $X$ selected from distribution $p(x)$
-- $ E[X] $: expectation of a random variable $X$, i.e.,
-  $  E[X] \overset{.}{=} \sum_x p(x)x  $
-- $ \arg\max_{a} f(a) $: a value of $a$ at which $f(a)$ takes its maximal value
-- $ \ln x $: natural logarithm of $x$
-- $ e^x $: the base of the natural logarithm, $ e \approx 2.71828 $, carried to power $x$; $ e^{\ln x} = x $
-- $ \mathbb{R} $: set of real numbers
-- $ f: X \to Y $: function $ f $ from elements of set $ X $ to elements of set $ Y $
-- $ (a, b] $: the real interval between $ a $ and $ b $ including $ b $ but not including $ a $
+- $E[X]$: expectation of a random variable $X$, i.e.,
+  $E[X] \overset{.}{=} \sum_x p(x)x$
+- $\arg\max_{a} f(a)$: a value of $a$ at which $f(a)$ takes its maximal value
+- $\ln x$: natural logarithm of $x$
+- $e^x$: the base of the natural logarithm, $e \approx 2.71828$, carried to power $x$; $e^{\ln x} = x$
+- $\mathbb{R}$: set of real numbers
+- $f: X \to Y$: function $f$ from elements of set $ X $ to elements of set $ Y $
+- $(a, b]$: the real interval between $a$ and $b$ including $b$ but not including $a$
 
 ## Parameters
 
-- $ \epsilon $: probability of taking a random action in an $ \epsilon $-greedy policy
-- $ \alpha, \beta $: step-size parameters
-- $ \gamma $: discount-rate parameter
-- $ \lambda $: decay-rate parameter for eligibility traces
-- $ \mathbb{1}_\text{predicate} $:  indicator function. = 1 if the predicate is true, else 0.
+- $\epsilon$: probability of taking a random action in an $ \epsilon $-greedy policy
+- $\alpha, \beta$: step-size parameters
+- $\gamma$: discount-rate parameter
+- $\lambda$: decay-rate parameter for eligibility traces
+- $\mathbb{1}_\text{predicate}$:  indicator function. = 1 if the predicate is true, else 0.
 
 # 1 Introduction
 
 # 2 Multi-Armed Bandit Problem
 
-- $ k $: number of actions (arms)
-- $ t $: discrete time step or play number
-- $ q_*(a) $: true value (expected reward) of action $ a $
-- $ Q_t(a) $: estimate at time $ t $ of $ q_*(a) $
-- $ N_t(a) $: number of times action $ a $ has been selected up to time $ t $
-- $ H_t(a) $: learned preference for selecting action $ a $ at time $ t $
-- $ \pi_t(a) $: probability of selecting action $ a $ at time $ t $
-- $ \bar{R}_t $: estimate at time $ t $ of the expected reward given $ \pi_t $
+- $k$: number of actions (arms)
+- $t$: discrete time step or play number
+- $q_*(a)$: true value (expected reward) of action $ a $
+- $Q_t(a)$: estimate at time $ t $ of $ q_*(a) $
+- $N_t(a)$: number of times action $ a $ has been selected up to time $ t $
+- $H_t(a)$: learned preference for selecting action $ a $ at time $ t $
+- $\pi_t(a)$: probability of selecting action $ a $ at time $ t $
+- $\bar{R}_t$: estimate at time $ t $ of the expected reward given $ \pi_t $
 
 # 3 Markov Decision Process
 
@@ -83,14 +83,13 @@ $$
 \sum_{s'\in S} \sum_{r\in R} p(s', r | s, a)=1, \text{for all s} \in S, a \in A(s)
 $$
 
-- $p(s' | s, a)$: **state**-transition prob. probability of transition to state $ s' $, from state $s$ taking action $a$
+- $p(s' | s, a)$: **state**-transition prob. probability of transition to state  $s'$, from state $s$ taking action $a$
 - $r(s, a)$: expected immediate reward from state $s$ after action $a$. 从上个状态采取行动后的即时回报
 
   $$
   r(s,a) = E[R_t| S_\text{t-1}=s, A_\text{t-1}=a]=\sum_{r\in R}r\sum_{s'\in S}p(s',r|s,a)
   $$
 - $r(s, a, s')$: expected immediate reward on transition from $ s $ to $ s' $ under action $ a. $ 在行动a下，两个状态转化的即时回报
-
 
   $$
   r(s,a,s') = E[R_t| S_\text{t-1}=s, A_\text{t-1}=a, S_t=s']=\sum_{r\in R}r \frac{p(s',r|s,a)}{p(s'|s,a)}
@@ -110,12 +109,12 @@ $\color {yellow} G_t \text{ Def in lecture } $$G_t=R_t+\gamma R_\text{t+1}+\gamm
 
 $\color {orange}\pi \text{'s Value Functions}$ assign values to: s, (s,a), exp return from that sate, (s,a)|$\pi$
 
-- $v_\pi(s)$: value of state $ s $ under policy $ \pi $ (expected return)
-- $v_*(s)$: value of state $ s $ under the **optimal policy** (its value functions are optimal).
+- $v_\pi(s)$: value of state $s$ under policy $\pi$ (expected return)
+- $v_*(s)$: value of state $s$ under the **optimal policy** (its value functions are optimal).
   - optimal value f for s & (s,a) are unique for a MDP, but there can be many optimal $\pi$
   - Any policy that is greedy with respect to  the optimal value functions must be an optimal policy.
-- $q_\pi(s, a)$: value of taking action $ a $ in state $ s $ while following policy $ \pi $
-- $q_*(s, a)$: value of taking action $ a $ in state $ s $ while following the optimal policy
+- $q_\pi(s, a)$: value of taking action $a$ in state $s$ while following policy $\pi$
+- $q_*(s, a)$: value of taking action $a$ in state $s$ while following the optimal policy
   ```
   q statnds for quality, distinguised from state-value f
   ```
@@ -220,13 +219,28 @@ sol:
 - Build 2 nw:
   - Evaluations nw: $Q_\theta(s,a)$
   - Target nw $Q_{\theta^-}(s,a)$ to compute TD target: synchronize with the evaluation nw every C step
-    - $\color{turquoise}\text{target }$ $y=r+\gamma max_\text{a'}Q_{\theta^-}(s',a')$
 
-Algorithm:
+    - $\color{turquoise}\text{target }$ $y=r+\gamma \max\limits_{a'} Q_{\theta^-}(s',a')$
 
-![image.png](pic/DQN.png)
+**Algorithm:**
 
-$\color{orange}\text{Double DQN (DDQN)}$ ,improved version of DQN
+1. Randomly initialize evaluation network $\theta; \theta^- \leftarrow \theta$
+2. Initialize experience replay buffer D
+3. Repeat until convergence{
+
+- Get initial state $s_0$
+- For each step t=0,1,...,T
+
+  - take action $a_t$ by $\epsilon$-greedy based on $Q_\theta$
+  - Get reward $r_t$ and the next state $s_{t+1}$
+  - Store ($s_t, a_t, s_{t+1}, r_t$) in D
+  - If D is large enough, sampling N samples $\{(s_t, a_t, s_{t+1}, r_t)\}^N_{i=1}$
+  - For each sample, calculate target $y_i =r_i+ \gamma \max\limits_{a'} Q_{\theta^-}(s_{i+1},a')$
+  - Update $\theta$ by minimize loss $L = \frac{1}{2N}\sum_i(y_i-Q_\theta(s_i,a_i))^2$
+  - If t mod C=0, then update $\theta^- \leftarrow \theta$
+    }
+
+$\color{orange}\text{Double DQN (DDQN)}$,improved version of DQN
 
 Due to the Jensen's inequality, max operation makes the est Q always larger than real Q value. And it will be more serious when #candidate actions increase.
 
@@ -264,12 +278,56 @@ Weight in importance sampling $w_t=(N\times P(t))^{-\beta}/(\max\limits_{i} w_i)
 
 $\color{orange}\text{Dueling DQN}$, improved version of DQN. parallel with DDQN
 
-![image.png](pic/DuelingDQN1.png)
+Inputs of s are processed by CNN to extract features.
 
-![image.png](pic/DuelingDQN2.png)
+Core:Advantage funciton A
+
+$$
+A^\pi(s,a)=Q^\pi(s,a)-V^\pi(s)\\Q^\pi(s,a)=E[G_t|s,a]\\V^\pi(s)=E_{a  ∼ \pi(·|s)}[Q^\pi(s,a)]
+$$
+
+$V^\pi(s) \text{ is the avagerage value of }Q^\pi(s,a)\text{. }A^\pi(s,a) \text{ measures the effect after taking an action.}$
+
+To obtain V, A separately (fc layer), Q in the DQN is decomposed. And they are combined into Q finally. *Subscript denotes parameters.*
+
+$$
+Q_{\theta,\alpha,\beta}(s,a) = V_{\theta,\alpha}(s)+A_{\theta,\beta}(s,a)
+$$
+
+However, this version is unstable in training because the non-uniqueness in modeling V and A.
+
+For sol 1, max two sides of Q=V+A (max limits a only operates the f with para a), define the optimal A function($\max\limits_aA(s,a)-\max\limits_aA(s,a)$) equals to 0.
+
+$$
+Q(s,a)=V(s)+A(s,a) \\ \max\limits_aQ(s,a)=V(s)+\max\limits_aA(s,a)-\max\limits_aA(s,a)\\V(s)=\max\limits_aQ(s,a)
+$$
+
+So is the sol 2.
+
+Therefore the two sols:
+
+1.Set $V_{\theta,\alpha}(s)=\max\limits_{a'}Q_{\theta,\alpha,\beta}(s,a')$
+
+$$
+Q_{\theta,\alpha,\beta}(s,a) = V_{\theta,\alpha}(s)+A_{\theta,\beta}(s,a)-\max\limits_{a'}A_{\theta,\beta}(s,a')
+$$
+
+2. Set $V_{\theta,\alpha}(s)=\frac{1}{|A|}\sum_{a' \in A}Q_{\theta,\alpha,\beta}(s,a')$
+
+$$
+Q_{\theta,\alpha,\beta}(s,a) = V_{\theta,\alpha}(s)+A_{\theta,\beta}(s,a)-\frac{1}{|A|}\sum_{a' \in A}A_{\theta,\beta}(s,a')
+$$
+
+The sol ensure the uniqueness of V function,
+
+but not satisfy with the Bellman f, the outputs of A,V,Q of the network are no longer the real A,V,Q.
+
+We do not care of it, because the standard of doing greedy is the order of Q. 
+
+The relative order of Q remains the same. s.t.$Q(s,a_1) > Q(s,a_2) \rightarrow A(s,a_1) > A(s,a_2)$$
 
 + +:
-  + Fine capture of the subtle relationship between value and action.
+  + Handle states that are less associated with actions. 没人的路上怎么开都行。
   + effective in learning state-value f: one state  value function corresponds to multiple Advantage. functions. Share the same state-value function; Easy Training, fast convergence.
 
 # dft

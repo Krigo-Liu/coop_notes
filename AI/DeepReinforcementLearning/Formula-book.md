@@ -44,8 +44,10 @@
 
 # 3 Markov Decision Process
 
-TODO: 寻找最优$\color{turquoise} \pi$的方法。
+TODO: 寻找最优pi的方法。
 The reinforcement learning agent and its environment interact over a sequence of discrete time steps. Everything inside the agent is completely known and controllable by the agent; everything outside is incompletely controllable but may or may not be completely known.The agent’s objective is to maximize the amount of reward it receives over time.
+
+**Markov Process** is a stochastic process with Markov property:  The future is independent of the past given the present.
 
 - $t$: discrete time step.
 - $\color{turquoise}\text{s, s' : current state, next state}$,  $\color{turquoise}\text{basis for making the choices}$
@@ -65,195 +67,59 @@ The reinforcement learning agent and its environment interact over a sequence of
 - $\pi(s)$ : action taken in state s under deterministic policy $\pi$
 - $\pi(a|s)$ : <mark> probability </mark> of taking action a in state s under stochastic policy $\pi$
 
-$\color{orange}\text{Stochastic process}$: 1/more events, stochastic(dynamic) system/phenomenon evovle with t.
+$\color{yellow}\text{Markov Decision Process (MDP)}$ is a mathematical framework used to describe an environment in decision-making scenarios where outcomes are partly random and partly under the control of a decision-maker.
 
 $$
-P[S_\text{t+1}|S_1,...,S_t]
+P[S_\text{t+1}=P[S_\text{t+1}|S_1,...,S_t]\\P[S_\text{t+1}|S_t,A_t]
 $$
 
-$\color{orange}\text{Markov process }$
-
-- <S state,P>
-- a stochastic process
-- with Markov property:The current state is the future sufficient statistics (充分统计量). $(future \bot past)|present$
+$\color{orange}\text{Finite Markov dynamics:}$ probability of transition to state $ s' $ with reward $ r $, from state $ s $ and action $ a $
 
 $$
-P[S_\text{t+1}|S_t]=P[S_\text{t+1}|S_1,...,S_t]
+p(s', r | s, a)= Pr\{S_t=s', R_t=r | S_\text{t-1}=s, A_\text{t-1}=a\}
 $$
 
-$\color{orange}\text{Markov reward process(MRP)}$
+$$
+\sum_{s'\in S} \sum_{r\in R} p(s', r | s, a)=1, \text{for all s} \in S, a \in A(s)
+$$
 
-- < S, P, r reward, $\gamma$ discount>
-- env: 不受agent控制，产生s,r
-- episodes: agent–environment interaction breaks naturally into subsequences, each episode ends in a special state called the terminal state.
-- $\color{orange}\text{discounted episode's return from }s_t$
-  $$
-  G_t= R_\text{t}+\gamma R_\text{t+1}+\gamma^2R_\text{t+2}+...=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k}=R_\text{t}+\gamma G_\text{t+1}
-  $$
-
-$\gamma \in[0,1]$, which helps to converge.
-
-Comparing the G here and the one in book ($G_t'= R_\text{t+1}+\gamma R_\text{t+2}+\gamma^2R_\text{t+3}+...+R_\text{T}=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k+1}$), G here makes sure the total order of episodic return for all different return sequences.
-![image.png](pic/returnseq.png)
-
-![image.png](pic/totalorder.png)
-
-$\color {orange}\text{Markov decision process (MDP)}$
-
-- <S,A,P,r,$\gamma$>
-- state transfer function $p(s'| s, a)= Pr\{S_t=s' | S_\text{t-1}=s, A_\text{t-1}=a\}$
-- reward function r(s,a)
-
-  ![image.png](pic/MDP.png)
-- dynamics: MDP stochastic transition, to next state $s～P(·|s_0,a_0)$. dot (⋅) represents any possible next state
-
-  ![image.png](pic/MDPdy.png)
-
-![image.png](pic/MDPdy2.png)
-
-$\color {orange}\text{Policy }\pi(a|s)=P(a|s) $
-
-- prob of taking action a in state s
-- Markov property: policy needs to be related to current s;does not consider historical s.
-- For 2 kinds of policies:
+- $p(s' | s, a)$: **state**-transition prob. probability of transition to state  $s'$, from state $s$ taking action $a$
+- $r(s, a)$: expected immediate reward from state $s$ after action $a$. 从上个状态采取行动后的即时回报
 
   $$
-  \sum_a \pi(a|s)=1
+  r(s,a) = E[R_t| S_\text{t-1}=s, A_\text{t-1}=a]=\sum_{r\in R}r\sum_{s'\in S}p(s',r|s,a)
   $$
-
-  - deterministic policy:for a given s, the agent always chooses the same a, without any randomness or probabilities involved.
-
-    $$
-    \pi(a \mid s)=\pi(s)=\mu(s)=\begin{cases}1 & \text{if } a = \mu(s) \\0 & \text{otherwise} \end{cases}
-    $$
-  - stochastic policy: a is sampled
-
-    $$
-    \pi(a \mid s)\in[0,1]
-    $$
-
-$\color {orange}\text{MDP to MRP: marginalization}$
-
-- MRP是MDP的简化版本，去掉了动作部分，只关注状态转移、奖励函数和折扣因子（γ）。
-- 这有助于分析和处理那些不需要明确决策行为的系统，或者是MDP的价值评估阶段。
-- 在每个状态下，按照某个策略选择动作后，状态的转移概率:
-
-$$
-P(s'| s)=\sum_a \pi(a|s)P(s'| s, a)
-$$
-
-- reward at s
-
-$$
-r(s)=\sum_a \pi(a|s)r(s,a)
-$$
-
-So, MRP <S,P',r',$\gamma$>
-
-$\color {orange}\text{Data distribution}$
-
-- Given the same MDP, the state-action(s-a) distribution sampled by different policy is different.
-- Obeserving the path of MDP...
-- state dist $d^\pi(s)=\sum_{t=0}^{\infty}P(s|\pi)$
-- state-action dist $d^\pi(s,a)=\sum_{t=0}^{\infty}P(s,a|\pi)$
-- Relationship
-
-$$
-d^\pi(s)=\sum_ad^\pi(s,a) \\ d^\pi(s,a)=d^\pi(s)\pi(a|s)\text{  (Bayes)}
-$$
-
-$\color {orange}\text{State-action occupancy measure}$
-
-- describes how often a policy visits certain state-action pairs in a Markov Decision Process (MDP).
-- provides a way to express the long-term distribution of states and actions under a given policy.
-- Discounted state-action distribution:
-
-$$
-\hat{\rho}^\pi(s, a) = \mathbb{E}_n \left[ \sum_{t=0}^{\infty}\gamma^t \mathbb{I}(s,a)\bigg| S_t = s, A_t = a \right] \quad \forall s \in S, a \in \mathcal{A} \\ = \sum_{t=0}^{\infty} \gamma^t P(s,a|\pi)
-$$
-
-- Discounted state distribution:
-
-$$
-\hat{v}^\pi(s) = \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(S_t = s | \pi) 
-\\= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}( s | \pi) \sum_a \pi(a|s)
-\\ = \sum_{t=0}^{\infty} \sum_a \gamma^t \mathbb{P}( s | \pi) \sum_a \pi(a|s)
-\\ = \sum_a \sum_{t=0}^{\infty} \mathbb{P}( s,a | \pi)
-\\ = \sum_{t=0}^{\infty} \hat{\rho}^\pi(s, a)
-$$
-
-- Normalization (When ($\gamma$ < 1\)): two distribution above -> real dist
-
-$$
-\sum_{s} \hat{v}^\pi(s) = \sum_{s} \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(s | \pi)
-\\ = \sum_{t=0}^{\infty} \sum_{s}\gamma^t\mathbb{P}(s| \pi)
-\\ = \sum_{t=0}^{\infty}\gamma^t
-\\ = \frac{1}{1-\gamma}
-$$
-
-- Normalized Discounted (Action-) State Distribution:
-
-$$
-v^\pi(s) = (1 - \gamma) \hat{v}^\pi(s) \\
-\rho^\pi(s,a) = (1 - \gamma) \hat{\rho}^\pi(s,a)
-$$
-
-- relationship
+- $r(s, a, s')$: expected immediate reward on transition from $ s $ to $ s' $ under action $ a. $ 在行动a下，两个状态转化的即时回报
 
   $$
-  \rho^\pi(s,a)=v^\pi(s)\pi(a|s) \\ v^\pi(s)=\sum_a \rho^\pi(s,a)
+  r(s,a,s') = E[R_t| S_\text{t-1}=s, A_\text{t-1}=a, S_t=s']=\sum_{r\in R}r \frac{p(s',r|s,a)}{p(s'|s,a)}
   $$
-- Theorem 1: $\rho^{\pi_1}=\rho^{\pi_2} \text{ iff } \pi_1=\pi_2$
-- Theorem 2: $\pi_\rho(s|a) = \frac{\rho(s,a)}{sum_a \rho^\pi(s,a)}$
 
-  - Given occupancy measure 𝜌, The only policy that can generate this occupancy metric is this formula.
-- Policy on occupancy measure
+$\color{orange}\text{Expected return }G_t$
 
-  - policy cummulative reward
-
-$$
-J(\pi)=E_\pi[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)]
-\\ = \sum_{t=0}^{\infty}\gamma^t E_\pi[r(S_t,A_t)]
-\\ = \sum_{t=0}^{\infty}\gamma^t \sum_a \sum_s P(s,a|\pi) {\color{red}\text{r(s,a)}}
-\\ = \sum_a \sum_s {\color{green}[\sum_{t=0}^{\infty} \gamma^tP(s,a|\pi)]} {\color{red}\text{r(s,a)}}
-\\ = \sum_a \sum_s {\color{green}\hat{\rho}^\pi(s, a)}{\color{red}\text{r(s,a)}}
-\\ = E_{(s,a)～\hat\rho^\pi}[r(s,a)]
-$$
-
-- Policy learning goal
-
-$$
-\max_\pi J(\pi)=E_\pi[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)] ≃ E_{(s,a)～\hat\rho^\pi}[r(s,a)]
-$$
-
-$\color {yellow}\text{Policy evaluation}$
-
-$\color{orange}\text{Bellman expectation equations }$
-
-- $V^\pi(s)$: Expected reward by following policy $\pi$ from state s
-- $Q^\pi(s, a)$: Expected reward while following policy $\pi$ from state s and take action a
-  - q: quality
-
+- function of future rewards, long term, that the agent seeks to maximize (in expected value).
+- undiscounted formula: $G_t= R_\text{t+1}+R_\text{t+2}+R_\text{t+3}+...+R_\text{T}$ appropriate for episodic tasks (interaction does not naturally break into episodes but continues without limit.)
+- discounted formula: $G_t= R_\text{t+1}+\gamma R_\text{t+2}+\gamma^2R_\text{t+3}+...+R_\text{T}=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k+1}=R_\text{t+1}+\gamma G_\text{t+1}$, appropriate for continuing tasks (Xbreaks into episode, continue without limitation).
+  - Note that although the return is a sum of an infinite number of terms, it is still finite if the reward is nonzero and constant—if < 1. For example, if the reward is a constant +1
     $$
-    V^\pi(s)=E_\pi[G_t|s]  \text{ def}
-    \\ = E_\pi[R_t + \gamma G_{t+1}|s]
-    \\ = E_\pi[R_t|s]+ E_\pi[\gamma G_{t+1}|s]
-    \\ = E_\pi[R_t|s]+ \gamma E_\pi[G_{t+1}|s]
-    \\ = E_\pi[R_t|s]+ \gamma V^\pi(s_{t+1})
-    \\ = E_\pi[R_t|s]+ E_\pi[\gamma V^\pi(s_{t+1})|s]
-    \\ = \sum_a \pi(a|s)r(s,a) + \sum_a \pi(a|s)\gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1})
-    \\ = \sum_a \pi(a|s)(r(s,a) + \gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1}))
+    G_t=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k+1}=\sum_{k=0}^{\infty}\gamma^k = \frac{1}{1-\gamma}
     $$
 
-$$
-Q^\pi(s,a) = E_\pi[G_t|s,a]
-\\ = E_\pi[R_t + \gamma G_{t+1}|s,a]
-\\ = E_\pi[R_t + \gamma Q(S_{t+1},A_{t+1})|s,a]
-\\ = E_\pi[R_t|s,a]+ E_\pi[\gamma Q(S_{t+1},A_{t+1})|s,a]
-\\ = r(s,a) + \gamma \sum_{s_{t+1}} P(s_{t+1}|s,a) \sum_{a_{t+1}} \pi(a_{t+1}|s_{t+1})Q(s_{t+1},a_{t+1})
-$$
+$\color {yellow} G_t \text{ Def in lecture } $$G_t=R_t+\gamma R_\text{t+1}+\gamma^2R_\text{t+2}+...=\sum_{k=0}^{\infty}\gamma^kR_\text{t+k} $
 
-$\color{pink}\text{Explanations} $ The value function $V_\pi$ 's Bellman equation.
+$\color {orange}\pi \text{'s Value Functions}$ assign values to: s, (s,a), exp return from that sate, (s,a)|$\pi$
+
+- $v_\pi(s)$: value of state $s$ under policy $\pi$ (expected return)
+- $v_*(s)$: value of state $s$ under the **optimal policy** (its value functions are optimal).
+  - optimal value f for s & (s,a) are unique for a MDP, but there can be many optimal $\pi$
+  - Any policy that is greedy with respect to  the optimal value functions must be an optimal policy.
+- $q_\pi(s, a)$: value of taking action $a$ in state $s$ while following policy $\pi$
+- $q_*(s, a)$: value of taking action $a$ in state $s$ while following the optimal policy
+  ```
+  q statnds for quality, distinguised from state-value f
+  ```
+
+$\color{orange}\text{Bellman equation for state values } v_\pi$ The value function $v_\pi$ s Bellman equation.
 
 ![image.png](pic/image.png)
 
@@ -263,7 +129,11 @@ From each of these, the environment could respond with one of several next state
 along with a reward, r, depending on its dynamics given by the function p.
 ```
 
-The action-value function $Q_\pi$ 's Bellman equation.
+$$
+v_\pi(s)=E_\pi[G_t|s]
+=E_\pi[R_\text{t+1}+\gamma G_\text{t+1}|S=s]
+=\sum_a\pi(a|s)\sum_\text{s',r}p(s',r|s,a)[r+\gamma v_\pi(s')] \text{   for all s} \in S
+$$
 
 ![q pi.png](pic/qpi.png)
 
@@ -271,7 +141,12 @@ The action-value function $Q_\pi$ 's Bellman equation.
 If we were to take action 𝑎 in state 𝑠, what is the expected return if we then follow 𝜋 afterward?
 ```
 
-
+$$
+q_\pi(s,a)
+=E_\pi[G_t|s,a]
+=E_\pi[R_\text{t+1}+\gamma G_\text{t+1}|S=s, A=a]
+=\sum_rp(s',r|s,a)[r+\gamma v_\pi(s')]\sum_\text{s',a}\pi(a'|s')
+$$
 
 $\color{orange}\text{Bellman optimality equation}$ :the value of a state under an optimal policy must equal the expected return for  the best action from that state
 
@@ -447,7 +322,7 @@ The sol ensure the uniqueness of V function,
 
 but not satisfy with the Bellman f, the outputs of A,V,Q of the network are no longer the real A,V,Q.
 
-We do not care of it, because the standard of doing greedy is the order of Q.
+We do not care of it, because the standard of doing greedy is the order of Q. 
 
 The relative order of Q remains the same. s.t.$Q(s,a_1) > Q(s,a_2) \rightarrow A(s,a_1) > A(s,a_2)$$
 

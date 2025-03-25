@@ -18,12 +18,12 @@
 - $\ln x$: natural logarithm of $x$
 - $e^x$: the base of the natural logarithm, $e \approx 2.71828$, carried to power $x$; $e^{\ln x} = x$
 - $\mathbb{R}$: set of real numbers
-- $f: X \to Y$: function $f$ from elements of set $ X $ to elements of set $ Y $
+- $f: X \to Y$: function $f$ from elements of set $X$ to elements of set $Y$
 - $(a, b]$: the real interval between $a$ and $b$ including $b$ but not including $a$
 
 ## Parameters
 
-- $\epsilon$: probability of taking a random action in an $ \epsilon $-greedy policy
+- $\epsilon$: probability of taking a random action in an $\epsilon$-greedy policy
 - $\alpha, \beta$: step-size parameters
 - $\gamma$: discount-rate parameter
 - $\lambda$: decay-rate parameter for eligibility traces
@@ -39,12 +39,12 @@ Even if the agent has a complete and accurate environment model, the agent is ty
 
 - $k$: number of actions (arms)
 - $t$: discrete time step or play number
-- $q_*(a)$: true value (expected reward) of action $ a $
-- $Q_t(a)$: estimate at time $ t $ of $ q_*(a) $
-- $N_t(a)$: number of times action $ a $ has been selected up to time $ t $
-- $H_t(a)$: learned preference for selecting action $ a $ at time $ t $
-- $\pi_t(a)$: probability of selecting action $ a $ at time $ t $
-- $\bar{R}_t$: estimate at time $ t $ of the expected reward given $ \pi_t $
+- $q_*(a)$: true value (expected reward) of action $a$
+- $Q_t(a)$: estimate at time $t$ of $q_*(a)$
+- $N_t(a)$: number of times action $a$ has been selected up to time $t$
+- $H_t(a)$: learned preference for selecting action $a$ at time $t$
+- $\pi_t(a)$: probability of selecting action $a$ at time $t$
+- $\bar{R}_t$: estimate at time $t$ of the expected reward given $\pi_t$
 
 # 3 Markov Decision Process
 
@@ -61,18 +61,18 @@ black-box -> model-free RL methods
 - $t$: discrete time step.
 - $\color{turquoise}\text{s, s' : current state, next state}$,  $\color{turquoise}\text{basis for making the choices}$
 - $a$: an action made my the agent
-- $\color{turquoise}\text{ r} $: a reward, $\color{turquoise}\text{basis for evaluating the choices}$
+- $\color{turquoise}\text{ r}$: a reward, $\color{turquoise}\text{basis for evaluating the choices}$
 - $S$: set of all nonterminal states
 - $S^+$: set of all states, including the **terminal state**
-- $A(s)$: set of all actions available in state $ s $
-- $R$: set of all possible rewards, a finite subset of $ \mathbb{R} $
-- $\rho \subseteq \mathbb{R}$: subset of $ \mathbb{R} $
-- $|S|$: number of elements in set $ S $
+- $A(s)$: set of all actions available in state $s$
+- $R$: set of all possible rewards, a finite subset of $\mathbb{R}$
+- $\rho \subseteq \mathbb{R}$: subset of $\mathbb{R}$
+- $|S|$: number of elements in set $S$
 - $T, T(t)$ final time step of an episode; the episode including time step t.
 - $A(t)$ : Action at t
 - $S(t)$ : state at t
 - $R(t)$ : reward at t
-- $\color{turquoise} \pi  $ : policy (stochastic decision-making rule),is a $\color{turquoise}\text{mapping from states to actions}$
+- $\color{turquoise} \pi$: policy (stochastic decision-making rule),is a $\color{turquoise}\text{mapping from states to actions}$
 - $\pi(s)$ : action taken in state s under deterministic policy $\pi$
 - $\pi(a|s)$ : <mark> probability </mark> of taking action a in state s under stochastic policy $\pi$
 
@@ -98,9 +98,10 @@ $\color{orange}\text{Markov reward process(MRP)}$
 - env: 不受agent控制，产生s,r
 - episodes: agent–environment interaction breaks naturally into subsequences, each episode ends in a special state called the terminal state.
 - $\color{orange}\text{discounted episode's return from }s_t$
-  $$
-  G_t= R_\text{t}+\gamma R_\text{t+1}+\gamma^2R_\text{t+2}+...=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k}=R_\text{t}+\gamma G_\text{t+1}
-  $$
+  
+$$
+G_t= R_\text{t}+\gamma R_\text{t+1}+\gamma^2R_\text{t+2}+...=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k}=R_\text{t}+\gamma G_\text{t+1}
+$$
 
 $\gamma \in[0,1]$, which helps to converge.
 
@@ -128,20 +129,21 @@ $\color {orange}\text{Policy }\pi(a|s)=P(a|s) $
 - Markov property: policy needs to be related to current s;does not consider historical s.
 - For 2 kinds of policies:
 
-  $$
-  \sum_a \pi(a|s)=1
-  $$
+$$
+\sum_a \pi(a|s)=1
+$$
 
   - deterministic policy:for a given s, the agent always chooses the same a, without any randomness or probabilities involved.
 
-    $$
-    \pi(a \mid s)=\pi(s)=\mu(s)=\begin{cases}1 & \text{if } a = \mu(s) \\0 & \text{otherwise} \end{cases}
-    $$
+$$
+\pi(a \mid s)=\pi(s)=\mu(s)=\begin{cases}1 & \text{if } a = \mu(s) \\0 & \text{otherwise} \end{cases}
+$$
+
   - stochastic policy: a is sampled
 
-    $$
-    \pi(a \mid s)\in[0,1]
-    $$
+$$
+\pi(a \mid s)\in[0,1]
+$$
 
 $\color {orange}\text{MDP to MRP: marginalization}$
 
@@ -186,7 +188,7 @@ $$
 - Discounted state distribution:
 
 $$
-\hat{v}^\pi(s) = \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(S_t = s | \pi) 
+\hat{v}^\pi(s) = \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(S_t = s | \pi)
 \\= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}( s | \pi) \sum_a \pi(a|s)
 \\ = \sum_{t=0}^{\infty} \sum_a \gamma^t \mathbb{P}( s | \pi) \sum_a \pi(a|s)
 \\ = \sum_a \sum_{t=0}^{\infty} \mathbb{P}( s,a | \pi)
@@ -211,9 +213,10 @@ $$
 
 - relationship
 
-  $$
-  \rho^\pi(s,a)=v^\pi(s)\pi(a|s) \\ v^\pi(s)=\sum_a \rho^\pi(s,a)
-  $$
+$$
+\rho^\pi(s,a)=v^\pi(s)\pi(a|s) \\ v^\pi(s)=\sum_a \rho^\pi(s,a)
+$$
+
 - Theorem 1: $\rho^{\pi_1}=\rho^{\pi_2} \text{ iff } \pi_1=\pi_2$
 - Theorem 2: $\pi_\rho(s|a) = \frac{\rho(s,a)}{sum_a \rho^\pi(s,a)}$
 
@@ -243,17 +246,17 @@ $\color{orange}\text{Bellman expectation equations }$
 - $Q^\pi(s, a)$: Expected reward while following policy $\pi$ from state s and take action a
   - q: quality
 
-    $$
-    V^\pi(s) = E_\pi[G_t|s]  \text{ def}
-    \\ = E_\pi[R_t + \gamma G_{t+1}|s]
-    \\ = E_\pi[R_t|s]+ E_\pi[\gamma G_{t+1}|s]
-    \\ = E_\pi[R_t|s]+ \gamma E_\pi[G_{t+1}|s]
-    \\ = E_\pi[R_t|s]+ \gamma V^\pi(s_{t+1})
-    \\ = E_\pi[R_t|s]+ E_\pi[\gamma V^\pi(s_{t+1})|s]
-    \\ = \sum_a \pi(a|s)r(s,a) + \sum_a \pi(a|s)\gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1})
-    \\ = \sum_a \pi(a|s)(r(s,a) + \gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1}))
-    \\ = \sum_a \pi(a|s)Q(s,a)
-    $$
+$$
+V^\pi(s) = E_\pi[G_t|s]  \text{ def}
+\\ = E_\pi[R_t + \gamma G_{t+1}|s]
+\\ = E_\pi[R_t|s]+ E_\pi[\gamma G_{t+1}|s]
+\\ = E_\pi[R_t|s]+ \gamma E_\pi[G_{t+1}|s]
+\\ = E_\pi[R_t|s]+ \gamma V^\pi(s_{t+1})
+\\ = E_\pi[R_t|s]+ E_\pi[\gamma V^\pi(s_{t+1})|s]
+\\ = \sum_a \pi(a|s)r(s,a) + \sum_a \pi(a|s)\gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1})
+\\ = \sum_a \pi(a|s)(r(s,a) + \gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1}))
+\\ = \sum_a \pi(a|s)Q(s,a)
+$$
 
 $$
 Q^\pi(s,a) = E_\pi[G_t|s,a]
@@ -304,9 +307,9 @@ Given a MDP with limited action space and state space: $|S| < \infty, |A| < \inf
   2. Repeat until convergence {
      a) Calculate 𝑉 ≔ 𝑉^𝜋 (Updating is time consuming)
      b) For each state 𝑠 ∈ 𝒮, update:
-     $$
-     \pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
-     $$
+$$
+\pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
+$$
 
   }
 - PI based on action value Q
@@ -315,9 +318,9 @@ Given a MDP with limited action space and state space: $|S| < \infty, |A| < \inf
   2. Repeat until convergence {
      a) Calculate Q ≔ Q^𝜋 (Updating is time consuming)
      b) For each state 𝑠 ∈ 𝒮, update:
-     $$
-     \pi(s) = arg \max_a Q(s,a)
-     $$
+$$
+\pi(s) = arg \max_a Q(s,a)
+$$
 
   }
 - $\color{Lime} \text{PROOF 35,36at k}$
@@ -330,9 +333,9 @@ Policy evaluation is time consuming.  But in the previous example, when the iter
 1. For each state, initialize V(s)=0
 2. Repeat until convergence {
    a) For each state 𝑠 ∈ 𝒮, update:
-   $$
-   V(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
-   $$
+$$
+V(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
+$$
 
 }
 3. Return a deterministic policy

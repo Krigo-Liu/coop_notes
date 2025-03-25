@@ -31,6 +31,10 @@
 
 # 1 Introduction
 
+$\color{orange}\text{Apporximations for value f, policy, models}$
+
+Even if the agent has a complete and accurate environment model, the agent is typically unable to perform enough computation (memory) per time step to fully use it.
+
 # 2 Multi-Armed Bandit Problem
 
 - $k$: number of actions (arms)
@@ -45,7 +49,14 @@
 # 3 Markov Decision Process
 
 TODO: 寻找最优$\color{turquoise} \pi$的方法。
-The reinforcement learning agent and its environment interact over a sequence of discrete time steps. Everything inside the agent is completely known and controllable by the agent; everything outside is incompletely controllable but may or may not be completely known.The agent’s objective is to maximize the amount of reward it receives over time.
+
+### 3.1 MDP concepts
+
+The reinforcement learning agent and its environment interact over a sequence of discrete time steps. Everything inside the agent is completely known and controllable by the agent; everything outside is incompletely controllable but may or may not be completely known. The agent’s objective is to maximize the amount of reward it receives over time.
+
+white-box environment -> the optimal policy can be solved by the dynamic programming: PI, VI
+
+black-box -> model-free RL methods
 
 - $t$: discrete time step.
 - $\color{turquoise}\text{s, s' : current state, next state}$,  $\color{turquoise}\text{basis for making the choices}$
@@ -226,8 +237,6 @@ $$
 \max_\pi J(\pi)=E_\pi[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)] ≃ E_{(s,a)～\hat\rho^\pi}[r(s,a)]
 $$
 
-$\color {yellow}\text{Policy evaluation}$
-
 $\color{orange}\text{Bellman expectation equations }$
 
 - $V^\pi(s)$: Expected reward by following policy $\pi$ from state s
@@ -235,7 +244,7 @@ $\color{orange}\text{Bellman expectation equations }$
   - q: quality
 
     $$
-    V^\pi(s)=E_\pi[G_t|s]  \text{ def}
+    V^\pi(s) = E_\pi[G_t|s]  \text{ def}
     \\ = E_\pi[R_t + \gamma G_{t+1}|s]
     \\ = E_\pi[R_t|s]+ E_\pi[\gamma G_{t+1}|s]
     \\ = E_\pi[R_t|s]+ \gamma E_\pi[G_{t+1}|s]
@@ -243,6 +252,7 @@ $\color{orange}\text{Bellman expectation equations }$
     \\ = E_\pi[R_t|s]+ E_\pi[\gamma V^\pi(s_{t+1})|s]
     \\ = \sum_a \pi(a|s)r(s,a) + \sum_a \pi(a|s)\gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1})
     \\ = \sum_a \pi(a|s)(r(s,a) + \gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1}))
+    \\ = \sum_a \pi(a|s)Q(s,a)
     $$
 
 $$
@@ -253,7 +263,7 @@ Q^\pi(s,a) = E_\pi[G_t|s,a]
 \\ = r(s,a) + \gamma \sum_{s_{t+1}} P(s_{t+1}|s,a) \sum_{a_{t+1}} \pi(a_{t+1}|s_{t+1})Q(s_{t+1},a_{t+1})
 $$
 
-$\color{pink}\text{Explanations} $ The value function $V_\pi$ 's Bellman equation.
+- $\color{pink}\text{Explanations}$ The value function $V_\pi$ 's Bellman equation.
 
 ![image.png](pic/image.png)
 
@@ -263,7 +273,7 @@ From each of these, the environment could respond with one of several next state
 along with a reward, r, depending on its dynamics given by the function p.
 ```
 
-The action-value function $Q_\pi$ 's Bellman equation.
+- The action-value function $Q_\pi$ 's Bellman equation.
 
 ![q pi.png](pic/qpi.png)
 
@@ -271,23 +281,144 @@ The action-value function $Q_\pi$ 's Bellman equation.
 If we were to take action 𝑎 in state 𝑠, what is the expected return if we then follow 𝜋 afterward?
 ```
 
+### 3.2 Policy evaluation
 
+$\color{orange}\text{Policy improvement theorem}$
 
-$\color{orange}\text{Bellman optimality equation}$ :the value of a state under an optimal policy must equal the expected return for  the best action from that state
+Assume deterministic policy $\pi$
+Policy $\pi'$ is the improvement of $\pi$ if: for any s, $Q^\pi(s, \pi') \ge V^\pi(s)$
+
+Then $\pi \text{ and } \pi'$ satisfy: for any s, $V^{\pi'}(s) \ge V^\pi(s)$
+
+$\color{Lime} \text{PROOF 28}$
+
+### 3.3 Find optimal policy
+
+#### 3.3.1 Policy iteration
+
+Given a MDP with limited action space and state space: $|S| < \infty, |A| < \infty$
+
+- PI based on s value V
+
+  1. Randomly initialize policy 𝜋
+  2. Repeat until convergence {
+     a) Calculate 𝑉 ≔ 𝑉^𝜋 (Updating is time consuming)
+     b) For each state 𝑠 ∈ 𝒮, update:
+     $$
+     \pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
+     $$
+
+  }
+- PI based on action value Q
+
+  1. Randomly initialize policy 𝜋
+  2. Repeat until convergence {
+     a) Calculate Q ≔ Q^𝜋 (Updating is time consuming)
+     b) For each state 𝑠 ∈ 𝒮, update:
+     $$
+     \pi(s) = arg \max_a Q(s,a)
+     $$
+
+  }
+- $\color{Lime} \text{PROOF 35,36at k}$
+
+#### 3.3.2 Value iteration $\color{Lime} \text{+e.g.}$
+
+**Speed up V, same for Q:**
+Policy evaluation is time consuming.  But in the previous example, when the iteration of value function V is not  convergent, the derived policy is already optimal. Don’t wait until convergence!  If only one round of value  update is carried out in the  policy evaluation, and then the policy is upgraded  directly according to the updated value.
+
+1. For each state, initialize V(s)=0
+2. Repeat until convergence {
+   a) For each state 𝑠 ∈ 𝒮, update:
+   $$
+   V(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
+   $$
+
+}
+3. Return a deterministic policy
 
 $$
-v_*(s)=\max_a q\pi_*(s,a) 
-=E_\pi[G_t|s]
-=E_\pi[R_\text{t+1}+\gamma G_\text{t+1}|S=s]
-=\sum_a\pi(a|s)\sum_\text{s',r}p(s',r|s,a)[r+\gamma v_\pi(s')]
+\pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
 
-$\color{orange}\text{Apporximations for value f, policy, models}$
+Synchronous value iteration store two copies of value function (Update new by using old)
+Asynchronous value iteration only store one copy of value function (Update new by using both old and new)
 
-Even if the agent has a complete and accurate environment model, the agent is typically unable to perform enough computation (memory) per time step to fully use it.
+#### 3.3.3 Optimal policy $\pi^*$
+
+In MDP with limited state and action  space, there is a policy:
+
+$V^{\pi^*}(s)\ge V^{\pi}(s) \text{ for any s} \in S$
+
+Optimal state value f
+
+$$
+V^{*}(s) = \max_\pi V^\pi(s) 
+\\ = \max_\pi \sum_a \pi(a|s)Q^\pi(s,a) 
+\\ = \max_aQ^*(s,a) 
+\\ = \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V^*(s')
+$$
+
+Optimal action value f
+
+$$
+Q^{*}(s,a) = \max_\pi Q^\pi(s,a)
+\\ = r(s,a) + \gamma \sum_{s'}P(s'|s,a)V^*(s')
+\\ = r(s,a) + \gamma \sum_{s'}P(s'|s,a)\max_a Q^*(s,a)
+$$
+
+When value function is optimal, its policy is optimal:
+
+$$
+\pi^*(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V^*(s')
+$$
+
+relationship
+
+$\color{Lime} \text{Proof: Value Iteration}$
+
+### 3.4 Policy v.s. Value Iteration
+
+Value iteration: greedy update method, equivalent to a round of value update in policy evaluation, and then the policy is upgraded directly according to the updated value
+
+In policy iteration, the cost of updating value function by using Bellman equation is very large!
+
+For MDP with small space, policy iteration usually converges quickly
+
+For MDP with large space, value iteration is more practical, more efficient
+
+If no state transition loop, best to use value iteration
+
+### 3.5 Model-based method
+
+MDP<S,A,P,r,$\gamma$>.
+In real applications, 𝑃 and 𝑟 are unknown.
+
+Need to learn the state transition probability P and reward r
+
+$$
+P(s'|s,a)=\frac{\text{\# take a under s and transfer to s'}}{\text{\# take a under s}}
+$$
+
+$$
+r(s,a)= \text{avgerage } {r(s,a)^{(i)}}
+$$
+
+Algorithm
+
+1. Randomly initialize policy 𝜋
+2. Repeat until convergence {
+   a) Execute 𝜋 in MDP, collect experienced data
+   b) Use the collected experience in MDP to update the estimation of 𝑃 and 𝑟
+   c) Value iteration by using the estimation of 𝑃 and 𝑟 to get new estimation of value function V
+   d) Update policy 𝜋 as greedy policy according to V
+   }
+
+-: action space is too large. -> model-free
 
 # 4 Model-free method
 
+Learn value function and policy directly from experiences.
 2 methods:
 MC: 从头到尾全部episode 采样完了才更新
 TD  只采样一部就更新

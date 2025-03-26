@@ -98,7 +98,7 @@ $\color{orange}\text{Markov reward process(MRP)}$
 - env: 不受agent控制，产生s,r
 - episodes: agent–environment interaction breaks naturally into subsequences, each episode ends in a special state called the terminal state.
 - $\color{orange}\text{discounted episode's return from }s_t$
-  
+
 $$
 G_t= R_\text{t}+\gamma R_\text{t+1}+\gamma^2R_\text{t+2}+...=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k}=R_\text{t}+\gamma G_\text{t+1}
 $$
@@ -133,13 +133,13 @@ $$
 \sum_a \pi(a|s)=1
 $$
 
-  - deterministic policy:for a given s, the agent always chooses the same a, without any randomness or probabilities involved.
+- deterministic policy:for a given s, the agent always chooses the same a, without any randomness or probabilities involved.
 
 $$
 \pi(a \mid s)=\pi(s)=\mu(s)=\begin{cases}1 & \text{if } a = \mu(s) \\0 & \text{otherwise} \end{cases}
 $$
 
-  - stochastic policy: a is sampled
+- stochastic policy: a is sampled
 
 $$
 \pi(a \mid s)\in[0,1]
@@ -307,22 +307,26 @@ Given a MDP with limited action space and state space: $|S| < \infty, |A| < \inf
   2. Repeat until convergence {
      a) Calculate 𝑉 ≔ 𝑉^𝜋 (Updating is time consuming)
      b) For each state 𝑠 ∈ 𝒮, update:
+
 $$
 \pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
 
-  }
+}
+
 - PI based on action value Q
 
   1. Randomly initialize policy 𝜋
   2. Repeat until convergence {
      a) Calculate Q ≔ Q^𝜋 (Updating is time consuming)
      b) For each state 𝑠 ∈ 𝒮, update:
+
 $$
 \pi(s) = arg \max_a Q(s,a)
 $$
 
-  }
+}
+
 - $\color{Lime} \text{PROOF 35,36at k}$
 
 #### 3.3.2 Value iteration $\color{Lime} \text{+e.g.}$
@@ -333,6 +337,7 @@ Policy evaluation is time consuming.  But in the previous example, when the iter
 1. For each state, initialize V(s)=0
 2. Repeat until convergence {
    a) For each state 𝑠 ∈ 𝒮, update:
+
 $$
 V(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
@@ -410,7 +415,7 @@ $$
 Algorithm
 
 1. Randomly initialize policy 𝜋
-2. Repeat until convergence {
+2. Repeat untFil convergence {
    a) Execute 𝜋 in MDP, collect experienced data
    b) Use the collected experience in MDP to update the estimation of 𝑃 and 𝑟
    c) Value iteration by using the estimation of 𝑃 and 𝑟 to get new estimation of value function V
@@ -421,10 +426,209 @@ Algorithm
 
 # 4 Model-free method
 
-Learn value function and policy directly from experiences.
-2 methods:
-MC: 从头到尾全部episode 采样完了才更新
-TD  只采样一部就更新
+If a problem cannot be modeled as MDP, it is not a reinforcement learning problem.
+Can be modeled does not mean that we know all the parameters.
+
+1. Learn value function and policy directly from experiences.
+   Key steps:
+
+(1) Estimating value function (Policy evaluation)
+
+(2) Optimizing policy (Policy improvement)
+
+2. 2 kinds of policy learning
+
+   on-policy learning:Sampling policy and learning policy is the same!
+
+   off-policy: Sampling policy and learning policy is different!
+
+   - target policy $\pi(a|s)$: evluate value function $V^\pi(s)$ or $Q^\pi(s,a)$
+   - Behavior policy $\mu(a|s)$: collect data $\{s_t,a_t,r_t, s_{t+1},...,s_{T-1},a_{T-1},r_{T-1},s_T,a_T,r_T \}～\mu$
+   - why:
+     - Balance exploration and exploitation
+     - Learning policy by observing human beings or other agents
+     - Experience from reusing old policies
+     - Learn the optimal policy when following the policy used in exploration
+     - Learn multiple policies when following one policy in exploration
+     - An example of MSR research in Cambridge
+
+#### 4.1 Monte Carlo value estimation
+
+MC: repeated random sampling to obtain numerical results.
+can only be applied to MDP with finite length (all episode has a terminate state).
+learns from the complete episode: no bootstrapping
+
+work in a fragmented (terminated) environment.
+
+must wait for the end of the episode until the cumulative reward is  known
+
+Steps:
+
+1. Sampling a lot of episodes using policy $\pi$
+2. For the state 𝑠 of each time step 𝑡 in each episode:Incremental counter 𝑁(𝑠) ←𝑁(𝑠) +1
+
+   Incremental total cumulative reward 𝑀(𝑠) ←𝑀(𝑠) + 𝐺𝑡
+
+   Value is estimated as the average of the cumulative rewards 𝑉(s)=  𝑀(𝑠)/𝑁(𝑠)
+3. According to the law of large numbers: $V(s) -> V^\pi(s) \text{ as } N(s) -> \infty$
+
+   Update 𝑉(𝑠) immediately after sampling an episode
+4. For each state $𝑠_𝑡$ and its cumulative reward $g_t$
+
+   $$
+   N(s_t) \leftarrow N(s_t) +1
+   \\ V(s_t) \leftarrow V(s_t) + \frac{1}{N(s_t)}(g_t-V(s_t))
+   $$
+
+   For nonn-stationary problems (that is, the environment will change over time), we can track a current average (that is, we don't consider episodes that are too long ago). Take $\alpha$ as a constant.
+
+   $$
+   V(s_t) \leftarrow V(s_t) + \alpha(g_t-V(s_t))
+   $$
+
+Analysis:
+
+The cummulative reward $g_t$ is the unbiased estimation of $V(s_t)$
+
+ Good convergence property (This is still true when using functional  approximation)
+ Insensitive to initial values
+ Easy to understand and use
+
+#### 4.2 Temporal difference
+
+By bootstrapping, TD learns from incomplete fragment.
+
+updates the current prediction value to make it close to  the estimated cumulative reward (untrue value).
+
+works in a continuous (non-terminating) environment.
+
+can do real-time learning at each step. 
+
+
+Steps:
+
+1. Update value function $V(s_t)$, make it close to the estimated cummulative reward (TD target) $r_t+\gamma V(s_{t+1})$. the braket content in the $\alpha$ is the TD error.
+
+$$
+V(s_t) \leftarrow V(s_t) + \alpha(\color{green}{r_t+\gamma V(s_{t+1})}- \color{orange}V(s_t))
+$$
+
+Analysis:
+
+Real target $r_t+\gamma V^\pi (s_{t+1})$ is the unbiased estimation of $V(s_t)$
+
+TD target $r_t+\gamma V(s_{t+1})$ is biased, $\gamma V(s_{t+1})$ is the current estimation
+
+TD target has a lower variance:
+
+ Cumulative reward: depend on multi-step random action, multi-step state  transition and multi-step reward   TD target: depend on single-step random action, single-step state transition and single-step reward
+
+ Usually more efficient than MC
+
+ TD finally converges to $𝑉^\pi (𝑠_{𝑡+1})$ (but it is not always the case when using function approximation)
+
+ More sensitive to initial values than MC
+
+#### 4.3 Multi-step TD Learning
+
+* Instead of updating based on a single reward, we update using a sum of rewards over **𝑛** steps.
+* This helps balance between **speed (shorter horizon)** and **accuracy (longer horizon)**.
+* It is useful when time constraints make full-episode learning impractical.
+* The update rule still remains model-free because it doesn’t rely on knowing the full environment dynamics.
+
+𝑛 step cummulative reward:
+
+$$
+g_t^{(n)}= r_\text{t}+\gamma r_\text{t+1}+...+\gamma^{n-1} R_\text{t+n-1}++\gamma^{n} R_\text{t+n}
+$$
+
+𝑛 step TD learning:
+
+$$
+V(s_t) \leftarrow V(s_t) + \alpha(g_t^{(n)}-V(s_t))
+$$
+
+#### 4.4 Off-policy MC by importance sampling
+
+Evaluate policy 𝜋 using the cumulative rewarded generated by policy 𝜇
+
+Cumulative reward 𝑔𝑡 should be weighted according by the importance ratio between two policies:
+
+$$
+\{s_t,a_t,r_t, s_{t+1},...,s_{T-1},a_{T-1},r_{T-1},s_T,a_T,r_T\}～\mu
+\\g_t^{\pi/\mu}=\frac{\pi(a_t|s_t)}{\mu(a_t|s_t)}\frac{\pi(a_{t+1}|s_{t+1})}{\mu(a_{t+1}|s_{t+1})}...\frac{\pi(a_T|s_T)}{\mu(a_T|s_T)}g_t=
+$$
+
+Update value function to approximate revised cumulative reward.
+
+Cannot be used when 𝜋≠0 but 𝜇=0; and significantly increase variance.
+
+$$
+V(s_t) \leftarrow V(s_t) + \alpha(g_t^{\pi/\mu}-V(s_t))
+$$
+
+.
+
+#### 4.4 Off-policy MC by importance sampling
+
+TD target is weighted by the importance sampling
+
+$$
+V(s_t) \leftarrow V(s_t) + \alpha \left( \frac{\pi(a_t | s_t)}{\mu(a_t | s_t)} (r_t + \gamma V(s_{t+1})) - V(s_t) \right)
+$$
+
+Lower variance than MC importance sampling.
+
+The policy only needs to be approximated in a single step.
+.
+
+#### 4.5 Policy optimization methods
+
+
+
+1. $\epsilon$ greedy policy improvement
+2. MC control
+
+   - on-policy
+   - off-policy
+     MC Control v.s TD Control
+3. SARSA (state-action-reward-state-action) On-Policy Control
+   policy evaluation:
+
+   $$
+   Q(s,a) \leftarrow Q(s,a)+\alpha (r+\gamma Q(s',a')-Q(s,a))
+   $$
+
+   policy improvement: $\epsilon$-greedy
+4. Q-learning (off-policy)
+   SARSA v.s. Q-learning
+
+
+
+#### 4.6 Summery
+
+
+Model-free RL
+
+- On-policy MC: 
+  $$
+  V(s_t) \leftarrow V(s_t) + \alpha (g_t - V(s_t))
+  $$
+- On-policy TD: 
+  $$
+  V(s_t) \leftarrow V(s_t) + \alpha (r_t + \gamma V(s_{t+1}) - V(s_t))
+  $$
+- On-policy TD (SARSA):
+  $$
+  Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t))
+  $$
+
+Off-policy TD (Q-learning):
+
+$$
+Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t))
+$$
+
 
 # 5 Multi-step bootsr
 

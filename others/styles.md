@@ -16,4 +16,6 @@ $\color{blue}\text{Blue}$
 
 $\color{pink}\text{Pink}$
 
-$\color{violet}\text{Violet}$$
+$\color{violet}\text{Violet}$
+
+$\color{purple}\text{purple}$

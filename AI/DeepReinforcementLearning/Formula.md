@@ -264,6 +264,8 @@ Q^\pi(s,a) = E_\pi[G_t|s,a]
 \\ = E_\pi[R_t + \gamma Q(S_{t+1},A_{t+1})|s,a]
 \\ = E_\pi[R_t|s,a]+ E_\pi[\gamma Q(S_{t+1},A_{t+1})|s,a]
 \\ = r(s,a) + \gamma \sum_{s_{t+1}} P(s_{t+1}|s,a) \sum_{a_{t+1}} \pi(a_{t+1}|s_{t+1})Q(s_{t+1},a_{t+1})
+\\ = r(s,a)+ \gamma \sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1})
+\\ = \color{red}{r(s,a)+ \gamma E_{s'∼P(⋅∣s,a)} [V^{\pi} (s')]}
 $$
 
 - $\color{pink}\text{Explanations}$ The value function $V_\pi$ 's Bellman equation.
@@ -502,8 +504,7 @@ updates the current prediction value to make it close to  the estimated cumulati
 
 works in a continuous (non-terminating) environment.
 
-can do real-time learning at each step. 
-
+can do real-time learning at each step.
 
 Steps:
 
@@ -582,53 +583,55 @@ Lower variance than MC importance sampling.
 The policy only needs to be approximated in a single step.
 .
 
-#### 4.5 Policy optimization methods
+#### 4.5 $\epsilon$ greedy policy improvement
 
-
-
-1. $\epsilon$ greedy policy improvement
-2. MC control
-
-   - on-policy
-   - off-policy
-     MC Control v.s TD Control
-3. SARSA (state-action-reward-state-action) On-Policy Control
-   policy evaluation:
-
-   $$
-   Q(s,a) \leftarrow Q(s,a)+\alpha (r+\gamma Q(s',a')-Q(s,a))
-   $$
-
-   policy improvement: $\epsilon$-greedy
-4. Q-learning (off-policy)
-   SARSA v.s. Q-learning
-
-
+![image.png](pic/epsilongdimp.png)
 
 #### 4.6 Summery
 
-
 Model-free RL
 
-- On-policy MC: 
+- On-policy MC:
+
   $$
   V(s_t) \leftarrow V(s_t) + \alpha (g_t - V(s_t))
   $$
-- On-policy TD: 
+- On-policy TD:
+
   $$
   V(s_t) \leftarrow V(s_t) + \alpha (r_t + \gamma V(s_{t+1}) - V(s_t))
   $$
-- On-policy TD (SARSA):
+- On-policy TD (SARSA):state-action-reward-state-action
+  In each time step:
+
   $$
   Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t))
   $$
 
-Off-policy TD (Q-learning):
+  Policy improvement: 𝝐-greedy
+
+  ![image.png](pic/SARSA.png)
+- Off-policy TD (Q-learning):
 
 $$
 Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t))
 $$
 
+Q learning's objective function:
+
+t, get s_t, a_t, r_t -> Q. $\max_{a'} Q(s_{t+1},a')$ Select a', no need to sample.
+
+efficient than SARSA
+
+??Do not need importance sampling?
+
+$$
+r_{t+1} = \gamma Q(s_{t+1}, a'_{t+1})=r_{t+1}+\gamma Q(s_{t+1}, arg \max_{a'} Q(s_{t+1},a'))=r_{t+1}+\gamma \max_{a'}Q(s_{t+1},a')
+$$
+
+![image.png](pic/QLearning.png)
+
+$\color{Lime} \text{PROOF Q-learning converge 52}$
 
 # 5 Multi-step bootsr
 
@@ -792,6 +795,46 @@ The relative order of Q remains the same. s.t.$Q(s,a_1) > Q(s,a_2) \rightarrow A
 + +:
   + Handle states that are less associated with actions. 没人的路上怎么开都行。
   + effective in learning state-value f: one state  value function corresponds to multiple Advantage. functions. Share the same state-value function; Easy Training, fast convergence.
+
+# 7 Stochastic Policy Gradient (SPG)
+
+This chapter considers the neural network that model the policy directly.
+
+1. Parameterized Policy
+   Model the policy
+
+   - stochastic $\pi_\theta(a|s)=P(a|s;\theta)$ output: a prob
+   - deterministic $a = \pi_\theta(s)$ output: an action
+     $\theta$: nn's para to model the policy
+     +: Generalize the visible known state to the unknown state.(For value based method, to get Q(s,a), must get (s,a) pair fist)
+2. Policy-based RL
+
+   - +:
+
+     - better convergence, effective in high-dimensional/continuous action space.
+       Value based method: $a^* = \max_a Q(s,a)$, comparison of a list by list, and discrete A.
+     - can learn stochastic policy
+   - -:
+
+     - often converge to the local optimum, not global optimum. (nn is not convex)
+     - inefficient in evaluating a policy & large variance.
+   - objective
+
+     - policy learning $J(\theta)=E_{ \tau～\pi_\theta(\tau)}[G(\tau)]= E_{s_0～v_0} [V^{\pi^\theta}(s_0)]$
+
+       - $G(\tau)$ discounted cummulative return of trajectory $\tau$
+       - $v_0$ distribution of initial states.
+       - more forms
+         $$
+         J(\theta)=E_{ \tau～\pi_\theta(\tau)}[G(\tau)]
+         \\ = E_{ \tau～\pi_\theta(\tau)}[\sum_{t=0}^{\infty}\gamma^t r(s_t,a_t)]
+         \\ = E_{ \pi_\theta}[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)]
+         \\ = E_{ (s,a)～\hat\rho^{\pi_\theta}}[ r(s,a)]
+         \\ = \frac{1}{1-\gamma}E_{ (s,a)～\rho^{\pi_\theta}}[ r(s,a)]
+         $$
+   - Policy gradient in 1-step MDP
+
+     Starting state 𝑠\~𝑑(𝑠),The MDP ends after one-step decision-making, and reward is 𝑟(𝑠,𝑎)
 
 # dft
 

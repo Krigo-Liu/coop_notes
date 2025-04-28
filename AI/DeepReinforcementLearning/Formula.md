@@ -4,7 +4,6 @@
 2. Lowercase letters: values of random variables & for scalar functions.
 3. **Quantities** that are required to be real-valued vectors are written in **bold** and in **lowercase** (even if random variables). Matrices are bold capitals.
 4. Abbreviations: - for disadvantages, + for advantages, sol for solution, nw for network
-
 ## Symbols
 
 - $\overset{.}{=}$: equality relationship that is true by definition
@@ -490,6 +489,7 @@ Steps:
    $$
    V(s_t) \leftarrow V(s_t) + \alpha(g_t-V(s_t))
    $$
+Analogy: You finish a whole chess game before adjusting your opinion about your opening moves.
 
 Analysis:
 
@@ -647,10 +647,12 @@ $\color{Lime} \text{PROOF Q-learning converge 52}$
 
 折中4, 采样几步就更新几次，剩下的值函数估计
 
-
 # 6 Value-based DRL
 
 这一讲终于跳脱出了前面传统的强化学习（解决相对简单的问题），用神经网络拟合Q, V函数，适用于更大的状态空间。
+
+focus on learning **how good** a state (or action) is.
+We don't directly learn *what action* to take — we learn *values* first.
 
 $\large \color{violet}\text{DQN family}$
 
@@ -804,21 +806,49 @@ We do not care of it, because the standard of doing greedy is the order of Q.
 The relative order of Q remains the same. s.t.$Q(s,a_1) > Q(s,a_2) \rightarrow A(s,a_1) > A(s,a_2)$$
 
 + +:
+
   + Handle states that are less associated with actions. 没人的路上怎么开都行。
   + effective in learning state-value f: one state  value function corresponds to multiple Advantage. functions. Share the same state-value function; Easy Training, fast convergence.
+#### 6.3 Challenges in Large MDPs
+
+Maintaining a table of $V(s)$ or $Q(s,a)$ becomes infeasible in large or continuous spaces.
+
+Solutions:
+- Discretization: split continuous spaces into grids.
+- Bucketing: group similar states.
+- Parameterized value functions: approximate $V_\theta(s)$ or $Q_\theta(s,a)$ using models.
+#### 6.4 Value Function Approximation
+
+  ??? Approximate $V(s)$ using parameters $\theta$:
+
+  $$Vθ(s)=θTx(s)V_\theta(s) = \theta^T x(s)Vθ(s)=θ^Tx(s)$$
+  
+  where:
+
+  * $x(s)$ is a feature vector extracted from state $s$.
+
+Objective:
+
+$$J(\theta) = \mathbb{E}_\pi \left[\frac{1}{2}(V_\pi(s) - V_\theta(s))^2\right]$$
+
+Gradient descent update:
+
+$$\theta \leftarrow \theta + \alpha (V_\pi(s) - V_\theta(s)) \nabla_\theta V_\theta(s)$$
+
+If true $V_\pi(s)$ is unknown, use Monte Carlo or TD targets instead.
+
+  > **Advantage**: Approximation generalizes to unseen states. **Weakness**: Bad approximators can give wrong value everywhere!
+  > **Analogy**: Instead of remembering every person's favorite food, you learn that *"teenagers like fast food"*. You generalize!
+  
 
 # 7 Stochastic Policy Gradient (SPG)
 
-This chapter considers the neural network that model the policy directly.
+### 7.1 Goal
+This chapter considers the neural network(parameters $\theta$) that model the stochastic policy $\pi_\theta(a|s)$ directly, which outputs a probability distribution over actions.
 
-1. Parameterized Policy
-   Model the policy
-
-   - stochastic $\pi_\theta(a|s)=P(a|s;\theta)$ output: a prob
-   - deterministic $a = \pi_\theta(s)$ output: an action
-     $\theta$: nn's para to model the policy
-     +: Generalize the visible known state to the unknown state.(For value based method, to get Q(s,a), must get (s,a) pair fist)
-2. Policy-based RL
+ +: Generalize the visible known state to the unknown state.(For value based method, to get Q(s,a), must get (s,a) pair fist)
+ 
+1. Policy-based RL
 
    - +:
 
@@ -836,39 +866,254 @@ This chapter considers the neural network that model the policy directly.
        - $G(\tau)$ discounted cummulative return of trajectory $\tau$
        - $v_0$ distribution of initial states.
        - more forms
-         $$
-         J(\theta)=E_{ \tau～\pi_\theta(\tau)}[G(\tau)]
+
+$$
+         J(\theta) = E_{ \tau～\pi_\theta(\tau)}[G(\tau)]
          \\ = E_{ \tau～\pi_\theta(\tau)}[\sum_{t=0}^{\infty}\gamma^t r(s_t,a_t)]
          \\ = E_{ \pi_\theta}[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)]
          \\ = E_{ (s,a)～\hat\rho^{\pi_\theta}}[ r(s,a)]
          \\ = \frac{1}{1-\gamma}E_{ (s,a)～\rho^{\pi_\theta}}[ r(s,a)]
          $$
+
    - Policy gradient in 1-step MDP
 
      Starting state 𝑠\~𝑑(𝑠),The MDP ends after one-step decision-making, and reward is 𝑟(𝑠,𝑎)
 
-# dft
+
+$$J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}[G(\tau)]$$
+
+Gradient:
+
+$$\nabla_\theta J(\theta) = \mathbb{E}_{s,a \sim \rho_{\pi_\theta}}\left[\nabla_\theta \log \pi_\theta(a|s) Q_{\pi_\theta}(s,a)\right]$$
+
+We adjust policy parameters to increase the probability of good actions (high $Q_{\pi_\theta}(s,a)$) and decrease the probability of bad ones.
+
+Analogy: If hitting the red button often gives candy, you slowly adjust to hit the red button more often.
+
+### 7.3 REINFORCE Algorithm
+
+Update rule:
+
+$$\theta \leftarrow \theta + \alpha g_t \nabla_\theta \log \pi_\theta(a_t|s_t)$$
+
+where $g_t$ is the return from time $t$ onward.
+
+REINFORCE uses full-episode returns, leading to high variance.
+
+### 7.4 Variance Reduction: Baseline
+
+Adjusted update:
+
+$$\nabla_\theta J(\theta) \propto \mathbb{E}\left[\nabla_\theta \log \pi_\theta(a|s) (Q_{\pi_\theta}(s,a) - b(s))\right]$$
+
+where $b(s)$ is a baseline function, typically $V(s)$.
+
+Subtracting a baseline does not bias the gradient but reduces variance.
+
+Analogy: Imagine you measure whether your action was better than "average" rather than judging it absolutely.
+
+### 7.5 Advantages and Weaknesses
+
+- Advantages:
+  - Works well with continuous or high-dimensional action spaces.
+  - Can learn stochastic behaviors (good for exploration).
+- Weaknesses:
+  - High variance, slow learning.
+  - Prone to getting stuck in local optima.
+
+Mathematical reason: The gradient depends on sampling entire trajectories, which introduces noise into updates.
+
+
+# 8 Deterministic Policy Gradient (DPG)
+
+### 8.1 Motivation
+
+Sampling over all actions is inefficient in continuous spaces. A deterministic policy:
+
+$$a = \mu_\theta(s)$$
+
+avoids unnecessary randomness by always outputting one action for each state.
+
+Analogy: Instead of rolling a dice to move, you deterministically step towards the goal every time.
+
+### 8.2 Deterministic Policy Gradient Theorem
+
+Objective:
+
+$$J(\theta) = \mathbb{E}_{s \sim \rho_{\mu_\theta}}[Q_{\mu_\theta}(s, \mu_\theta(s))]$$
+
+Gradient:
+
+$$\nabla_\theta J(\theta) = \mathbb{E}_{s \sim \rho_{\mu_\theta}}\left[\nabla_\theta \mu_\theta(s) \nabla_a Q_{\mu_\theta}(s,a)\big|_{a=\mu_\theta(s)}\right]$$
+
+This avoids integrating over the action space, making updates cheaper and faster.
+
+### 8.3 Deep DPG (DDPG)
+
+Combines DPG with deep networks:
+- Actor: approximates $\mu_\theta(s)$
+- Critic: approximates $Q_\phi(s,a)$
+
+Training techniques:
+- Experience Replay: store and reuse past experiences.
+- Target Networks: slow-moving copies to stabilize learning.
+
+DDPG is effective for high-dimensional continuous control tasks.
+
+### 8.4 Twin Delayed DDPG (TD3)
+
+TD3 addresses DDPG's overestimation bias.
+
+Modifications:
+- Twin Q-networks: minimize the smaller one.
+- Add noise to target actions (target policy smoothing).
+- Delayed actor updates.
+
+TD3 target:
+
+$$y = r + \gamma \min_{j=1,2} Q_{\phi_j}(s', a')$$
+
+where $a'$ is a slightly perturbed action.
+
+### 8.5 Advantages and Weaknesses
+
+- Advantages:
+  - Efficient for continuous action tasks.
+  - More stable and less biased than basic DDPG.
+- Weaknesses:
+  - Requires careful tuning.
+  - More computationally complex (multiple critics, delayed updates).
+
+Mathematical reason: bias from Q-value overestimation is controlled by taking the minimum estimate, stabilizing learning.
+
+
+# 9 Model-based RL
+## Review: Learn an MDP Model
+- **Motivation**: In real applications, the MDP model (state transition $P$ and reward function $r$) is often unknown. We need to learn it from observed episodes.
+- **Key Steps**:
+  1. **State Transition Probability**:  
+     $$P(s'|s, a) = \frac{\text{Count}(s \rightarrow a \rightarrow s')}{\text{Count}(s \rightarrow a)}$$  
+     This estimates the probability of transitioning to state $s'$ after taking action $a$ in state $s$.
+  2. **Reward Function**:  
+     $$r(s, a) = \text{average}\{r(s, a)^{(i)}\}$$  
+     Computes the expected immediate reward for taking action $a$ in state $s$.
+
+- **Advantages**:
+  - Enables planning without direct interaction with the environment.
+  - Efficient use of data by generalizing from observed transitions.
+- **Weaknesses**:
+  - Requires sufficient data to accurately estimate probabilities.
+  - Sensitive to incomplete or noisy observations.
+## 9.1 Model Classification
+- **Distribution Model**: Provides all possible outcomes and their probabilities.  
+  - Example: Predicting all possible sums of dice rolls.
+- **Sample Model**: Generates a single outcome based on probabilities.  
+  - Example: Rolling dice once to get one sum.
+
+- **Advantages of Sample Model**: Computationally cheaper for large state spaces.
+- **Weaknesses of Distribution Model**: High memory and computation requirements for complex environments.
+## 9.2 Planning
+- **Definition**: Planning is the process of using a model to derive a policy.
+- **Types**:
+  - **State-space Planning**: Searches for the optimal policy in the state space (focus of the course).
+  - **Plan-space Planning**: Searches in the plan space (e.g., genetic algorithms).
+
+- **General Framework**:
+  1. Simulate experiences using the model.
+  2. Update the value function using simulated data.
+  3. Improve the policy based on the updated value function.
+
+- **Example**: Dynamic Programming  
+  Formula:  
+  $$V(s) \leftarrow \max_a \left[ r(s, a) + \gamma \sum_{s'} P(s'|s, a) V(s') \right]$$
+
+## 9.3 Dyna Framework
+- **Integration**: Combines planning, learning, and acting.
+- **Steps**:
+  1. Interact with the environment to collect real experiences.
+  2. Update the model using real experiences.
+  3. Simulate experiences using the model.
+  4. Update the value function and policy using both real and simulated experiences.
+
+- **Algorithm: Dyna-Q**:
+  1. Initialize $Q(s, a)$ and the model.
+  2. Repeat:
+     - Take action $a$, observe $r$ and $s'$.
+     - Update $Q(s, a)$ using real experience.
+     - Update the model with $(s, a, r, s')$.
+     - Perform $n$ planning steps using simulated experiences.
+
+- **Advantages**:
+  - Balances exploration and exploitation.
+  - Improves sample efficiency by leveraging simulated data.
+- **Weaknesses**:
+  - Model inaccuracies can propagate errors.
+## 9.4 Sampling Methods
+- **Uniform Random Sampling**: Updates all states equally, which can be inefficient.
+- **Priority Sampling**: Focuses updates on states with significant value changes.
+  - Formula for priority:  
+    $$P \leftarrow \left| r + \gamma \max_{a'} Q(s', a') - Q(s, a) \right|$$
+
+- **Advantages of Priority Sampling**:
+  - Faster convergence by prioritizing important updates.
+- **Weaknesses**:
+  - Requires maintaining a priority queue, adding computational overhead.
+## 9.5 Expected vs. Sample Updates
+- **Expected Update**:  
+  $$Q(s, a) \leftarrow \sum_{s'} P(s'|s, a) \left[ r + \gamma \max_{a'} Q(s', a') \right]$$  
+  - Advantages: Accurate, unbiased.  
+  - Weaknesses: Computationally expensive.
+
+- **Sample Update**:  
+  $$Q(s, a) \leftarrow Q(s, a) + \alpha \left( r + \gamma \max_{a'} Q(s', a') - Q(s, a) \right)$$  
+  - Advantages: Computationally cheap.  
+  - Weaknesses: Subject to sampling error.
+## 9.6 Trajectory Sampling
+- **Definition**: Samples trajectories based on the current policy.
+- **Advantages**:
+  - Focuses on relevant states.
+  - Efficient for deterministic environments.
+- **Weaknesses**:
+  - May overfit to frequently visited states.
+## 9.7 Model-based Deep RL (MBRL)
+- **Key Questions**:
+  1. How to train a deep model accurately?
+  2. When to trust the model?
+  3. How to use the model to improve policy training?
+  4. Does the model improve data efficiency?
+
+- **Approaches**:
+  - **Model Predictive Control (MPC)**: Plans actions using the model without learning a policy.
+  - **MBPO (Model-based Policy Optimization)**: Uses branched rollouts to balance model error and sample efficiency.
+    - Formula for policy improvement:  
+      $$\eta[\pi] \geq \hat{\eta}[\pi] - C(\epsilon_m, \epsilon_\pi)$$  
+      where $C$ bounds the error due to model inaccuracies.
+
+- **Advantages of MBRL**:
+  - Higher sample efficiency than model-free methods.
+- **Weaknesses**:
+  - Sensitive to model errors, especially in stochastic environments.
+## 9.8 Future Directions
+1. **Environment Model Learning**: Improve accuracy and generalization.
+2. **Understanding Bounds**: Tighten theoretical guarantees for policy improvement.
+3. **Multi-agent MBRL**: Extend to collaborative or competitive settings.
+
+# drafts
 
 Approximate Value Functions
 
-- $v_\theta(s)$: approximate value of state $ s $ given parameter vector $ \theta $
-- $q_\theta(s, a)$: approximate value of state-action pair $ (s, a) $ given parameter vector $ \theta $
-- $\nabla v_\theta(s)$: column vector of partial derivatives of $ v_\theta(s) $ with respect to $ \theta $
-- $\nabla q_\theta(s, a)$: column vector of partial derivatives of $ q_\theta(s, a) $ with respect to $ \theta $
+- $v_\theta(s)$: approximate value of state $s$ given parameter vector $\theta$
+- $q_\theta(s, a)$: approximate value of state-action pair $(s, a)$ given parameter vector $\theta$
+- $\nabla v_\theta(s)$: column vector of partial derivatives of $v_\theta(s)$ with respect to $\theta$
+- $\nabla q_\theta(s, a)$: column vector of partial derivatives of $q_\theta(s, a)$ with respect to $\theta$
 
 #### Bellman Operators
 
 - $B_\pi$: Bellman operator for value functions
-- $P$: state-transition probability matrix under $ \pi $
+- $P$: state-transition probability matrix under $\pi$
 - $D$: diagonal matrix with on-policy state distribution on its diagonal
-- $X$: feature matrix, with $ x(s) $ as its rows
+- $X$: feature matrix, with $x(s)$ as its rows
 - $\Pi$: projection operator for value functions
-
-## Missing Symbols and Notation
-
-Below are the missing symbols and notation that were not properly formatted in the original document:
-
-## Symbols
 
 - $\mathbb{R}$: set of real numbers
 - $f : X \to Y$: function $f$ from elements of set $X$ to elements of set $Y$

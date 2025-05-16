@@ -187,11 +187,13 @@ $$
 - Discounted state distribution:
 
 $$
-\hat{v}^\pi(s) = \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(S_t = s | \pi)
-\\= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}( s | \pi) \sum_a \pi(a|s)
-\\ = \sum_{t=0}^{\infty} \sum_a \gamma^t \mathbb{P}( s | \pi) \sum_a \pi(a|s)
-\\ = \sum_a \sum_{t=0}^{\infty} \mathbb{P}( s,a | \pi)
-\\ = \sum_{t=0}^{\infty} \hat{\rho}^\pi(s, a)
+\begin{aligned}
+\hat{v}^\pi(s) &= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(S_t = s | \pi)
+\\ &= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}( s | \pi) \sum_a \pi(a|s)
+\\ &= \sum_{t=0}^{\infty} \sum_a \gamma^t \mathbb{P}( s | \pi) \sum_a \pi(a|s)
+\\ &= \sum_a \sum_{t=0}^{\infty} \mathbb{P}( s,a | \pi)
+\\ &= \sum_{t=0}^{\infty} \hat{\rho}^\pi(s, a)
+\end{aligned}
 $$
 
 - Normalization (When ($\gamma$ < 1\)): two distribution above -> real dist
@@ -225,12 +227,14 @@ $$
   - policy cummulative reward
 
 $$
-J(\pi)=E_\pi[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)]
-\\ = \sum_{t=0}^{\infty}\gamma^t E_\pi[r(S_t,A_t)]
-\\ = \sum_{t=0}^{\infty}\gamma^t \sum_a \sum_s P(s,a|\pi) {\color{red}\text{r(s,a)}}
-\\ = \sum_a \sum_s {\color{green}[\sum_{t=0}^{\infty} \gamma^tP(s,a|\pi)]} {\color{red}\text{r(s,a)}}
-\\ = \sum_a \sum_s {\color{green}\hat{\rho}^\pi(s, a)}{\color{red}\text{r(s,a)}}
-\\ = E_{(s,a)～\hat\rho^\pi}[r(s,a)]
+\begin{aligned}
+J(\pi) &=E_\pi[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)]
+\\ &= \sum_{t=0}^{\infty}\gamma^t E_\pi[r(S_t,A_t)]
+\\ &= \sum_{t=0}^{\infty}\gamma^t \sum_a \sum_s P(s,a|\pi) {\color{red}\text{r(s,a)}}
+\\ &= \sum_a \sum_s {\color{green}[\sum_{t=0}^{\infty} \gamma^tP(s,a|\pi)]} {\color{red}\text{r(s,a)}}
+\\ &= \sum_a \sum_s {\color{green}\hat{\rho}^\pi(s, a)}{\color{red}\text{r(s,a)}}
+\\ &= E_{(s,a)～\hat\rho^\pi}[r(s,a)]
+\end{aligned}
 $$
 
 - Policy learning goal
@@ -246,25 +250,30 @@ $\color{orange}\text{Bellman expectation equations }$
   - q: quality
 
 $$
-V^\pi(s) = E_\pi[G_t|s]  \text{ def}
-\\ = E_\pi[R_t + \gamma G_{t+1}|s]
-\\ = E_\pi[R_t|s]+ E_\pi[\gamma G_{t+1}|s]
-\\ = E_\pi[R_t|s]+ \gamma E_\pi[G_{t+1}|s]
-\\ = E_\pi[R_t|s]+ \gamma V^\pi(s_{t+1})
-\\ = E_\pi[R_t|s]+ E_\pi[\gamma V^\pi(s_{t+1})|s]
-\\ = \sum_a \pi(a|s)r(s,a) + \sum_a \pi(a|s)\gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1})
-\\ = \sum_a \pi(a|s)(r(s,a) + \gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1}))
-\\ = \sum_a \pi(a|s)Q(s,a)
+\begin{aligned}
+V^\pi(s) &= E_\pi[G_t|s]  \text{ def}
+\\ &= E_\pi[R_t + \gamma G_{t+1}|s]
+\\ &= E_\pi[R_t|s]+ E_\pi[\gamma G_{t+1}|s]
+\\ &= E_\pi[R_t|s]+ \gamma E_\pi[G_{t+1}|s]
+\\ &= E_\pi[R_t|s]+ \gamma V^\pi(s_{t+1})
+\\ &= E_\pi[R_t|s]+ E_\pi[\gamma V^\pi(s_{t+1})|s]
+\\ &= \sum_a \pi(a|s)r(s,a) + \sum_a \pi(a|s)\gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1})
+\\ &= \sum_a \pi(a|s)(r(s,a) + \gamma\sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1}))
+\\ &= \sum_a \pi(a|s)Q(s,a)
+\end{aligned}
 $$
 
 $$
-Q^\pi(s,a) = E_\pi[G_t|s,a]
-\\ = E_\pi[R_t + \gamma G_{t+1}|s,a]
-\\ = E_\pi[R_t + \gamma Q(S_{t+1},A_{t+1})|s,a]
-\\ = E_\pi[R_t|s,a]+ E_\pi[\gamma Q(S_{t+1},A_{t+1})|s,a]
-\\ = r(s,a) + \gamma \sum_{s_{t+1}} P(s_{t+1}|s,a) \sum_{a_{t+1}} \pi(a_{t+1}|s_{t+1})Q(s_{t+1},a_{t+1})
-\\ = r(s,a)+ \gamma \sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1})
-\\ = \color{red}{r(s,a)+ \gamma E_{s'∼P(⋅∣s,a)} [V^{\pi} (s')]}
+\begin{aligned}
+Q^\pi(s,a) &= E_\pi[G_t|s,a]
+\\ &= E_\pi[R_t + \gamma G_{t+1}|s,a]
+\\ &= E_\pi[R_t + \gamma Q(S_{t+1},A_{t+1})|s,a]
+\\ &= E_\pi[R_t|s,a]+ E_\pi[\gamma Q(S_{t+1},A_{t+1})|s,a]
+\\ &= r(s,a) + \gamma \sum_{s_{t+1}} P(s_{t+1}|s,a) \sum_{a_{t+1}} \pi(a_{t+1}|s_{t+1})Q(s_{t+1},a_{t+1})
+\\ &= r(s,a) + \gamma E_{s'∼P(⋅∣s,a), a'\sim\pi_\theta(·|s')}Q(s',a')
+\\ &= r(s,a)+ \gamma \sum_{s_{t+1}} P(s_{t+1}|s,a) V^\pi(s_{t+1})
+\\ &= \color{red}{r(s,a)+ \gamma E_{s'∼P(⋅∣s,a)} [V^{\pi} (s')]}
+\end{aligned}
 $$
 
 - $\color{pink}\text{Explanations}$ The value function $V_\pi$ 's Bellman equation.
@@ -643,7 +652,7 @@ $\color{Lime} \text{PROOF Q-learning converge 52}$
 
 ![image.png](pic/Q-learning convergence.png?t=1743929995986)
 
-# 5 Multi-step bootsr
+# 5 Multi-step bootsrtrapping
 
 折中4, 采样几步就更新几次，剩下的值函数估计
 
@@ -844,84 +853,297 @@ If true $V_\pi(s)$ is unknown, use Monte Carlo or TD targets instead.
 # 7 Stochastic Policy Gradient (SPG)
 
 ### 7.1 Goal
-This chapter considers the neural network(parameters $\theta$) that model the stochastic policy $\pi_\theta(a|s)$ directly, which outputs a probability distribution over actions.
+This chapter considers the neural network (parameters $\theta$) that model the stochastic policy $\pi_\theta(a|s)=\pi_\theta(a|s;\theta)$ directly, which outputs a probability distribution over actions. Notice, the final outcome here does not mean the choose the largest probability.
 
- +: Generalize the visible known state to the unknown state.(For value based method, to get Q(s,a), must get (s,a) pair fist)
+Value-based RL vs. policy-based RL:
+	value-based: 
+		visit (s,a) to find Q(s,a)
+		slower (compare and find the large a col by col: $a^* = \max_\limits{a} Q(s,a)$ ), discrete A.
+	policy-based:
+		having s then can have a -> generalization ability (generalize the visible known state to the unknown state.)
+		efficient in high-dimensional, continuous A.
+		can learn stochastic policy by $\color{red}\text{stochastic policy gradient (SPG)}$.
+		better convergence property but usually converges into the local minimum. Because, NN is non-convex (gradient formula), non linearity.
+		inefficient in evaluation policy, and having large variance.
  
-1. Policy-based RL
+### 7.2 SPG
 
-   - +:
+Stochastic policy $\pi_\theta(a|s)=\pi_\theta(a|s;\theta)=P(a|s;\theta)$
+Trajectory $\tau$ is sampled by $\pi_\theta$: $\tau = \{s_0,a_0,r_0,...\}\sim \pi_\theta$ 
+Total return of the $\tau$  
+$$J(\pi_\theta)=E_{ \pi_\theta}[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)]=E_{ \pi_\theta}[\sum_{t=0}^{\infty}\gamma^t r_t]$$
+the policy is determined by $\theta$:
+$$
+\begin{aligned}
+J(\theta) &= \mathbb{E}_{\tau \sim \pi_\theta(\tau)}[G(\tau)] \\
+&= \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\left[\sum_{t=0}^{\infty} \gamma^t r(s_t, a_t)\right] \\
+&= \mathbb{E}_{\pi_\theta}\left[\sum_{t=0}^{\infty} \gamma^t r(S_t, A_t)\right] \\
+&= \mathbb{E}_{(s, a) \sim \hat{\rho}^{\pi_\theta}}[r(s, a)] \\
+&= \frac{1}{1 - \gamma} \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[r(s, a)] \\
+&= \mathbb{E}_{s_0 \sim v_0}[V^{\pi_\theta}(s_0)]
+\end{aligned}
+$$
+	where, $v_0$ is the distribution of the initial states
+	
+$\color{red}\text{Goal}$: Gradient ascent to maximize the $J(\theta)$
 
-     - better convergence, effective in high-dimensional/continuous action space.
-       Value based method: $a^* = \max_a Q(s,a)$, comparison of a list by list, and discrete A.
-     - can learn stochastic policy
-   - -:
+  1-step MDP:
 
-     - often converge to the local optimum, not global optimum. (nn is not convex)
-     - inefficient in evaluating a policy & large variance.
-   - objective
+Starting state 𝑠\~𝑑(𝑠),The MDP ends after one-step decision-making, and reward is 𝑟(𝑠,𝑎)
 
-     - policy learning $J(\theta)=E_{ \tau～\pi_\theta(\tau)}[G(\tau)]= E_{s_0～v_0} [V^{\pi^\theta}(s_0)]$
-
-       - $G(\tau)$ discounted cummulative return of trajectory $\tau$
-       - $v_0$ distribution of initial states.
-       - more forms
 
 $$
-         J(\theta) = E_{ \tau～\pi_\theta(\tau)}[G(\tau)]
-         \\ = E_{ \tau～\pi_\theta(\tau)}[\sum_{t=0}^{\infty}\gamma^t r(s_t,a_t)]
-         \\ = E_{ \pi_\theta}[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)]
-         \\ = E_{ (s,a)～\hat\rho^{\pi_\theta}}[ r(s,a)]
-         \\ = \frac{1}{1-\gamma}E_{ (s,a)～\rho^{\pi_\theta}}[ r(s,a)]
-         $$
+\begin{aligned}
+J(\theta) &= \mathbb{E}_{s \sim d, a \sim \pi_\theta(·|s)}[r(s,a)] \\
+&= \sum_s v^{\pi_\theta}(s) \sum_a \pi_\theta(a|s)r(s,a)
+\end{aligned}$$
+where $v(s)$ is the stationary distribution under policy $\pi$.
 
-   - Policy gradient in 1-step MDP
+Gradient: Notice, $\pi_\theta$ is a function. $\log \pi_\theta$ is a composite function.
+$$\begin{aligned}
+\frac{\partial \pi_\theta(a|s)}{\partial\theta} 
+&= \pi_\theta(a|s) \cdot \frac{1}{\pi_\theta(a|s)} \frac{\partial \pi_\theta(a|s)}{\partial\theta} 
+&& \text{(Multiply by 1 in a clever way)} \\
+&= \pi_\theta(a|s) \cdot \frac{\partial \log \pi_\theta(a|s)}{\partial\theta} \cdot\frac{\partial\theta}{\partial \pi_\theta(a|s)} \cdot\frac{\partial \pi_\theta(a|s)}{\partial\theta} 
+&& \text{Using } \frac{d}{dx}\log f(x) = \frac{f'(x)}{f(x)} \\
+&= \pi_\theta(a|s) \cdot \nabla_\theta \log \pi_\theta(a|s)
+&& \text{(Final policy gradient form)}
+\end{aligned}$$
 
-     Starting state 𝑠\~𝑑(𝑠),The MDP ends after one-step decision-making, and reward is 𝑟(𝑠,𝑎)
+$$
+\begin{aligned}
+\nabla_\theta J(\theta) 
+&= \sum_{s \in S} d(s) \sum_{a \in A} \frac{\partial \pi_\theta(a|s)}{\partial \theta} r(s,a) \\
+&= \sum_{s \in S} d(s) \sum_{a \in A} \pi_\theta(a|s) \nabla_\theta \log \pi_\theta(a|s) r(s,a) \\
+&= \mathbb{E}_{s \sim d(s), a \sim \pi_\theta(s)} \left[ \nabla_\theta \log \pi_\theta(a|s) \cdot r(s,a) \right]
+\end{aligned}
+$$
+---
+#### Policy gradient theorem
 
+For any differential policy $\pi_\theta(a|s)$, $$\nabla_\theta J(\theta) =\mathbb{E}_{(s, a) \sim \hat{\rho}^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right] 
+\propto \nabla_\theta J(\theta) =\mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right]$$
+Parameters are put in into the learning rate.
 
-$$J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}[G(\tau)]$$
+- policy gradient algorithm: on-policy, sampling by $\pi_\theta$
+---
 
-Gradient:
+Go deeper into the calculation of the gradient.
+The NN-implemented scoring function $$f_\theta(s,a)$$
+For a stochastic policy, the probability of sampling an action is implemented by softmax:
+$$
+\begin{aligned}
+&\pi_\theta(a|s) = \frac{e^{f_\theta(s,a)}}{\sum_{a'} e^{f_\theta(s,a')}}\\
 
-$$\nabla_\theta J(\theta) = \mathbb{E}_{s,a \sim \rho_{\pi_\theta}}\left[\nabla_\theta \log \pi_\theta(a|s) Q_{\pi_\theta}(s,a)\right]$$
+& \log \pi_\theta(a|s) = \log e^{f_\theta(s,a)} - \log {\sum_{a'} e^{f_\theta(s,a')}}= f_\theta(s,a) - \log {\sum_{a'} e^{f_\theta(s,a')}}\\
 
-We adjust policy parameters to increase the probability of good actions (high $Q_{\pi_\theta}(s,a)$) and decrease the probability of bad ones.
+& \nabla_\theta \log \pi_\theta(a|s) = \frac{\partial f_\theta(s,a)}{\partial} - \nabla_\theta \log {\sum_{a'} e^{f_\theta(s,a')}}
+\end{aligned}
+$$
+$$
+\begin{aligned}
 
-Analogy: If hitting the red button often gives candy, you slowly adjust to hit the red button more often.
+\nabla_\theta \log {\sum_{a'} e^{f_\theta(s,a')}} &= \frac{1}{\sum_{a'} e^{f_\theta(s,a')}} \cdot\nabla_\theta {\sum_{a'} e^{f_\theta(s,a')}} \\
 
-### 7.3 REINFORCE Algorithm
+&= \frac{1}{\sum_{a''} e^{f_\theta(s,a'')}} \cdot {\sum_{a'} e^{f_\theta(s,a')}} \cdot \nabla_\theta f_\theta(s,a')\\
 
-Update rule:
+&= \sum_{a'}(\frac{e^{f_\theta(s,a')}}{\sum_{a''} e^{f_\theta(s,a'')}}\nabla_\theta f_\theta(s,a'))\\
 
-$$\theta \leftarrow \theta + \alpha g_t \nabla_\theta \log \pi_\theta(a_t|s_t)$$
+&= \sum_{a'} \pi_\theta(a'|s)\nabla_\theta f_\theta(s,a')\\
 
-where $g_t$ is the return from time $t$ onward.
+&= \mathbb{E}_{a' \sim \pi_\theta(·|s)} \nabla_\theta f_\theta(s,a')
+\end{aligned}
+$$
+So,
+$$
+\nabla_\theta \log \pi_\theta(a|s) =\nabla_\theta f_\theta(s,a) - \mathbb{E}_{a' \sim \pi_\theta(·|s)} \nabla_\theta f_\theta(s,a')
+$$
+The policy gradient theorem can be derived into:
+$$
+\begin{aligned}
+\nabla_\theta J(\theta) &=\mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right]\\
+& = \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\left[ (\nabla_\theta f_\theta(s,a) - \mathbb{E}_{a' \sim \pi_\theta(·|s)} \nabla_\theta f_\theta(s,a')) \cdot Q^{\pi_\theta}(s,a) \right]
 
-REINFORCE uses full-episode returns, leading to high variance.
+\end{aligned}
+$$
+The next step is to estimate the Q.
 
-### 7.4 Variance Reduction: Baseline
+### 7.3 REINFORCE Algorithm： MC policy gradient
+Cumulative reward $g_t$ to estimate $Q^{\pi_\theta} (s_t,a_t)$, by running multiple rollout (sampling multiple episode) ->  full-episode returns ->high variance, slow learning.
 
-Adjusted update:
+The variance can be reduced in some sense by the baseline $b(s)$, typically $b(s)=V_w(s)$, and it will not cause the bias. Reason:
+$$
+\begin{aligned}
+\nabla_\theta J(\theta) &\propto \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[ 
+\nabla_\theta \log \pi_\theta(a|s) \cdot (Q^{\pi_\theta}(s,a)-b(s))]\\
 
-$$\nabla_\theta J(\theta) \propto \mathbb{E}\left[\nabla_\theta \log \pi_\theta(a|s) (Q_{\pi_\theta}(s,a) - b(s))\right]$$
+&= \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[\nabla_\theta\log \pi_\theta(a|s)Q^{\pi_\theta}(s,a)]
+- \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[\nabla_\theta\log \pi_\theta(a|s)b(s)]\\
 
-where $b(s)$ is a baseline function, typically $V(s)$.
+&=  \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[\nabla_\theta\log \pi_\theta(a|s)Q^{\pi_\theta}(s,a)] - \sum_s v^{\pi_\theta}(s) \sum_a \pi_\theta(a|s)\nabla_\theta\log \pi_\theta(a|s)b(s)\\
 
-Subtracting a baseline does not bias the gradient but reduces variance.
+&=  \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[\nabla_\theta\log \pi_\theta(a|s)Q^{\pi_\theta}(s,a)] - \sum_s v^{\pi_\theta}(s)b(s) \sum_a \pi_\theta(a|s) \nabla_\theta\log \pi_\theta(a|s)\\
 
-Analogy: Imagine you measure whether your action was better than "average" rather than judging it absolutely.
+&=  \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[\nabla_\theta\log \pi_\theta(a|s)Q^{\pi_\theta}(s,a)] - \sum_s v^{\pi_\theta}(s)b(s) \sum_a  \nabla_\theta \pi_\theta(a|s)\\
 
-### 7.5 Advantages and Weaknesses
+&=  \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[\nabla_\theta\log \pi_\theta(a|s)Q^{\pi_\theta}(s,a)] - \sum_s v^{\pi_\theta}(s)b(s) \nabla_\theta \sum_a  \pi_\theta(a|s)\\
 
-- Advantages:
-  - Works well with continuous or high-dimensional action spaces.
-  - Can learn stochastic behaviors (good for exploration).
-- Weaknesses:
-  - High variance, slow learning.
-  - Prone to getting stuck in local optima.
+&=  \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[\nabla_\theta\log \pi_\theta(a|s)Q^{\pi_\theta}(s,a)] - \sum_s v^{\pi_\theta}(s)b(s) \nabla_\theta 1\\
 
-Mathematical reason: The gradient depends on sampling entire trajectories, which introduces noise into updates.
+&=  \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[\nabla_\theta\log \pi_\theta(a|s)Q^{\pi_\theta}(s,a)] - \sum_s v^{\pi_\theta}(s)b(s) \cdot0 \\
+
+&=  \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}[\nabla_\theta\log \pi_\theta(a|s)Q^{\pi_\theta}(s,a)]
+
+\end{aligned}
+$$
+The best baseline is $V^\pi(s)$. 
+	- **Implementation**: Requires learning an additional value function network (essentially forming the foundation of **Actor-Critic methods**). The critic (Vπ(s)Vπ(s)) is trained via supervised regression (e.g., MSE) to predict expected returns. 
+	- **Empirical Impact**: In practice, using Vπ(s)Vπ(s) as a baseline can **reduce variance by 10× or more**, depending on task complexity and reward scaling.
+
+#### REINFORCE (Standard Policy Gradient)
+1. **Repeat until convergence**:
+   - **a)** Generate an episode $\{s_0, a_0, r_0, \cdots, s_T, a_T, r_T\} \sim \pi_\theta$
+   - **b)** For each step $t = 0, 1, \cdots, T$:
+     - $g_t \leftarrow \sum_{\tau=t}^T \gamma^{\tau-t} r_\tau$
+     - $\theta \leftarrow \theta + \alpha g_t \nabla_\theta \log \pi_\theta (a_t | s_t)$
+
+#### REINFORCE (with b(s))
+1. **Episode generation**:
+   - **a)** Generate an episode $\{s_0, a_0, r_0, \cdots, s_T, a_T, r_t\} \sim \pi_\theta$
+2. **For each step $t = 0, 1, \cdots, T$**:
+   - $g_t \leftarrow \sum_{\tau=1}^T r^{2-\tau} t_\tau$
+   - $\delta_t \leftarrow g_t - V_W(s_t)$
+   - $w \leftarrow w + \alpha^w \delta_t \nabla_w V(s_t)$
+   - $\theta \leftarrow \theta + \alpha^\theta \delta_t \nabla_\theta \log \pi_\theta (a_t | s_t)$
+   
+Still having problems: task needs to have a terminate state before REINFORCE, Low data utilization efficiency, High training variance (imp defect).
+
+### 7.4 Actor-Critic
+Build a trainable action-value function $Q_\phi$ to replace the Q estimation.
+Actor network $\pi_\theta$ learns to take actions to satisfy the critic. Loss:
+$$L(\phi)=\frac{1}{2} (r_t+\gamma Q_\phi(s_{t+1},a_{t+1})-Q_\phi(s_t,a_t))^2$$
+Critic $Q_\phi(s,a)$ learns to accurately estimate the value function of the actions taken by policies.  Policy gradient
+$$\nabla_\theta J(\theta) \propto \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right]$$
+#### Actor-Critic Algorithm
+1. **Initialize parameters**:
+   - Randomly initialize policy parameters $\theta$ (Actor), $\phi$ (Critic)
+1. **Repeat until convergence**:
+   - a) Start from initial state $s_0$, take action $a_0 \sim \pi_\theta(\cdot|s_0)$
+   - b) For each step $t = 0, 1, \cdots, T$:
+     - Receive reward $r_t$ and next state $s_{t+1}$
+     - Take next action $a_{t+1} \sim \pi_\theta(\cdot|s_{t+1})$
+     - **Compute TD error**:
+       $$\delta_t \leftarrow r_t + \gamma Q_\phi(s_{t+1}, a_{t+1}) - Q_\phi(s_t, a_t)$$
+     - **Update Actor (policy)**:
+       $$\theta \leftarrow \theta + \alpha \nabla_\theta \log \pi_\theta(a_t|s_t) Q_\phi(s_t, a_t)$$
+     - **Update Critic (value function)**:
+       $$\phi \leftarrow \phi + \beta \delta_t \nabla_\phi Q_\phi(s_t, a_t)$$
+1. **Note**: This is essentially a Deep Learning version of SARSA, using the transition tuple $(s_t, a_t, r_t, s_{t+1}, a_{t+1})$. On-policy.
+   It can be -> off-policy with importance sampling.
+![[AC.png]]
+### Advantage Actor-Critic (A2C)
+Standardize critics' scores by subtracting a baseline function,
+reduce the probability of poor action and improve the probability of good action,
+reduce the variance, speed up convergence.
+
+Advantage function $A^\pi = Q^\pi(s,a)-V^\pi(s)$
+$$\nabla_\theta J(\theta) \propto \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot A^{\pi}(s,a) \right]$$
+$$
+\begin{aligned}
+A^\pi &= Q^\pi(s,a)-V^\pi(s)
+\\ &= {r(s,a)+ \gamma E_{s'∼P(⋅∣s,a)} [V^{\pi} (s')]}-V^\pi(s)
+
+\end{aligned}
+$$
+#### Training: $V^{\pi_\theta}(s) \approx V_\phi(s)$
+1. **TD Error Calculation**:
+   - Compute temporal difference (TD) error using current critic $V_\phi$:
+     $$
+     \delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)
+     $$
+     where $s_{t+1}$ is the sampled next state.
+1. **Actor Update**:
+   - Update policy parameters $\theta$ using the advantage estimate:
+     $$
+     \nabla_\theta J(\theta) \approx \nabla_\theta \log \pi_\theta(a_t|s_t) \cdot \delta_t
+     $$
+     (Here $\delta_t$ serves as an estimate of the advantage function $A(s_t,a_t)$)
+2. **Critic Update**:
+   - Minimize the mean squared TD error:
+     $$
+     \mathcal{L}(\phi) = \frac{1}{2} \left( r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t) \right)^2
+     $$
+![[A3C.png]]
+![[A3C alg.png]]
+### 7.5 TRPO (Trust Region Policy Optimization) & PPO (Proximal Policy Optimization)
+When the policy network is a deep model, updating the parameters along the policy gradient is likely to cause the policy to suddenly deteriorate significantly due to the long step size, affecting the training effect.
+
+TRPO (Trust region policy optimization): Find a trust region when updating, when updating policies in this region, you can get a certain security guarantee of policy performance. Proposed in 2015. Theoretically, guarantee the monotonicity (单调性) of policy learning, and achieved better results than the policy gradient algorithm in practical application.
+
+weakness of policy gradient: Difficult to determine a good step size. The distribution of collected data will change with the update of the policy. Poor step size has great influence.
+
+$$
+\begin{aligned}
+\max_\theta \quad & \mathbb{E}_{s \sim \rho_{\pi_{\text{old}}}, a \sim \pi_{\text{old}}} \left[ \frac{\pi_\theta(a|s)}{\pi_{\text{old}}(a|s)} A^{\pi_{\text{old}}}(s, a) \right] \\\\
+\text{s.t.} \quad & \mathbb{E}_{s \sim \rho_{\pi_{\text{old}}}} \left[ \text{KL}[\pi_{\text{old}}(\cdot|s) \| \pi_\theta(\cdot|s)] \right] \leq \delta
+\end{aligned}
+$$
+
+Where:
+- $A^{\pi_{\text{old}}}(s, a)$: Advantage function under the old policy
+- $\rho_{\pi_{\text{old}}}$: State visitation distribution of the old policy
+- $\delta$: Maximum allowed average KL-divergence between old and new policies
+### Features
+- Ensures monotonic policy improvement under mild assumptions
+- Uses **second-order optimization techniques**
+- Computationally more expensive due to Fisher matrix and KL constraint enforcement
+
+---
+## 🔹 Proximal Policy Optimization (PPO)
+
+### Motivation
+
+PPO simplifies TRPO by replacing the hard trust region constraint with a **soft clipping mechanism**. It retains the benefits of stable policy updates while being much easier to implement and more computationally efficient.
+
+### Objective
+
+PPO maximizes a clipped surrogate objective:
+
+$$
+L^{\text{CLIP}}(\theta) = \mathbb{E}_t \left[ \min \left( r_t(\theta) A_t, \text{clip}(r_t(\theta), 1 - \epsilon, 1 + \epsilon) A_t \right) \right]
+$$
+
+Where:
+- \( r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)} \): Importance sampling ratio
+- \( A_t \): Advantage estimate at time \( t \)
+- \( \epsilon \): Clipping range parameter (e.g., 0.1 or 0.2)
+
+### Features
+
+- Simple first-order optimization
+- Avoids large policy updates via clipping
+- Strong empirical performance across many RL environments
+- Often used with GAE (Generalized Advantage Estimation)
+
+---
+
+## 🔸 Comparison
+
+| Feature                  | TRPO                                   | PPO                                      |
+|--------------------------|----------------------------------------|------------------------------------------|
+| Action Space             | Continuous/Discrete                    | Continuous/Discrete                      |
+| Optimization             | Constrained (Trust Region)             | Unconstrained (Clipped)                  |
+| Stability                | Very High                              | High                                     |
+| Efficiency               | Lower (second-order method)            | Higher (first-order gradient descent)    |
+| Implementation           | Complex                                | Simple                                   |
+
+---
+
+## 📝 Summary
+
+- **TRPO**: Provides theoretical guarantees and safe updates via trust regions, but requires complex implementation and is slower.
+- **PPO**: A practical and popular alternative to TRPO. It uses clipping to limit update size, making it simple, stable, and efficient.
+
 
 
 # 8 Deterministic Policy Gradient (DPG)
@@ -1012,6 +1234,7 @@ Mathematical reason: bias from Q-value overestimation is controlled by taking th
 
 - **Advantages of Sample Model**: Computationally cheaper for large state spaces.
 - **Weaknesses of Distribution Model**: High memory and computation requirements for complex environments.
+## Planning & Learning: Introduction&Sampling&Decision-time Planning
 ## 9.2 Planning
 - **Definition**: Planning is the process of using a model to derive a policy.
 - **Types**:
@@ -1075,6 +1298,7 @@ Mathematical reason: bias from Q-value overestimation is controlled by taking th
   - Efficient for deterministic environments.
 - **Weaknesses**:
   - May overfit to frequently visited states.
+## Model-based Deep Reinforcement Learning
 ## 9.7 Model-based Deep RL (MBRL)
 - **Key Questions**:
   1. How to train a deep model accurately?
@@ -1093,11 +1317,30 @@ Mathematical reason: bias from Q-value overestimation is controlled by taking th
   - Higher sample efficiency than model-free methods.
 - **Weaknesses**:
   - Sensitive to model errors, especially in stochastic environments.
-## 9.8 Future Directions
+## PETS (Probabilistic ensembles with trajectory sampling)
+In this ensemble, each single model is Gaussian process built by neural networks
+1. uncertainty: epistemic (model var 认知不确定性，很少数据认识不到位), aleatoric (stochastic env 环境不确定性)
+2. To capture two uncertainty construct B NNs with the same network framework：Inputs are all state-action pairs, and outputs are the mean vector and covariance matrix in the next state  Their parameters are randomly initialized in different ways, and different data are randomly sampled from real data for training every time
+3. Trajectory sampling: Choose one model from B NNs in each prediction  Sampling a trajectory (simulated)will use multiple environmental model. Reduce the variance.
+4. Simulated data -> train the agent
+## MBPO
+1. Initialize policy 𝜋𝜙, predictive model 𝑃𝜃, env. Dataset 𝒟𝑒𝑛𝑣, and model dataset 𝒟𝑚𝑜𝑑𝑒𝑙 2. Repeat 𝑁 epochs { a) Train model 𝑃𝜃 on 𝒟𝑒𝑛𝑣 via maximum likelihood b) For step 𝑡=1→𝑇 { Interact with the environment by policy 𝜋𝜙 Add generated trajectories into 𝒟𝑒𝑛𝑣 For M model rollouts { Sample state 𝑠𝑡 uniformly from 𝒟𝑒𝑛𝑣 Perform 𝑘-step model rollout by PETS starting from 𝑠𝑡 using policy 𝜋𝜙 on model 𝑃𝜃 Add the generated trajectory into 𝒟𝑚𝑜𝑑𝑒𝑙 } For G gradient updates { Update policy 𝜋𝜙 by SAC on 𝒟𝑚𝑜𝑑𝑒𝑙: 𝜙←𝜙−𝜆𝜋∇𝜙𝒥𝜙;𝒟𝑚𝑜𝑑𝑒𝑙 } } }
+	真实数据采集一部分，用来生成人造数据，然后训练agent
+	
+##  Future Directions
 1. **Environment Model Learning**: Improve accuracy and generalization.
 2. **Understanding Bounds**: Tighten theoretical guarantees for policy improvement.
 3. **Multi-agent MBRL**: Extend to collaborative or competitive settings.
 
+# 10 Imitation Learning
+part of off-line RL.
+In the complex env like autonomous driving, robotics, dialog, the reward function is difficult to design. So we need to learn straight from the expert (human driver etc), we will get the optimal strategy. Then try to get the max reward from the policy, so called inverse learning: infer reward function from demonstrations (rollouts) of expert policy.
+
+1. Imitation Learning: 
+	1. Given: demonstrations or demonstrator
+	2. Goal: train a policy to mimic demonstrations
+2. 状态分布一样，policy也一样。
+3. 广义上，现在Learning from expert demonstration (LfD), Imitation learning, behavior cloning, inverse RL, apprenticeship learning 都属于imitation learning.
 # drafts
 
 Approximate Value Functions
@@ -1165,3 +1408,5 @@ Approximate Value Functions
 
 1. Sutton, R.,S. & Barto, A.,G. (2018). Reinforcement learning: An introduction. (2 e.d.)
 2. Lecture notes by Jianxiong Guo.
+# Footnote
+mutl-agent RL is not covered in this note.

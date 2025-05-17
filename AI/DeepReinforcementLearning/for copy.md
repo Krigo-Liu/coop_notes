@@ -922,7 +922,7 @@ $$
 #### Policy gradient theorem
 
 For any differential policy $\pi_\theta(a|s)$, $$\nabla_\theta J(\theta) =\mathbb{E}_{(s, a) \sim \hat{\rho}^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right] 
-\propto \nabla_\theta J(\theta) =\mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right]$$
+\propto \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right]$$
 Parameters are put in into the learning rate.
 
 - policy gradient algorithm: on-policy, sampling by $\pi_\theta$
@@ -930,9 +930,6 @@ Parameters are put in into the learning rate.
 
 Go deeper into the calculation of the gradient.
 The NN-implemented scoring function $$f_\theta(s,a)$$
-For a stochastic policy in a continuous action problem (does not cover in this lecture):
-$$
-\pi_\theta(a|s) \propto exp\{(a-f_\theta(s))^2\}$$
 For a stochastic policy in a discrete action problem, the probability of sampling an action is implemented by softmax:
 $$
 \begin{aligned}
@@ -1132,209 +1129,70 @@ Where:
 | Efficiency               | Lower (second-order method)            | Higher (first-order gradient descent)    |
 | Implementation           | Complex                                | Simple                                   |
 
+
 # 8 Deterministic Policy Gradient (DPG)
 
-Deterministic policy $$a=\mu_\theta(s)$$
-In discrete action prob: undifferentiable
-$$
-\mu_\theta = arg \max_a Q_\theta(s,a)
-$$
-In continuous action prob: differentiable (this lec)
-$$
-a = \mu_\theta(s)
-$$
-In previous RL algorithms:
-REINFORCE & Actor-Critic (TRPO, PPO): All of them are on-policy; their sample efficiency is relatively low.
-DQN: Off-policy, but only deal with the environment with limited action space because of maximizing Q-function.
-So off-policy, unlimited (continuous) action space? DPG.
+### 8.1 Motivation
 
----
+Sampling over all actions is inefficient in continuous spaces. A deterministic policy:
 
-**Deterministic on-policy learning objective.**
-$$
-\begin{aligned}
-J(\theta) &= \mathbb{E}_{\tau \sim \mu_\theta(\tau)}[G(\tau)]\\
-&= \mathbb{E}_{s_0 \sim v_0}[V^{\mu_\theta}(s_0)] \\
-&= \mathbb{E}_{s_0 \sim v_0}[Q^{\mu_\theta}(s_0, \mu_\theta(s_0))] \\
-&= \mathbb{E}_{s \sim \hat v^{\mu_\theta}}[r(s, \mu_\theta(s))] \\
-&= \frac{1}{1-\gamma}\mathbb{E}_{s \sim v^{\mu_\theta}}[r(s, \mu_\theta(s))] \\
-\end{aligned}
-$$
-**Deterministic policy gradient theorem (on-policy)**
-$$
-\nabla_\theta J(\theta) = \mathbb{E}_{s \sim \hat v^{\mu_\theta}}\left[\nabla_\theta \mu_\theta(s) \nabla_a Q^{\mu_\theta}(s,a)\big|_{a=\mu_\theta(s)}\right]
-$$
+$$a = \mu_\theta(s)$$
 
-**Deterministic off-policy learning objective**
-$$
-\begin{aligned}
-J_\beta(\theta) 
-&= \mathbb{E}_{s_0 \sim \hat v^{\pi_\beta}}[V^{\mu_\theta}(s_0)] \\
-&= \int_S \hat{v}^{\pi_\beta}(s) V^{\mu_\theta}(s) \, ds \\
-&= \int_S \hat{v}^{\pi_\beta}(s) Q^{\mu_\theta}(s,\mu_\theta(s)) \, ds
-\end{aligned}
-$$
-**Deterministic policy gradient theorem (off-policy)**
-$$
-\nabla_\theta J(\theta) = \mathbb{E}_{s \sim \hat v^{\mu_\beta}}\left[\nabla_\theta \mu_\theta(s) \nabla_a Q^{\mu_\theta}(s,a)\big|_{a=\mu_\theta(s)}\right]
-$$
----
+avoids unnecessary randomness by always outputting one action for each state.
 
-#### 8.1. Deterministic Actor-Critic Training Comparison
- On-Policy (SARSA-style)
-1. **Sampling**:  
-   Collect transitions using current policy $\mu_\theta$:  
-   $\{s_t, a_t, r_t, s_{t+1}, a_{t+1}\} \sim \mu_\theta$
+Analogy: Instead of rolling a dice to move, you deterministically step towards the goal every time.
 
-2. **TD Error**:  
-   Compute SARSA-style TD target:  
-   $\delta_t = r_t + \gamma Q_\phi(s_{t+1}, a_{t+1}) - Q_\phi(s_t, a_t)$
+### 8.2 Deterministic Policy Gradient Theorem
 
-3. **Actor Update**:  
-   Update policy parameters via deterministic policy gradient:  
-   $\theta \leftarrow \theta + \alpha \nabla_\theta \mu_\theta(s_t) \cdot \nabla_a Q_\phi(s_t, a)\big|_{a=a_t}$  
-   *(Uses actions sampled from $\mu_\theta$)*
-
-4. **Critic Update**:  
-   Minimize TD error (MSE loss):  
-   $\phi \leftarrow \phi + \beta \delta_t \nabla_\phi Q_\phi(s_t, a_t)$  
-   $\text{Loss} = \frac{1}{2} \delta_t^2$
-
- **Off-Policy (Q-learning-style)**
-4. **Sampling**:  
-   Collect transitions using behavior policy $\pi_\beta$:  
-   $\{s_t, a_t, r_t, s_{t+1}\} \sim \pi_\beta$
-
-5. **TD Error**:  
-   Compute Q-learning-style TD target:  
-   $\delta_t = r_t + \gamma Q_\phi(s_{t+1}, \mu_\theta(s_{t+1})) - Q_\phi(s_t, a_t)$  
-   *(Uses target policy's action $\mu_\theta(s_{t+1})$ instead of sampled $a_{t+1}$)*
-
-6. **Actor Update**:  
-   Update policy parameters similarly but with off-policy actions:  
-   $\theta \leftarrow \theta + \alpha \nabla_\theta \mu_\theta(s_t) \cdot \nabla_a Q_\phi(s_t, a)\big|_{a=\mu_\theta(s_t)}$
-
-7. **Critic Update**:  
-   Same as on-policy:  
-   $\phi \leftarrow \phi + \beta \delta_t \nabla_\phi Q_\phi(s_t, a_t)$
-
----
-#### 8.2 Compatible Function Approximation
-当函数 $Q_\phi(s,a)$ 和策略 $\mu_\theta(s)$ 满足以下两个条件时，称为兼容compatible的：
-
- 1. Q 梯度与 $\mu_\theta(s)$ 用线性关系估计
-$$
-\nabla_a Q_\phi(s, a) \big|_{a = \mu_\theta(s)} = \nabla_\theta \mu_\theta(s)^T \phi
-$$
-
-2. 均方误差最小化
-$$
-\phi \text{ minimize the mean-squared error: } \text{MSE}(\theta, \phi) = \mathbb{E}\left[ \epsilon(s; \theta, \phi)^T \epsilon(s; \theta, \phi) \right]
-$$
-where $$
-\epsilon(s; \theta, \phi) = \nabla_a Q_\phi(s, a)\big|_{a = \mu_\theta(s)} - \nabla_a Q^{\mu_\theta}(s, a)\big|_{a = \mu_\theta(s)}
-$$
----
-e.g. $$
-Q_\phi(s, a) = x(s, a)^T \phi
-$$
-
-where
-$$
-x(s, a)^T = a^T \nabla_\theta \mu_\theta(s)
-$$
-#### 8.3 Deep Deterministic Policy Gradient (DDPG)
-solve the unstability of AC with neural function approximator, combines DPG and DQN.
-key words: experience replay (off-policy), target networks, batch normalization Q-network before action input. add continuous noise.
-![[DDPG.png]]
-#### 8.4 Twin delayed DDPG (TD3)
-Overestimation problem exists in DDPG.
-Learn two (twin) critics simultaneously, select the smaller Q estimation to avoid overestimation.
-Smooth the policy’s output, make it difficult to exploit the vulnerability of the Q function.
-Actor is updated at a lower frequency and critic is updated at a higher frequency. Usually, Critic : Actor = 2 : 1
-![[TD3.png]]
-#### 8.5 Maximum Entropy RL
-
-1. Entropy: measure of randomness of distribution
-$$\mathcal{H}(p) = \mathbb{E}_{x \sim p} [-\log p(x)]$$
-
-Maximum Entropy Principle: Under known conditions or constraints, the selected probability distribution should maximize the entropy (that is, uncertainty or information), so as to minimize the influence from one's own assumptions or prejudices. 事情有余地。
-
-2. Maximum entropy RL
-$$\pi^* = \arg \max_{\pi} \mathbb{E}_{\tau \sim \pi(\tau)} \left[ \sum_{t=0}^{\infty} \gamma^t \left( r(s_t, a_t) + \alpha \mathcal{H}(\pi(\cdot | s_t)) \right) \right]$$
-
-其中：
-- $\alpha > 0$ is Entropy regularization coefficient
-- 离散动作空间熵：$\mathcal{H}(\pi(\cdot | s_t)) = -\sum_a \pi(a|s_t) \log \pi(a|s_t)$, The bigger 𝛼 is, the more exploratory it is
-- 连续动作空间熵：$\int_{-\infty}^{\infty} \pi(x|s_t) \log \pi(x|s_t) dx$
-
-3.Energy-Based Model, EBM)
 Objective:
-$$\max_{p} \mathbb{E}_{x \sim p} [\phi(x)] + \alpha\mathcal{H}(p)$$
 
-The optimal dist. Boltzmann:
-$$p^*(x) = \frac{\exp(-\phi(x)/\alpha)}{Z}$$
-where：
-- $Z$ is the partition function
-- $\epsilon(x) = -\phi(x)/\alpha$ is the energy function
+$$J(\theta) = \mathbb{E}_{s \sim \rho_{\mu_\theta}}[Q_{\mu_\theta}(s, \mu_\theta(s))]$$
 
-4. Soft Value Functions
-	(Soft) State-value function
-  $$V_{soft}^{\pi}(s) = \mathbb{E}_{\tau \sim \pi(\tau)} \left[ \sum_{t=0}^{\infty} \gamma^t \left( r(s_t, a_t) + \alpha \mathcal{H}(\pi(\cdot | s_t)) \right) | s_0 = s \right]$$
-  
-  (Soft) Action-value function
-  $$Q_{soft}^{\pi}(s,a) = r(s,a) + \mathbb{E}_{\tau \sim \pi(\tau)} \left[ \sum_{t=1}^{\infty} \gamma^t \left( r(s_t, a_t) + \alpha \mathcal{H}(\pi(\cdot | s_t)) \right) | s_0 = s, a_0 = a \right]$$
+Gradient:
 
-???Soft Bellman Equation:
-$$V_{soft}^{\pi}(s) = \mathbb{E}_{a \sim \pi(\cdot | s)} \left[ Q_{soft}^{\pi}(s,a) - \alpha \log \pi(a | s) \right]$$
-$$Q_{soft}^{\pi}(s,a) = r(s,a) + \gamma \mathbb{E}_{s' \sim p(\cdot | s,a)} \left[ V_{soft}^{\pi}(s') \right]$$
-......还有好几个soft
+$$\nabla_\theta J(\theta) = \mathbb{E}_{s \sim \rho_{\mu_\theta}}\left[\nabla_\theta \mu_\theta(s) \nabla_a Q_{\mu_\theta}(s,a)\big|_{a=\mu_\theta(s)}\right]$$
 
-5. soft Q-Learning
-discrete action space
-目标函数：
-$$L(\theta) = \mathbb{E}_{(s,a,s',r)\sim U(D)} \frac{1}{2} \left[ (r + \gamma V_{\theta^-}(s')) - Q_\theta(s,a) \right]^2$$
+This avoids integrating over the action space, making updates cheaper and faster.
 
-**连续动作空间挑战**：
-- 需要近似采样：$\pi(\cdot | s_t ) = \exp(Q_\theta(s_t, \cdot)/\alpha) / Z(s_t)$
-- 使用Stein变分梯度下降(SVGD)等方法
+### 8.3 Deep DPG (DDPG)
 
----
-![[coop_notes/AI/DeepReinforcementLearning/pic/softQ.png]]
-6. soft Actor-Critic (SAC)
-### 网络结构
-- Actor网络：$\pi_{\theta}$
-- 双Critic网络：$Q_{w1}$, $Q_{w2}$
+Combines DPG with deep networks:
+- Actor: approximates $\mu_\theta(s)$
+- Critic: approximates $Q_\phi(s,a)$
 
-### 损失函数
-**Critic损失**：
-$$L_Q(w) = \mathbb{E}_{(s,a,s',r)\sim U(D), a' \sim \pi_{\theta}(s')} \frac{1}{2} \left[ Q_w(s,a) - (r + \gamma (\min_{j=1,2} Q_{wj}(s',a') - \alpha \log \pi_{\theta}(a'|s'))) \right]^2$$
+Training techniques:
+- Experience Replay: store and reuse past experiences.
+- Target Networks: slow-moving copies to stabilize learning.
 
-**Actor损失**（使用重参数化技巧）：
-$$\hat{a}_{\theta}(s,\xi) = \tanh(\mu_{\theta}(s) + \sigma_{\theta}(s) \odot \xi), \quad \xi \sim \mathcal{N}(0,I)$$
-$$L_{\pi}(\theta) = \mathbb{E}_{s\sim U(D), \xi \sim \mathcal{N}(0,I)} \left[\alpha \log \pi_{\theta}(\hat{a}_{\theta}(s,\xi)|s) - \min_{j=1,2} Q_{wj}(s,\hat{a}_{\theta}(s,\xi))\right]$$
+DDPG is effective for high-dimensional continuous control tasks.
 
----
+### 8.4 Twin Delayed DDPG (TD3)
 
-7. Adaptive Entropy Regularization)
+TD3 addresses DDPG's overestimation bias.
 
-### 目标
-$$\max_{\pi} \mathbb{E}_{\tau \sim \pi(\tau)} \left[ \sum_{t=0}^{\infty} \gamma^t r(s_t, a_t) \right]$$
-约束条件：
-$$\mathbb{E}_{(s,a) \sim \rho^\pi} [-\log \pi(a|s)] \geq \mathcal{H}_0$$
+Modifications:
+- Twin Q-networks: minimize the smaller one.
+- Add noise to target actions (target policy smoothing).
+- Delayed actor updates.
 
-### 自适应调整
-$$\mathcal{L}(\alpha) = \mathbb{E}_{s \sim U(D), a \sim \pi(\cdot|s)} [\alpha (-\log \pi(a|s) - \mathcal{H}_0)]$$
+TD3 target:
 
----
+$$y = r + \gamma \min_{j=1,2} Q_{\phi_j}(s', a')$$
 
-## 关键特性对比
+where $a'$ is a slightly perturbed action.
 
-| 方法 | 动作空间 | 核心创新 | 主要优势 |
-|------|---------|---------|---------|
-| 软Q学习 | 离散/连续 | 能量基策略 | 强探索性 |
-| SAC | 连续 | 双Q网络+自适应熵 | 稳定高效 |
-| 传统RL | 任意 | 无熵正则 | 可能欠探索 |
+### 8.5 Advantages and Weaknesses
+
+- Advantages:
+  - Efficient for continuous action tasks.
+  - More stable and less biased than basic DDPG.
+- Weaknesses:
+  - Requires careful tuning.
+  - More computationally complex (multiple critics, delayed updates).
+
+Mathematical reason: bias from Q-value overestimation is controlled by taking the minimum estimate, stabilizing learning.
+
+
 # 9 Model-based RL
 ## Review: Learn an MDP Model
 - **Motivation**: In real applications, the MDP model (state transition $P$ and reward function $r$) is often unknown. We need to learn it from observed episodes.
@@ -1467,7 +1325,7 @@ In the complex env like autonomous driving, robotics, dialog, the reward functio
 	2. Goal: train a policy to mimic demonstrations
 2. 状态分布一样，policy也一样。
 3. 广义上，现在Learning from expert demonstration (LfD), Imitation learning, behavior cloning, inverse RL, apprenticeship learning 都属于imitation learning.
-# Terminologies
+# drafts
 
 Approximate Value Functions
 

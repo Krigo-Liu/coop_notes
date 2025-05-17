@@ -1075,7 +1075,7 @@ $$
      $$
 ![[A3C.png]]
 ![[A3C alg.png]]
-### 7.5 TRPO (Trust Region Policy Optimization) & PPO (Proximal Policy Optimization)
+### 7.5 TRPO (Trust Region Policy Optimization)
 When the policy network is a deep model, updating the parameters along the policy gradient is likely to cause the policy to suddenly deteriorate significantly due to the long step size, affecting the training effect.
 
 TRPO (Trust region policy optimization): Find a trust region when updating, when updating policies in this region, you can get a certain security guarantee of policy performance. Proposed in 2015. Theoretically, guarantee the monotonicity (单调性) of policy learning, and achieved better results than the policy gradient algorithm in practical application.
@@ -1097,15 +1097,12 @@ Where:
 - Ensures monotonic policy improvement under mild assumptions
 - Uses **second-order optimization techniques**
 - Computationally more expensive due to Fisher matrix and KL constraint enforcement
+### 7.6 Proximal Policy Optimization (PPO)
 
----
-## 🔹 Proximal Policy Optimization (PPO)
-
-### Motivation
+#### Motivation
 
 PPO simplifies TRPO by replacing the hard trust region constraint with a **soft clipping mechanism**. It retains the benefits of stable policy updates while being much easier to implement and more computationally efficient.
-
-### Objective
+#### Objective
 
 PPO maximizes a clipped surrogate objective:
 
@@ -1114,20 +1111,15 @@ L^{\text{CLIP}}(\theta) = \mathbb{E}_t \left[ \min \left( r_t(\theta) A_t, \text
 $$
 
 Where:
-- \( r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)} \): Importance sampling ratio
-- \( A_t \): Advantage estimate at time \( t \)
-- \( \epsilon \): Clipping range parameter (e.g., 0.1 or 0.2)
-
-### Features
-
+- $r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}$: Importance sampling ratio
+- $A_t$: Advantage estimate at time \( t \)
+- $\epsilon$: Clipping range parameter (e.g., 0.1 or 0.2)
+#### Features
 - Simple first-order optimization
 - Avoids large policy updates via clipping
 - Strong empirical performance across many RL environments
 - Often used with GAE (Generalized Advantage Estimation)
-
----
-
-## 🔸 Comparison
+#### 🔸 Comparison
 
 | Feature                  | TRPO                                   | PPO                                      |
 |--------------------------|----------------------------------------|------------------------------------------|
@@ -1136,14 +1128,6 @@ Where:
 | Stability                | Very High                              | High                                     |
 | Efficiency               | Lower (second-order method)            | Higher (first-order gradient descent)    |
 | Implementation           | Complex                                | Simple                                   |
-
----
-
-## 📝 Summary
-
-- **TRPO**: Provides theoretical guarantees and safe updates via trust regions, but requires complex implementation and is slower.
-- **PPO**: A practical and popular alternative to TRPO. It uses clipping to limit update size, making it simple, stable, and efficient.
-
 
 
 # 8 Deterministic Policy Gradient (DPG)

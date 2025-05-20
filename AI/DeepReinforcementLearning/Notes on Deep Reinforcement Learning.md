@@ -3,7 +3,7 @@
 1. Capital letters: random variables
 2. Lowercase letters: values of random variables & for scalar functions.
 3. **Quantities** that are required to be real-valued vectors are written in **bold** and in **lowercase** (even if random variables). Matrices are bold capitals.
-4. Abbreviations: - for disadvantages, + for advantages, sol for solution, nw for network, nn for neural network, env for environment
+4. Abbreviations: - for disadvantages, + for advantages, sol for solution, nw for network, nn for neural network, env for environment.
 # 1 Introduction
 
 Types of learning in AI:
@@ -33,71 +33,70 @@ CrashCourse AI lecture 9 has explained fundamental ideas of RL:
 
 Algorithm Selection Matrix Based on Environment Characteristics and Model Transparency by the lecture note:
 
-| Env characteristics                    | White-Box (The relationship between variables and objectives can be expressed with explicit formulas.)   | Black-Box (only input-output interactions are observable)        |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Static                                 | **Operations Research & Optimization**:<br>(Mixed-integer) Linear Programming,<br>Nonlinear Optimization | **NN Surrogate**: Model Optimization,<br>Bayesian Optimization   |
-| Dynamic<br>(env has state transitions) | **Dynamic Programming**:<br>Direct MDP Solving,<br>Tree/Graph Search                                     | **RL**:<br>Policy Optimization,<br>Bandits, Sequential Black-Box |
-### Symbols
-- $\overset{.}{=}$: equality relationship that is true by definition
-- $\approx$: approximately equal
-- $\propto$: proportional to
-- $Pr\{X = x\}$: probability that a random variable $X$ takes on the value $x$
-- $X \sim p$: random variable $X$ selected from distribution $p(x)$
-- $E[X]$: expectation of a random variable $X$, i.e.,
-  $E[X] \overset{.}{=} \sum_x p(x)x$
-- $\arg\max_{a} f(a)$: a value of $a$ at which $f(a)$ takes its maximal value
-- $\ln x$: natural logarithm of $x$
-- $e^x$: the base of the natural logarithm, $e \approx 2.71828$, carried to power $x$; $e^{\ln x} = x$
-- $\mathbb{R}$: set of real numbers
-- $f: X \to Y$: function $f$ from elements of set $X$ to elements of set $Y$
-- $(a, b]$: the real interval between $a$ and $b$ including $b$ but not including $a$
-- $\epsilon$: probability of taking a random action in an $\epsilon$-greedy policy
-- $\alpha, \beta$: step-size parameters
-- $\gamma$: discount-rate parameter
-- $\lambda$: decay-rate parameter for eligibility traces
-- $\mathbb{1}_\text{predicate}$:  indicator function. = 1 if the predicate is true, else 0.
-# 2 Multi-Armed Bandit Problem
+| Env characteristics                    | White-Box (The relationship between variables and objectives can be expressed with explicit formulas.)                                                                                      | Black-Box (only input-output interactions are observable)                                                                     |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Static                                 | **Operations Research & Optimization**:<br>(Mixed-integer) Linear Programming,<br>Nonlinear Optimization                                                                                    | **NN Surrogate**: Model Optimization,<br>Bayesian Optimization                                                                |
+| Dynamic<br>(env has state transitions) | Transition prob and the reward $P(s'\| s,a), R(s,a)$ are fully known.<br><br>**Dynamic Programming**:<br>Value Iteration, Policy Iteration,<br>Direct MDP Solving,<br>Tree/Graph Search<br> | Do not know the model.<br><br><br>**RL** (the most typical senario):<br>Policy Optimization,<br>Bandits, Sequential Black-Box |
+Usually:
+White-box ↔ Model-based methods
+Black-box ↔ Model-free
 
-- $k$: number of actions (arms)
-- $t$: discrete time step or play number
-- $q_*(a)$: true value (expected reward) of action $a$
-- $Q_t(a)$: estimate at time $t$ of $q_*(a)$
-- $N_t(a)$: number of times action $a$ has been selected up to time $t$
-- $H_t(a)$: learned preference for selecting action $a$ at time $t$
-- $\pi_t(a)$: probability of selecting action $a$ at time $t$
-- $\bar{R}_t$: estimate at time $t$ of the expected reward given $\pi_t$
+Not 100%, because: sometimes you may learn a model (transition dynamics) when the model is unknown, that is a model-based, but black-box.
+# 2 Multi-Armed Bandit Problem (MAB)
 
+It can be viewed as a state-less RL problem.
+
+The scene:
+2. I am a gambler who wants to **maximize** my total rewards on pulling levers in a 300 trails.
+3. there are k levers
+4. each lever corresponds to an unknown stationary probability distribution. each choice(actions) -> expected/mean reward (value of that action)
+5. explore - exploit the levers
+
+Action-value Q
+$$
+Q_t(a) =  \frac{\sum_{i=1}^{t-1} R_i \cdot \mathbb{1}_{A_i=a}}{\sum_{i=1}^{t-1} \mathbb{1}_{A_i=a}}=\frac{R_1+R_2+...+R_{N_t(a)}}{N_t(a)}
+$$
+
+We introduce 3 methods to solve:
+### 2.1 Greedy type
+1. **Greedy**: At every step, **choose the arm with the highest estimated average reward** (based on past plays).  It **does not explore**. If the initial estimates are wrong, greedy may **lock into a sub-optimal arm** permanently. It can’t discover better arms if it never tries them again.
+$$
+A_t = arg \max_a Q_t(a)
+$$
+
+2. **$\epsilon$ - greedy**: With probability **ε**, explore, pick a random arm. With prob **1-ε** exploit: pick the current best arm.
+	The probability of selecting a* depends on whether it is currently estimated as the best action.
+	If a* is the current best action:
+$$
+P(a^*)=(1-\epsilon)+\epsilon/k
+$$
+	If not: 
+$$
+P(a^*)=\epsilon/k
+$$
+	Early in the learning, when the agent does not know the true values, the probability of choosing a* is low. Over time as Q(a*) gets updated and improves, a* is more likely to become the best action, and the probability increases toward $(1-\epsilon)+\epsilon/k$.
+
+	It is possible to reduce $\epsilon$ over time to try to get the best of both high and low values.
+
+skip: ### 2.2 Upper Confidence Bound (UCB)
+skip: ### 2.3 Thompson Sampling (TS)
+
+| Algorithm             | Exploitation | Exploration          | Type          | Pros                         | Cons                                  |
+| --------------------- | ------------ | -------------------- | ------------- | ---------------------------- | ------------------------------------- |
+| **Greedy**            | ✅ High       | ❌ None               | Deterministic | Simple, fast                 | Easily gets stuck                     |
+| **ε-Greedy**          | ✅ Moderate   | ✅ Random, uniform    | Stochastic    | Easy to implement            | Inefficient exploration               |
+| **UCB**               | ✅ Strong     | ✅ Confidence-based   | Deterministic | Theoretically grounded       | Needs tuning, assumes bounded rewards |
+| **Thompson Sampling** | ✅ Strong     | ✅ Posterior sampling | Probabilistic | Effective, Bayesian approach | Can be computationally heavier        |
+
+skip:
+incremental update rule, 
+Non-stationary problem for sample-avg, 
+Exponential-recency weighted average.
 # 3 Markov Decision Process
 
-TODO: 寻找最优$\color{turquoise} \pi$的方法。
+The reinforcement learning agent and its environment interact over a sequence of discrete time steps. Everything inside the agent is completely known and controllable by the agent; everything outside is incompletely controllable but may or may not be **completely** known. The agent’s objective is to maximize the amount of reward it receives over time.
 
-### 3.1 MDP concepts
-
-The reinforcement learning agent and its environment interact over a sequence of discrete time steps. Everything inside the agent is completely known and controllable by the agent; everything outside is incompletely controllable but may or may not be completely known. The agent’s objective is to maximize the amount of reward it receives over time.
-
-white-box environment -> the optimal policy can be solved by the dynamic programming: PI, VI
-
-black-box -> model-free RL methods
-
-- $t$: discrete time step.
-- $\color{turquoise}\text{s, s' : current state, next state}$,  $\color{turquoise}\text{basis for making the choices}$
-- $a$: an action made my the agent
-- $\color{turquoise}\text{ r}$: a reward, $\color{turquoise}\text{basis for evaluating the choices}$
-- $S$: set of all nonterminal states
-- $S^+$: set of all states, including the **terminal state**
-- $A(s)$: set of all actions available in state $s$
-- $R$: set of all possible rewards, a finite subset of $\mathbb{R}$
-- $\rho \subseteq \mathbb{R}$: subset of $\mathbb{R}$
-- $|S|$: number of elements in set $S$
-- $T, T(t)$ final time step of an episode; the episode including time step t.
-- $A(t)$ : Action at t
-- $S(t)$ : state at t
-- $R(t)$ : reward at t
-- $\color{turquoise} \pi$: policy (stochastic decision-making rule),is a $\color{turquoise}\text{mapping from states to actions}$
-- $\pi(s)$ : action taken in state s under deterministic policy $\pi$
-- $\pi(a|s)$ : <mark> probability </mark> of taking action a in state s under stochastic policy $\pi$
-
-$\color{orange}\text{Stochastic process}$: 1/more events, stochastic(dynamic) system/phenomenon evovle with t.
+$\color{orange}\text{Stochastic process}$: 1/more events, stochastic(dynamic) system/phenomenon evolve with t.
 
 $$
 P[S_\text{t+1}|S_1,...,S_t]
@@ -124,7 +123,7 @@ $$
 G_t= R_\text{t}+\gamma R_\text{t+1}+\gamma^2R_\text{t+2}+...=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k}=R_\text{t}+\gamma G_\text{t+1}
 $$
 
-$\gamma \in[0,1]$, which helps to converge.
+	$\gamma \in[0,1]$, which helps to converge.
 
 Comparing the G here and the one in book ($G_t'= R_\text{t+1}+\gamma R_\text{t+2}+\gamma^2R_\text{t+3}+...+R_\text{T}=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k+1}$), G here makes sure the total order of episodic return for all different return sequences.
 ![image.png](pic/returnseq.png)
@@ -456,6 +455,25 @@ Algorithm
 
 -: action space is too large. -> model-free
 
+
+Symbols:
+- $t$: discrete time step.
+- $\color{turquoise}\text{s, s' : current state, next state}$,  $\color{turquoise}\text{basis for making the choices}$
+- $a$: an action made my the agent
+- $\color{turquoise}\text{ r}$: a reward, $\color{turquoise}\text{basis for evaluating the choices}$
+- $S$: set of all nonterminal states
+- $S^+$: set of all states, including the **terminal state**
+- $A(s)$: set of all actions available in state $s$
+- $R$: set of all possible rewards, a finite subset of $\mathbb{R}$
+- $\rho \subseteq \mathbb{R}$: subset of $\mathbb{R}$
+- $|S|$: number of elements in set $S$
+- $T, T(t)$ final time step of an episode; the episode including time step t.
+- $A(t)$ : Action at t
+- $S(t)$ : state at t
+- $R(t)$ : reward at t
+- $\color{turquoise} \pi$: policy (stochastic decision-making rule),is a $\color{turquoise}\text{mapping from states to actions}$
+- $\pi(s)$ : action taken in state s under deterministic policy $\pi$
+- $\pi(a|s)$ : <mark> probability </mark> of taking action a in state s under stochastic policy $\pi$
 # 4 Model-free method
 
 If a problem cannot be modeled as MDP, it is not a reinforcement learning problem.
@@ -1500,35 +1518,39 @@ In the complex env like autonomous driving, robotics, dialog, the reward functio
 3. 广义上，现在Learning from expert demonstration (LfD), Imitation learning, behavior cloning, inverse RL, apprenticeship learning 都属于imitation learning.
 # Terminologies
 
-Approximate Value Functions
-
-- $v_\theta(s)$: approximate value of state $s$ given parameter vector $\theta$
-- $q_\theta(s, a)$: approximate value of state-action pair $(s, a)$ given parameter vector $\theta$
-- $\nabla v_\theta(s)$: column vector of partial derivatives of $v_\theta(s)$ with respect to $\theta$
-- $\nabla q_\theta(s, a)$: column vector of partial derivatives of $q_\theta(s, a)$ with respect to $\theta$
-
-#### Bellman Operators
-
-- $B_\pi$: Bellman operator for value functions
-- $P$: state-transition probability matrix under $\pi$
-- $D$: diagonal matrix with on-policy state distribution on its diagonal
-- $X$: feature matrix, with $x(s)$ as its rows
-- $\Pi$: projection operator for value functions
-
+- $\overset{.}{=}$: equality relationship that is true by definition
+- $\approx$: approximately equal
+- $\propto$: proportional to
+- $Pr\{X = x\}$: probability that a random variable $X$ takes on the value $x$
+- $X \sim p$: random variable $X$ selected from distribution $p(x)$
+- $E[X]$: expectation of a random variable $X$, i.e.,
+  $E[X] \overset{.}{=} \sum_x p(x)x$
+- $\arg\max_{a} f(a)$: a value of $a$ at which $f(a)$ takes its maximal value
+- $\ln x$: natural logarithm of $x$
+- $e^x$: the base of the natural logarithm, $e \approx 2.71828$, carried to power $x$; $e^{\ln x} = x$
 - $\mathbb{R}$: set of real numbers
-- $f : X \to Y$: function $f$ from elements of set $X$ to elements of set $Y$
+- $f: X \to Y$: function $f$ from elements of set $X$ to elements of set $Y$
 - $(a, b]$: the real interval between $a$ and $b$ including $b$ but not including $a$
-- $\in$: is an element of; e.g., $s \in S, r \in R$
-- $\subseteq$: subset of; e.g., $R \subseteq \mathbb{R}$
-- $|S|$: number of elements in set $S$
-
-## Temporal Difference Learning
+- $\epsilon$: probability of taking a random action in an $\epsilon$-greedy policy
+- $\alpha, \beta$: step-size parameters
+- $\gamma$: discount-rate parameter
+- $\lambda$: decay-rate parameter for eligibility traces
+- $\mathbb{1}_\text{predicate}$:  indicator function. = 1 if the predicate is true, else 0.
+### MAB:
+- $k$: number of actions (arms)
+- $t$: discrete time step or play number
+- $q_*(a)$: true value (expected reward) of action $a$
+- $Q_t(a)$: estimate at time $t$ of $q_*(a)$
+- $N_t(a)$: number of times action $a$ has been selected up to time $t$
+- $H_t(a)$: learned preference for selecting action $a$ at time $t$
+- $\pi_t(a)$: probability of selecting action $a$ at time $t$
+- $\bar{R}_t$: estimate at time $t$ of the expected reward given $\pi_t$
+### Temporal Difference Learning
 
 - $\delta_t$: temporal-difference (TD) error at time $t$
 - $\delta_t^s, \delta_t^a$: state- and action-specific forms of the TD error
 - $n$: in n-step methods, $n$ is the number of steps of bootstrapping
-
-## Eligibility Traces
+### Eligibility Traces
 
 - $w, w_t$: weight vector in function approximation
 - $\mathbf{w}, \mathbf{w}_t$: weight vector notation
@@ -1536,8 +1558,7 @@ Approximate Value Functions
 - $x(s, a)$: vector of features visible in state $s$ taking action $a$
 - $\mathbf{x}(s)$, $\mathbf{x}(s, a)$: feature vectors in bold
 - $\mathbf{w}^T \mathbf{x}$: inner product of weight vector and feature vector
-
-## Policy Gradient Methods
+### Policy Gradient Methods
 
 - $\theta, \theta_t$: parameter vector of target policy
 - $\pi(a | s, \theta)$: probability of taking action $a$ in state $s$ given parameter $\theta$
@@ -1545,31 +1566,19 @@ Approximate Value Functions
 - $J(\theta)$: performance measure for policy $\pi_\theta$
 - $\nabla J(\theta)$: gradient of performance measure
 - $b(a|s)$: behavior policy used to select actions while learning about target policy $\pi$
-
-## Importance Sampling
+### Importance Sampling
 
 - $\rho_t:h$: importance sampling ratio for time $t$ through time $h$
 - $\rho_t$: importance sampling ratio for time $t$ alone, $\rho_t = \rho_{t:t}$
 - $r(\pi)$: average reward (reward rate) for policy $\pi$
 - $\bar{R}_t$: estimate of $r(\pi)$ at time $t$
 
-## Norms and Errors
-
-- $\|v\|^2_{\mu}$: $\mu$-weighted squared norm of value function $v$
-- $\|\delta_t\|^2$: squared temporal-difference error
-- $BE(w)$: mean square Bellman error
-- $PBE(w)$: mean square projected Bellman error
-- $TDE(w)$: mean square temporal-difference error
 
 # References
 
-1. Lecture notes by Jianxiong Guo.
+[1]. Lecture notes by Dr. Jianxiong Guo.
 [2]. CrashCourse. (2019, Oct 12). Reinforcement learning: Crash course AI #9. [Video]. YouTube. https://www.youtube.com/watch?v=nIgIv4IfJ6s.
-2. Sutton, R.,S. & Barto, A.,G. (2018). Reinforcement learning: An introduction. (2 e.d.)
-3. 
+[3]. Sutton, R.,S. & Barto, A.,G. (2018). Reinforcement learning: An introduction. (2 e.d.)
+
 # Footnote
-mutl-agent RL is not covered in this note.
-
-[^1]: 
-
-[^1]: 
+multi-agent RL is not covered.

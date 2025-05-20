@@ -1,11 +1,43 @@
-# Summary of Notation
+### Formatting and Abbreviation Key
 
 1. Capital letters: random variables
 2. Lowercase letters: values of random variables & for scalar functions.
 3. **Quantities** that are required to be real-valued vectors are written in **bold** and in **lowercase** (even if random variables). Matrices are bold capitals.
-4. Abbreviations: - for disadvantages, + for advantages, sol for solution, nw for network
-## Symbols
+4. Abbreviations: - for disadvantages, + for advantages, sol for solution, nw for network, nn for neural network, env for environment
+# 1 Introduction
 
+Types of learning in AI:
+- Supervised Learning(SL): a teacher gives an AI answers to learn from.
+- Unsupervised Learning(UL): AI tries to find patterns in the world.
+- Reinforcement Learning (RL): particular useful where we want to train AIs to have certain skills we do not fully understand ourselves. e.g. how to walk (the angles and velocity of your feet ...) 
+
+|           | SL                                                                                                                                                                      | UL                                                                                                                                                                                                                                    | RL                                                                                                                                                                                                                                                                                                                            |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Objective | Learning from static dataset<br><br>Build a system to generalize its responses which acts correctly in situations not present in the training set                       | finding patterns hidden in collections of unlabeled data.                                                                                                                                                                             | Learns through interaction with an environment,maximize the total reward in the long run  <br> <br>About sequence decision making                                                                                                                                                                                             |
+| Problem   | Needs the knowledgable external supervisor, and it is impractical to obtain exp. (correct and representative behavior) of all situations, focus on isolated subproblems | Lack of Ground Truth:can't directly know if the clusters or representations are “correct” or meaningful without manual inspection or domain knowledge;<br><br>Sensitive to Initialization and Hyperparameters;<br><br>Mode collapse\| | Trade-off between exploration (trying new actions) and exploitation(choosing actions known to yield good rewards):The dilemma is that neither exploration nor exploitation can be pursued exclusively without failing at the task. Pure exploitation might miss better options, while pure exploration might waste resources. |
+CrashCourse AI lecture 9 has explained fundamental ideas of RL:
+
+   Generally, we tell the AI at the very end of the task if they succeeded, and then ask them to tell us how they did it. Sometimes the feed back could come earlier. So, if we want AI to learn how to walk, we give them a **reward** when it both standing up and moving forward, and then figure out what steps they took to get to that point. The longer the AI stands up and moves forward, the longer it's walking, and the more reward it gets.
+
+   The key of RL is trial-and-error, over and over again. For human, the reward might be a cookie or the joy. For AI, the reward is just a small positive signal that tells it "good job, and do that again!"
+
+   In SL, we would have a training label after each action that tells the AI whether it did the right thing or not. We cannot do that here with RL, because we do not know the right thing actually is until we complete the task. Here is the hardest thing in RL: **credit assignment**.
+
+   Let's say we put the agent into a room, its goal is to get the battery for recharging. The agent has 4 actions (up, down, left, right), and states (current location, previous location, and visual scope(whole room)). Then, let the agent **explore** the room. Every time the agent succeed at its tasks (walks from the start point to the goal), we look back at its action, and figure out which game state were helpful and which were not. During this reflection, we are assigning **values** to those different game states and deciding on a **policy** for which actions work best. The values give more information that help decide a better policy.
+
+   But it is boring if the agent just takes the same long and winding path every time. -> **Trade-off between exploitation and exploration**. Now that the bot knows one way to get to the battery, he could just **exploit** his knowledge by always taking the same 10 actions. It is not terrible, he knows he will not get lost and will definitely get a reward. But there are probably more efficient paths out there. It is usually worth trying lots of different actions to see what happens which is a strategy called **exploration**. Every time he explores, he will get a bit more data about the best way to get a reward. So, let the bot explore for 100 actions, and after he completes a path, we will update the values of the cells he have been to. But the bot might explore worse paths. So we always need the **balance of exploitation and exploration**.
+
+   When the bot was learning how to navigate on that small grid, cells closer to the battery have higher values than those far away. But for many problems we will want to use a **value function** to think about what we have done so far, and decide on the next move using math.
+
+   There are so many **types of problems**. But a lot these problems need a ton of data and a ton of time to solve. There have been really impressive results recently thanks to deep reinforcement learning on large-scale computing. These systems can explore massive environments and a huge number of states. At core of a lot of these problems are discrete symbols, like the squares on a game board. So how to reason and plan in these spaces is a key part of AI. (CrashCourse, 2019)
+
+Algorithm Selection Matrix Based on Environment Characteristics and Model Transparency by the lecture note:
+
+| Env characteristics                    | White-Box (The relationship between variables and objectives can be expressed with explicit formulas.)   | Black-Box (only input-output interactions are observable)        |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Static                                 | **Operations Research & Optimization**:<br>(Mixed-integer) Linear Programming,<br>Nonlinear Optimization | **NN Surrogate**: Model Optimization,<br>Bayesian Optimization   |
+| Dynamic<br>(env has state transitions) | **Dynamic Programming**:<br>Direct MDP Solving,<br>Tree/Graph Search                                     | **RL**:<br>Policy Optimization,<br>Bandits, Sequential Black-Box |
+### Symbols
 - $\overset{.}{=}$: equality relationship that is true by definition
 - $\approx$: approximately equal
 - $\propto$: proportional to
@@ -19,21 +51,11 @@
 - $\mathbb{R}$: set of real numbers
 - $f: X \to Y$: function $f$ from elements of set $X$ to elements of set $Y$
 - $(a, b]$: the real interval between $a$ and $b$ including $b$ but not including $a$
-
-## Parameters
-
 - $\epsilon$: probability of taking a random action in an $\epsilon$-greedy policy
 - $\alpha, \beta$: step-size parameters
 - $\gamma$: discount-rate parameter
 - $\lambda$: decay-rate parameter for eligibility traces
 - $\mathbb{1}_\text{predicate}$:  indicator function. = 1 if the predicate is true, else 0.
-
-# 1 Introduction
-
-$\color{orange}\text{Apporximations for value f, policy, models}$
-
-Even if the agent has a complete and accurate environment model, the agent is typically unable to perform enough computation (memory) per time step to fully use it.
-
 # 2 Multi-Armed Bandit Problem
 
 - $k$: number of actions (arms)
@@ -582,7 +604,6 @@ $$
 V(s_t) \leftarrow V(s_t) + \alpha(g_t^{\pi/\mu}-V(s_t))
 $$
 
-.
 
 #### 4.4 Off-policy MC by importance sampling
 
@@ -921,8 +942,12 @@ $$
 ---
 #### Policy gradient theorem
 
-For any differential policy $\pi_\theta(a|s)$, $$\nabla_\theta J(\theta) =\mathbb{E}_{(s, a) \sim \hat{\rho}^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right] 
-\propto \nabla_\theta J(\theta) =\mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right]$$
+For any differential policy $\pi_\theta(a|s)$
+$$
+\begin{aligned}
+\nabla_\theta J(\theta) &=\mathbb{E}_{(s, a) \sim \hat{\rho}^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right] \\
+&\propto \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right]
+\end{aligned}$$
 Parameters are put in into the learning rate.
 
 - policy gradient algorithm: on-policy, sampling by $\pi_\theta$
@@ -1254,13 +1279,18 @@ Smooth the policy’s output, make it difficult to exploit the vulnerability of 
 Actor is updated at a lower frequency and critic is updated at a higher frequency. Usually, Critic : Actor = 2 : 1
 ![[TD3.png]]
 #### 8.5 Maximum Entropy RL
+For the deterministic policy of continuous action, gradient can be directly returned to the action from the critic, and then the gradient can be further returned to policy network through the chain rule.
 
-1. Entropy: measure of randomness of distribution
+Soft Q-Learning and Soft AC are very popular, and they are equivalent.
+
+Policy’s entropy is regarded as a part of the reward, which encourages the diversity, encourages exploration, and improves the robustness to environmental changes
+
+1. **Entropy**: measure of randomness of distribution
 $$\mathcal{H}(p) = \mathbb{E}_{x \sim p} [-\log p(x)]$$
 
 Maximum Entropy Principle: Under known conditions or constraints, the selected probability distribution should maximize the entropy (that is, uncertainty or information), so as to minimize the influence from one's own assumptions or prejudices. 事情有余地。
 
-2. Maximum entropy RL
+2. **Maximum entropy RL**
 $$\pi^* = \arg \max_{\pi} \mathbb{E}_{\tau \sim \pi(\tau)} \left[ \sum_{t=0}^{\infty} \gamma^t \left( r(s_t, a_t) + \alpha \mathcal{H}(\pi(\cdot | s_t)) \right) \right]$$
 
 其中：
@@ -1268,7 +1298,7 @@ $$\pi^* = \arg \max_{\pi} \mathbb{E}_{\tau \sim \pi(\tau)} \left[ \sum_{t=0}^{\i
 - 离散动作空间熵：$\mathcal{H}(\pi(\cdot | s_t)) = -\sum_a \pi(a|s_t) \log \pi(a|s_t)$, The bigger 𝛼 is, the more exploratory it is
 - 连续动作空间熵：$\int_{-\infty}^{\infty} \pi(x|s_t) \log \pi(x|s_t) dx$
 
-3.Energy-Based Model, EBM)
+**3.Energy-Based Model, EBM)**
 Objective:
 $$\max_{p} \mathbb{E}_{x \sim p} [\phi(x)] + \alpha\mathcal{H}(p)$$
 
@@ -1278,17 +1308,28 @@ where：
 - $Z$ is the partition function
 - $\epsilon(x) = -\phi(x)/\alpha$ is the energy function
 
-4. Soft Value Functions
-	(Soft) State-value function
+4. **Soft Value Functions**
+Soft means “entropy-regularized"
+(Soft) State-value function
   $$V_{soft}^{\pi}(s) = \mathbb{E}_{\tau \sim \pi(\tau)} \left[ \sum_{t=0}^{\infty} \gamma^t \left( r(s_t, a_t) + \alpha \mathcal{H}(\pi(\cdot | s_t)) \right) | s_0 = s \right]$$
   
   (Soft) Action-value function
   $$Q_{soft}^{\pi}(s,a) = r(s,a) + \mathbb{E}_{\tau \sim \pi(\tau)} \left[ \sum_{t=1}^{\infty} \gamma^t \left( r(s_t, a_t) + \alpha \mathcal{H}(\pi(\cdot | s_t)) \right) | s_0 = s, a_0 = a \right]$$
+Soft Bellman Equation
+$$
+\begin{aligned}
+V_{soft}^\pi(s) &= \mathbb{E}_{a \sim \pi(\cdot|s)}[ Q_{soft}^\pi(s,a)]+ \alpha \mathcal{H}(\pi(\cdot|s))\\
+&= \mathbb{E}_{a \sim \pi(\cdot|s)} [ Q_{soft}^\pi(s,a) - \alpha \log \pi(a|s)] \\
+\end{aligned}
+$$
 
-???Soft Bellman Equation:
-$$V_{soft}^{\pi}(s) = \mathbb{E}_{a \sim \pi(\cdot | s)} \left[ Q_{soft}^{\pi}(s,a) - \alpha \log \pi(a | s) \right]$$
-$$Q_{soft}^{\pi}(s,a) = r(s,a) + \gamma \mathbb{E}_{s' \sim p(\cdot | s,a)} \left[ V_{soft}^{\pi}(s') \right]$$
-......还有好几个soft
+$$
+\begin{aligned}
+Q_{soft}^\pi(s,a) &= r(s,a) + \gamma \mathbb{E}_{s' \sim p(\cdot|s,a)} \left[ V_{soft}^\pi(s') \right] \\
+&= r(s,a) + \gamma \mathbb{E}_{s' \sim p(\cdot|s,a)} \left[ \mathbb{E}_{a' \sim \pi(\cdot|s')} \left[ Q_{soft}^\pi(s',a') \right] + \alpha \mathcal{H}(\pi(a'|s')) \right]\\
+&= r(s,a) + \gamma \mathbb{E}_{s' \sim p(\cdot|s,a)} \left[ \mathbb{E}_{a' \sim \pi(\cdot|s')} \left[ Q_{soft}^\pi(s',a') - \alpha \log \pi(a'|s') \right] \right]
+\end{aligned}
+$$
 
 5. soft Q-Learning
 discrete action space
@@ -1302,41 +1343,31 @@ $$L(\theta) = \mathbb{E}_{(s,a,s',r)\sim U(D)} \frac{1}{2} \left[ (r + \gamma V_
 ---
 ![[coop_notes/AI/DeepReinforcementLearning/pic/softQ.png]]
 6. soft Actor-Critic (SAC)
-### 网络结构
 - Actor网络：$\pi_{\theta}$
 - 双Critic网络：$Q_{w1}$, $Q_{w2}$
-
-### 损失函数
-**Critic损失**：
+	Critic损失：
 $$L_Q(w) = \mathbb{E}_{(s,a,s',r)\sim U(D), a' \sim \pi_{\theta}(s')} \frac{1}{2} \left[ Q_w(s,a) - (r + \gamma (\min_{j=1,2} Q_{wj}(s',a') - \alpha \log \pi_{\theta}(a'|s'))) \right]^2$$
 
-**Actor损失**（使用重参数化技巧）：
+	Actor损失（使用重参数化技巧）：
 $$\hat{a}_{\theta}(s,\xi) = \tanh(\mu_{\theta}(s) + \sigma_{\theta}(s) \odot \xi), \quad \xi \sim \mathcal{N}(0,I)$$
 $$L_{\pi}(\theta) = \mathbb{E}_{s\sim U(D), \xi \sim \mathcal{N}(0,I)} \left[\alpha \log \pi_{\theta}(\hat{a}_{\theta}(s,\xi)|s) - \min_{j=1,2} Q_{wj}(s,\hat{a}_{\theta}(s,\xi))\right]$$
 
----
-
 7. Adaptive Entropy Regularization)
-
-### 目标
+	goal
 $$\max_{\pi} \mathbb{E}_{\tau \sim \pi(\tau)} \left[ \sum_{t=0}^{\infty} \gamma^t r(s_t, a_t) \right]$$
-约束条件：
+	约束条件：
 $$\mathbb{E}_{(s,a) \sim \rho^\pi} [-\log \pi(a|s)] \geq \mathcal{H}_0$$
 
-### 自适应调整
+	自适应调整
 $$\mathcal{L}(\alpha) = \mathbb{E}_{s \sim U(D), a \sim \pi(\cdot|s)} [\alpha (-\log \pi(a|s) - \mathcal{H}_0)]$$
 
----
-
-## 关键特性对比
-
-| 方法 | 动作空间 | 核心创新 | 主要优势 |
-|------|---------|---------|---------|
-| 软Q学习 | 离散/连续 | 能量基策略 | 强探索性 |
-| SAC | 连续 | 双Q网络+自适应熵 | 稳定高效 |
-| 传统RL | 任意 | 无熵正则 | 可能欠探索 |
+| 方法   | 动作空间  | 核心创新      | 主要优势  |
+| ---- | ----- | --------- | ----- |
+| 软Q学习 | 离散/连续 | 能量基策略     | 强探索性  |
+| SAC  | 连续    | 双Q网络+自适应熵 | 稳定高效  |
+| 传统RL | 任意    | 无熵正则      | 可能欠探索 |
 # 9 Model-based RL
-## Review: Learn an MDP Model
+#### 9.1 Review: Learn an MDP Model
 - **Motivation**: In real applications, the MDP model (state transition $P$ and reward function $r$) is often unknown. We need to learn it from observed episodes.
 - **Key Steps**:
   1. **State Transition Probability**:  
@@ -1532,7 +1563,13 @@ Approximate Value Functions
 
 # References
 
-1. Sutton, R.,S. & Barto, A.,G. (2018). Reinforcement learning: An introduction. (2 e.d.)
-2. Lecture notes by Jianxiong Guo.
+1. Lecture notes by Jianxiong Guo.
+[2]. CrashCourse. (2019, Oct 12). Reinforcement learning: Crash course AI #9. [Video]. YouTube. https://www.youtube.com/watch?v=nIgIv4IfJ6s.
+2. Sutton, R.,S. & Barto, A.,G. (2018). Reinforcement learning: An introduction. (2 e.d.)
+3. 
 # Footnote
 mutl-agent RL is not covered in this note.
+
+[^1]: 
+
+[^1]: 

@@ -11,10 +11,12 @@ Types of learning in AI:
 - Unsupervised Learning(UL): AI tries to find patterns in the world.
 - Reinforcement Learning (RL): particular useful where we want to train AIs to have certain skills we do not fully understand ourselves. e.g. how to walk (the angles and velocity of your feet ...) 
 
-|           | SL                                                                                                                                                                      | UL                                                                                                                                                                                                                                    | RL                                                                                                                                                                                                                                                                                                                            |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Objective | Learning from static dataset<br><br>Build a system to generalize its responses which acts correctly in situations not present in the training set                       | finding patterns hidden in collections of unlabeled data.                                                                                                                                                                             | Learns through interaction with an environment,maximize the total reward in the long run  <br> <br>About sequence decision making                                                                                                                                                                                             |
-| Problem   | Needs the knowledgable external supervisor, and it is impractical to obtain exp. (correct and representative behavior) of all situations, focus on isolated subproblems | Lack of Ground Truth:can't directly know if the clusters or representations are “correct” or meaningful without manual inspection or domain knowledge;<br><br>Sensitive to Initialization and Hyperparameters;<br><br>Mode collapse\| | Trade-off between exploration (trying new actions) and exploitation(choosing actions known to yield good rewards):The dilemma is that neither exploration nor exploitation can be pursued exclusively without failing at the task. Pure exploitation might miss better options, while pure exploration might waste resources. |
+|           | SL                                                                                                                                                                      | UL                                                                                                                                                                                                                                   | RL                                                                                                                                                                                                                                                                                                                            |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Objective | Learning from static dataset<br><br>Build a system to generalize its responses which acts correctly in situations not present in the training set                       | finding patterns hidden in collections of unlabeled data.                                                                                                                                                                            | Learns through interaction with an environment,maximize the total reward in the long run  <br> <br>About sequence decision making                                                                                                                                                                                             |
+| Problem   | Needs the knowledgable external supervisor, and it is impractical to obtain exp. (correct and representative behavior) of all situations, focus on isolated subproblems | Lack of Ground Truth:can't directly know if the clusters or representations are “correct” or meaningful without manual inspection or domain knowledge;<br><br>Sensitive to Initialization and Hyper-parameters;<br><br>Mode collapse | Trade-off between exploration (trying new actions) and exploitation(choosing actions known to yield good rewards):The dilemma is that neither exploration nor exploitation can be pursued exclusively without failing at the task. Pure exploitation might miss better options, while pure exploration might waste resources. |
+
+
 CrashCourse AI lecture 9 has explained fundamental ideas of RL:
 
    Generally, we tell the AI at the very end of the task if they succeeded, and then ask them to tell us how they did it. Sometimes the feed back could come earlier. So, if we want AI to learn how to walk, we give them a **reward** when it both standing up and moving forward, and then figure out what steps they took to get to that point. The longer the AI stands up and moves forward, the longer it's walking, and the more reward it gets.
@@ -37,11 +39,16 @@ Algorithm Selection Matrix Based on Environment Characteristics and Model Transp
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | Static                                 | **Operations Research & Optimization**:<br>(Mixed-integer) Linear Programming,<br>Nonlinear Optimization                                                                                    | **NN Surrogate**: Model Optimization,<br>Bayesian Optimization                                                                |
 | Dynamic<br>(env has state transitions) | Transition prob and the reward $P(s'\| s,a), R(s,a)$ are fully known.<br><br>**Dynamic Programming**:<br>Value Iteration, Policy Iteration,<br>Direct MDP Solving,<br>Tree/Graph Search<br> | Do not know the model.<br><br><br>**RL** (the most typical senario):<br>Policy Optimization,<br>Bandits, Sequential Black-Box |
+
+s for state, a for action.
+
 Usually:
 White-box ↔ Model-based methods
 Black-box ↔ Model-free
 
 Not 100%, because: sometimes you may learn a model (transition dynamics) when the model is unknown, that is a model-based, but black-box.
+
+
 # 2 Multi-Armed Bandit Problem (MAB)
 
 It can be viewed as a state-less RL problem.
@@ -92,17 +99,17 @@ skip:
 incremental update rule, 
 Non-stationary problem for sample-avg, 
 Exponential-recency weighted average.
-# 3 Markov Decision Process
+# 3 Markov Decision Process (MDP)
 
 The reinforcement learning agent and its environment interact over a sequence of discrete time steps. Everything inside the agent is completely known and controllable by the agent; everything outside is incompletely controllable but may or may not be **completely** known. The agent’s objective is to maximize the amount of reward it receives over time.
-
-$\color{orange}\text{Stochastic process}$: 1/more events, stochastic(dynamic) system/phenomenon evolve with t.
+### 3.1 Define the process/trajectory
+$\color{red}\text{Stochastic process}$: 1/more events, stochastic(dynamic) system/phenomenon evolve with t.
 
 $$
 P[S_\text{t+1}|S_1,...,S_t]
 $$
 
-$\color{orange}\text{Markov process }$
+$\color{red}\text{Markov process }$
 
 - <S state,P>
 - a stochastic process
@@ -112,12 +119,12 @@ $$
 P[S_\text{t+1}|S_t]=P[S_\text{t+1}|S_1,...,S_t]
 $$
 
-$\color{orange}\text{Markov reward process(MRP)}$
+$\color{red}\text{Markov reward process(MRP)}$
 
 - < S, P, r reward, $\gamma$ discount>
 - env: 不受agent控制，产生s,r
 - episodes: agent–environment interaction breaks naturally into subsequences, each episode ends in a special state called the terminal state.
-- $\color{orange}\text{discounted episode's return from }s_t$
+- $\color{red}\text{discounted episode's return from }s_t$
 
 $$
 G_t= R_\text{t}+\gamma R_\text{t+1}+\gamma^2R_\text{t+2}+...=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k}=R_\text{t}+\gamma G_\text{t+1}
@@ -125,12 +132,10 @@ $$
 
 	$\gamma \in[0,1]$, which helps to converge.
 
-Comparing the G here and the one in book ($G_t'= R_\text{t+1}+\gamma R_\text{t+2}+\gamma^2R_\text{t+3}+...+R_\text{T}=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k+1}$), G here makes sure the total order of episodic return for all different return sequences.
-![image.png](pic/returnseq.png)
+Comparing the G here and the one in book written by Sutton and Barto ($G_t'= R_\text{t+1}+\gamma R_\text{t+2}+\gamma^2R_\text{t+3}+...+R_\text{T}=\sum_{k=0}^{\infty} \gamma^kR_\text{t+k+1}$), G here makes sure the total order of episodic return for all different return sequences.
 
-![image.png](pic/totalorder.png)
 
-$\color {orange}\text{Markov decision process (MDP)}$
+$\color {red}\text{Markov decision process (MDP)}$
 
 - <S,A,P,r,$\gamma$>
 - state transfer function $p(s'| s, a)= Pr\{S_t=s' | S_\text{t-1}=s, A_\text{t-1}=a\}$
@@ -141,138 +146,162 @@ $\color {orange}\text{Markov decision process (MDP)}$
 
   ![image.png](pic/MDPdy.png)
 
-![image.png](pic/MDPdy2.png)
+When the rewards are only related to state in the situation of maze(location) or go (size of the final territory):
 
-$\color {orange}\text{Policy }\pi(a|s)=P(a|s) $
+  Reward function r(s): $S -> R$
+  their MDP dynamics:
+   s0 - a0, r(s0) -> s1 -a1, r(s1)-> ...
+
+   cumulative reward: 
+$$
+   r(s_0)+\gamma(s_1)+\gamma^2r(s_2)+...
+$$
+
+
+$\color {red}\text{Policy }\pi(a|s)=P(a|s)$
 
 - prob of taking action a in state s
-- Markov property: policy needs to be related to current s;does not consider historical s.
-- For 2 kinds of policies:
+- Markov property: policy only needs to be related to current s
 
 $$
 \sum_a \pi(a|s)=1
 $$
 
-- deterministic policy:for a given s, the agent always chooses the same a, without any randomness or probabilities involved.
+- **deterministic** policy: for a given s, the agent always chooses the same a, without any randomness or probabilities involved.
 
 $$
 \pi(a \mid s)=\pi(s)=\mu(s)=\begin{cases}1 & \text{if } a = \mu(s) \\0 & \text{otherwise} \end{cases}
 $$
 
-- stochastic policy: a is sampled
+- **stochastic** policy: a is sampled from the distribution $\pi$
 
 $$
 \pi(a \mid s)\in[0,1]
 $$
 
-$\color {orange}\text{MDP to MRP: marginalization}$
-
-- MRP是MDP的简化版本，去掉了动作部分，只关注状态转移、奖励函数和折扣因子（γ）。
-- 这有助于分析和处理那些不需要明确决策行为的系统，或者是MDP的价值评估阶段。
-- 在每个状态下，按照某个策略选择动作后，状态的转移概率:
+$\color {red}\text{Convert MDP to MRP by marginalization}$
+- MRP is MDP's simplified version, removing the action part, which focuses on state transition, reward function and discount factor (γ). 
+- Under each state, after selecting a certain action: 
 
 $$
-P(s'| s)=\sum_a \pi(a|s)P(s'| s, a)
+P'(s'| s)=\sum_a \pi(a|s)P(s'| s, a)
 $$
 
 - reward at s
 
 $$
-r(s)=\sum_a \pi(a|s)r(s,a)
+r'(s)=\sum_a \pi(a|s)r(s,a)
 $$
 
 So, MRP <S,P',r',$\gamma$>
 
-$\color {orange}\text{Data distribution}$
+### 3.2 Stats about the trajectory
 
-- Given the same MDP, the state-action(s-a) distribution sampled by different policy is different.
-- Obeserving the path of MDP...
-- state dist $d^\pi(s)=\sum_{t=0}^{\infty}P(s|\pi)$
-- state-action dist $d^\pi(s,a)=\sum_{t=0}^{\infty}P(s,a|\pi)$
-- Relationship
-
-$$
-d^\pi(s)=\sum_ad^\pi(s,a) \\ d^\pi(s,a)=d^\pi(s)\pi(a|s)\text{  (Bayes)}
-$$
-
-$\color {orange}\text{State-action occupancy measure}$
-
+$\color {red}\text{State-action occupancy measure}$
+- Given the same MDP, the state-action(s-a) **distribution** sampled by different policy is different
 - describes how often a policy visits certain state-action pairs in a Markov Decision Process (MDP).
-- provides a way to express the long-term distribution of states and actions under a given policy.
-- Discounted state-action distribution:
+
+- state distribution $$d^\pi(s)=\sum_{t=0}^{\infty}P(s|\pi)$$
+- state-action distribution $$d^\pi(s,a)=\sum_{t=0}^{\infty}P(s,a|\pi)$$
+  Relationship
 
 $$
-\hat{\rho}^\pi(s, a) = \mathbb{E}_n \left[ \sum_{t=0}^{\infty}\gamma^t \mathbb{I}(s,a)\bigg| S_t = s, A_t = a \right] \quad \forall s \in S, a \in \mathcal{A} \\ = \sum_{t=0}^{\infty} \gamma^t P(s,a|\pi)
+\begin{aligned}
+& d^\pi(s,a) = \pi(a|s)d^\pi(s)=\pi(a|s)\sum_{a'} d^\pi(s,a')\\
+\end{aligned}
 $$
 
-- Discounted state distribution:
+- **Discounted** state-action distribution
+
+$$\begin{aligned}
+
+\hat{\rho}^\pi(s, a) &= \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty}\gamma^t \mathbb{I}(S_t = s, A_t = a) \right] \quad \forall s \in S, a \in \mathcal{A} \\ 
+&= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(S_t = s, A_t = a|\pi)
+\end{aligned}
+$$
+
+- **Discounted** state distribution
 
 $$
 \begin{aligned}
 \hat{v}^\pi(s) &= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(S_t = s | \pi)
-\\ &= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}( s | \pi) \sum_a \pi(a|s)
-\\ &= \sum_{t=0}^{\infty} \sum_a \gamma^t \mathbb{P}( s | \pi) \sum_a \pi(a|s)
-\\ &= \sum_a \sum_{t=0}^{\infty} \mathbb{P}( s,a | \pi)
-\\ &= \sum_{t=0}^{\infty} \hat{\rho}^\pi(s, a)
+\\ &= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}( s | \pi) \sum_{a} \pi(a|s)
+\\ &= \sum_{t=0}^{\infty} \sum_{a} \gamma^t \mathbb{P}( s | \pi) \pi(a|s)
+\\ &= \sum_{a} \sum_{t=0}^{\infty} \mathbb{P}( s,a | \pi)
+\\ &= \sum_{a} \hat{\rho}^\pi(s, a)
 \end{aligned}
 $$
 
 - Normalization (When ($\gamma$ < 1\)): two distribution above -> real dist
 
 $$
-\sum_{s} \hat{v}^\pi(s) = \sum_{s} \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(s | \pi)
-\\ = \sum_{t=0}^{\infty} \sum_{s}\gamma^t\mathbb{P}(s| \pi)
-\\ = \sum_{t=0}^{\infty}\gamma^t
-\\ = \frac{1}{1-\gamma}
+\begin{aligned}
+\sum_{s} \hat{v}^\pi(s) &= \sum_{s} \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(s | \pi)
+\\ &= \sum_{t=0}^{\infty} \sum_{s}\gamma^t\mathbb{P}(s| \pi)
+\\ &= \sum_{t=0}^{\infty}\gamma^t
+\\ &= \frac{1}{1-\gamma}
+\end{aligned}
 $$
 
 - Normalized Discounted (Action-) State Distribution:
 
 $$
-v^\pi(s) = (1 - \gamma) \hat{v}^\pi(s) \\
-\rho^\pi(s,a) = (1 - \gamma) \hat{\rho}^\pi(s,a)
+\begin{aligned}
+v^\pi(s) &= (1 - \gamma) \hat{v}^\pi(s) \\
+\rho^\pi(s,a) &= (1 - \gamma) \hat{\rho}^\pi(s,a)
+\end{aligned}
 $$
 
 - relationship
 
 $$
-\rho^\pi(s,a)=v^\pi(s)\pi(a|s) \\ v^\pi(s)=\sum_a \rho^\pi(s,a)
-$$
-
-- Theorem 1: $\rho^{\pi_1}=\rho^{\pi_2} \text{ iff } \pi_1=\pi_2$
-- Theorem 2: $\pi_\rho(s|a) = \frac{\rho(s,a)}{sum_a \rho^\pi(s,a)}$
-
-  - Given occupancy measure 𝜌, The only policy that can generate this occupancy metric is this formula.
-- Policy on occupancy measure
-
-  - policy cummulative reward
-
-$$
 \begin{aligned}
-J(\pi) &=E_\pi[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)]
-\\ &= \sum_{t=0}^{\infty}\gamma^t E_\pi[r(S_t,A_t)]
-\\ &= \sum_{t=0}^{\infty}\gamma^t \sum_a \sum_s P(s,a|\pi) {\color{red}\text{r(s,a)}}
-\\ &= \sum_a \sum_s {\color{green}[\sum_{t=0}^{\infty} \gamma^tP(s,a|\pi)]} {\color{red}\text{r(s,a)}}
-\\ &= \sum_a \sum_s {\color{green}\hat{\rho}^\pi(s, a)}{\color{red}\text{r(s,a)}}
-\\ &= E_{(s,a)～\hat\rho^\pi}[r(s,a)]
+\rho^\pi(s,a)=v^\pi(s)\pi(a|s) \\
+ v^\pi(s)=\sum_a \rho^\pi(s,a)
 \end{aligned}
 $$
 
-- Policy learning goal
+---
+- Theorem 1: The occupancy measure obtained by two policies interacting with the same dynamic environment satisfies: $$\rho^{\pi_1}=\rho^{\pi_2} \text{ iff } \pi_1=\pi_2$$
+- Theorem 2: Given occupancy measure 𝜌, The only policy that can generate this occupancy metric is $$\pi_\rho(s|a) = \frac{\rho(s,a)}{\sum_{a'} \rho^\pi(s,a')}$$
+---
+  
+### 3.3 Policy
+
+  - **policy cumulative reward**: 
 
 $$
-\max_\pi J(\pi)=E_\pi[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)] ≃ E_{(s,a)～\hat\rho^\pi}[r(s,a)]
+\begin{aligned}
+J(\pi) &=\mathbb{E}_\pi[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)]
+\\ &= \sum_{t=0}^{\infty}\gamma^t \mathbb{E}_\pi[r(S_t,A_t)]
+\\ &= \sum_{t=0}^{\infty}\gamma^t \sum_s \sum_a \mathbb{P}(s,a|\pi) {\color{red}\text{r(s,a)}}
+\\ &= \sum_s \sum_a {\color{green}[\sum_{t=0}^{\infty} \gamma^t\mathbb{P}(s,a|\pi)]} {\color{red}\text{r(s,a)}}
+\\ &= \sum_s \sum_a {\color{green}\hat{\rho}^\pi(s, a)}{\color{red}\text{r(s,a)}}
+\\ &= \mathbb{E}_{(s,a)\sim \hat\rho^\pi}[r(s,a)]
+\end{aligned}
 $$
 
-$\color{orange}\text{Bellman expectation equations }$
+- **Policy learning goal**: select those actions that can maximize the expected cumulative reward
+  omit the max for two after terms.
+$$
+\max_\pi J(\pi)= \mathbb{E}_\pi[\sum_{t=0}^{\infty}\gamma^t r(S_t,A_t)] ≃ \sum_s \sum_a\rho^\pi(s,a)r(s,a)
+$$
+  The relationship between the policy π and its occupancy measure ρ is a black box, so the optimization objectives above cannot directly guide the update direction.
+  
+  In each state S, after the policy changes the choice of action, does the policy as a whole become better? 
+  Not necessarily. The RL optimization especially with cumulative reward is not locally decomposable due to the sequential and dynamics nature of MDP's, so improving the local choice **doesn't guarantee** global improvement of the policy. Therefore, to improve the policy as a **whole**, we often need to: estimate gradients over **expected return**,  and make **global updates** based on full trajectories, not just one-step changes.
 
-- $V^\pi(s)$: Expected reward by following policy $\pi$ from state s
-- $Q^\pi(s, a)$: Expected reward while following policy $\pi$ from state s and take action a
+#### 3.3.1 Policy Evaluation & Policy Improvement
+
+$\color{red}\text{Bellman expectation equations }$
+
+- State-value function $V^\pi(s)$: Expected reward by following policy $\pi$ from state s
+- Action-value function $Q^\pi(s, a)$: Expected reward while following policy $\pi$ from state s and take action a
   - q: quality
 
 $$
 \begin{aligned}
-V^\pi(s) &= E_\pi[G_t|s]  \text{ def}
+V^\pi(s) &= E_\pi[G_t|s]
 \\ &= E_\pi[R_t + \gamma G_{t+1}|s]
 \\ &= E_\pi[R_t|s]+ E_\pi[\gamma G_{t+1}|s]
 \\ &= E_\pi[R_t|s]+ \gamma E_\pi[G_{t+1}|s]
@@ -297,7 +326,8 @@ Q^\pi(s,a) &= E_\pi[G_t|s,a]
 \end{aligned}
 $$
 
-- $\color{pink}\text{Explanations}$ The value function $V_\pi$ 's Bellman equation.
+- Explanations: 
+  The value function $V_\pi$ 's Bellman equation.
 
 ![image.png](pic/image.png)
 
@@ -307,7 +337,7 @@ From each of these, the environment could respond with one of several next state
 along with a reward, r, depending on its dynamics given by the function p.
 ```
 
-- The action-value function $Q_\pi$ 's Bellman equation.
+  The action-value function $Q_\pi$ 's Bellman equation.
 
 ![q pi.png](pic/qpi.png)
 
@@ -315,56 +345,80 @@ along with a reward, r, depending on its dynamics given by the function p.
 If we were to take action 𝑎 in state 𝑠, what is the expected return if we then follow 𝜋 afterward?
 ```
 
-### 3.2 Policy evaluation
+---
+$\color{red}\text{Policy improvement theorem}$
 
-$\color{orange}\text{Policy improvement theorem}$
+Policy $\pi'$ is the improvement of $\pi$ if:  for any s, $Q^\pi(s, \pi'(s)) \ge V^\pi(s)$
 
-Assume deterministic policy $\pi$
-Policy $\pi'$ is the improvement of $\pi$ if: for any s, $Q^\pi(s, \pi') \ge V^\pi(s)$
+Then $\pi \text{ and } \pi'$ satisfy: for any s, $V^{\pi'}(s) \ge V^\pi(s)$.                       (Proof p28)
 
-Then $\pi \text{ and } \pi'$ satisfy: for any s, $V^{\pi'}(s) \ge V^\pi(s)$
+---
 
-$\color{Lime} \text{PROOF 28}$
+So it is able to improve our policy iteratively.
 
-### 3.3 Find optimal policy
+#### 3.3.2 Algorithms that that iteratively improve a policy to solve an MDP
 
-#### 3.3.1 Policy iteration
+2 algos: 
+- **Policy Iteration** (PI) = alternating evaluation and improvement
+- **Value Iteration** (VI) = single-step updates combining evaluation + improvement
 
-Given a MDP with limited action space and state space: $|S| < \infty, |A| < \infty$
 
-- PI based on s value V
+| Property                        | Description                                                | Value Iteration & Policy Iteration                                                                      |
+| ------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **White-box or Black-box**      | Do we know the model (transitions & rewards)?              | ✅ **White-box** — both require full knowledge of the MDP                                                |
+| **Model-based or Model-free**   | Do they need access to a model?                            | ✅ **Model-based** — they rely on knowing ( P(s'                                                         |
+| **Static or Dynamic**           | Is the problem fixed or changing over time?                | ✅ **Static** — the environment (P, r) is fixed; they solve for the optimal policy in that setting       |
+| **Planning or Learning**        | Are we acting in a known or unknown environment?           | ✅ **Planning** — because everything is known and we compute the solution ahead of acting                |
+| **Policy-based or Value-based** | Do we optimize policy directly or through value functions? | Mixed: Policy Iteration = policy-based, Value Iteration = value-based, but both involve both components |
+
+ 1. **Policy Iteration Process**
+
+$$
+\pi^0 \xrightarrow{PE} V^{\pi^0} \xrightarrow{PI} \pi^1 \xrightarrow{PE} V^{\pi^1} \xrightarrow{PI} \pi^2 \xrightarrow{PE} \cdots \xrightarrow{PI} \pi^*
+$$
+
+  According to Policy Improvement Theorem: Value function of the updated policy satisfies monotonicity.
+  $$
+  V^{\pi^{k+1}}(s) \geq Q\left(s, \pi^{k+1}(s)\right) \geq V^{\pi^k}(s)
+  $$
+
+  As long as the number of all possible policies is limited, the policy iteration can converge to the optimal policy
+
+  Since $$|S| < \infty$$$$|A| < \infty$$, # possible policies is $$|A|^{|S|}$$ is limited.
+
+  Policy iteration can find the optimal policy in finite iterations
+
+   **Deterministic** policy:
+   Given a MDP with limited action space and state space: $|S| < \infty, |A| < \infty$
+
+- PI based on V
 
   1. Randomly initialize policy 𝜋
   2. Repeat until convergence {
-     a) Calculate 𝑉 ≔ 𝑉^𝜋 (Updating is time consuming)
+     a) Calculate $𝑉 ≔ 𝑉^𝜋$ (Updating is time consuming)
      b) For each state 𝑠 ∈ 𝒮, update:
-
 $$
 \pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
+  }
 
-}
-
-- PI based on action value Q
-
+- PI based on Q
   1. Randomly initialize policy 𝜋
   2. Repeat until convergence {
-     a) Calculate Q ≔ Q^𝜋 (Updating is time consuming)
+     a) Calculate $Q ≔ Q^𝜋$ (Updating is time consuming)
      b) For each state 𝑠 ∈ 𝒮, update:
-
 $$
 \pi(s) = arg \max_a Q(s,a)
 $$
+  }
 
-}
+  Skip PI for stochastic policy.
 
-- $\color{Lime} \text{PROOF 35,36at k}$
 
-#### 3.3.2 Value iteration $\color{Lime} \text{+e.g.}$
+ 2. **Value iteration** $\color{Lime} \text{+e.g.}$
+   Only one round of value update is carried out in the policy evaluation, and then the policy is upgraded directly according to the updated value.
 
-**Speed up V, same for Q:**
-Policy evaluation is time consuming.  But in the previous example, when the iteration of value function V is not  convergent, the derived policy is already optimal. Don’t wait until convergence!  If only one round of value  update is carried out in the  policy evaluation, and then the policy is upgraded  directly according to the updated value.
-
+**Value Iteration (V value)**
 1. For each state, initialize V(s)=0
 2. Repeat until convergence {
    a) For each state 𝑠 ∈ 𝒮, update:
@@ -373,15 +427,63 @@ $$
 V(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
 
-}
+   }
 3. Return a deterministic policy
-
 $$
 \pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
 
-Synchronous value iteration store two copies of value function (Update new by using old)
-Asynchronous value iteration only store one copy of value function (Update new by using both old and new)
+
+2.Value Iteration
+$$
+V_0 \rightarrow V_1 \rightarrow V_2 \rightarrow \cdots \rightarrow V^*
+$$
+**Value Iteration (Q value)**
+5. For each state, initialize Q(s)=0
+6. Repeat until convergence {
+   a) For each state 𝑠 ∈ 𝒮, update:
+
+$$
+Q(s,a) = r(s,a) + \gamma \sum_{s'}P(s'|s,a)\max_{a'}Q(s',a')
+$$
+
+   }
+3. Return a deterministic policy
+$$
+\pi(s) = arg \max_a Q(s,a)
+$$
+
+
+
+ **Synchronous Value Iteration**  
+*(stores two copies of value function - updates new using old)*  
+
+1. For all states $$s \in S$$:  
+$$
+V_{new}(s) \leftarrow \max_{a \in A} \left[ r(s, a) + \gamma \sum_{s' \in S} P(s'|s, a) V_{old}(s') \right]
+$$
+
+2. Update:  
+$$
+V_{old}(s) \leftarrow V_{new}(s)
+$$
+
+**Asynchronous Value Iteration**  
+*(stores one copy of value function - updates using mixed old/new values)*  
+
+1. For all states $$s \in S$$:  
+$$
+V(s) \leftarrow \max_{a \in A} \left[ r(s, a) + \gamma \sum_{s' \in S} P(s'|s, a) V(s') \right]
+$$
+**PI VS. VI**
+Value iteration: greedy update method, equivalent to a round of value update in policy evaluation, and then the policy is upgraded directly according to the updated value
+
+In policy iteration, the cost of updating value function by using Bellman equation is very large!
+
+For MDP with **small** space, **policy iteration** usually converges **quickly.**
+For MDP with large space, value iteration is more practical, more efficient.
+
+If no state transition loop, best to use value iteration
 
 #### 3.3.3 Optimal policy $\pi^*$
 
@@ -407,28 +509,12 @@ Q^{*}(s,a) = \max_\pi Q^\pi(s,a)
 $$
 
 When value function is optimal, its policy is optimal:
-
+$$V^{*}(s)=V^{\pi^*}(s)\ge V^{\pi}(s) $$
 $$
 \pi^*(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V^*(s')
 $$
 
-relationship
-
-$\color{Lime} \text{Proof: Value Iteration}$
-
-### 3.4 Policy v.s. Value Iteration
-
-Value iteration: greedy update method, equivalent to a round of value update in policy evaluation, and then the policy is upgraded directly according to the updated value
-
-In policy iteration, the cost of updating value function by using Bellman equation is very large!
-
-For MDP with small space, policy iteration usually converges quickly
-
-For MDP with large space, value iteration is more practical, more efficient
-
-If no state transition loop, best to use value iteration
-
-### 3.5 Model-based method
+### 3.4 Model-based method
 
 MDP<S,A,P,r,$\gamma$>.
 In real applications, 𝑃 and 𝑟 are unknown.
@@ -453,7 +539,7 @@ Algorithm
    d) Update policy 𝜋 as greedy policy according to V
    }
 
--: action space is too large. -> model-free
+-: action space is too large. -> model-free (not learn an MDP, but to learn value function and policy directly from experience).
 
 
 Symbols:

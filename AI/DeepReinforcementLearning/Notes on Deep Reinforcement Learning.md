@@ -267,6 +267,7 @@ $$
 ---
   
 ### 3.3 Policy
+<mark> probability </mark> of taking action a in state s under stochastic policy $\pi$
 
   - **policy cumulative reward**: 
 
@@ -384,7 +385,7 @@ $$
 
   As long as the number of all possible policies is limited, the policy iteration can converge to the optimal policy
 
-  Since $$|S| < \infty$$$$|A| < \infty$$, # possible policies is $$|A|^{|S|}$$ is limited.
+  Since $|S| < \infty$, and$|A| < \infty$, # possible policies is $|A|^{|S|}$ is limited.
 
   Policy iteration can find the optimal policy in finite iterations
 
@@ -471,7 +472,7 @@ $$
 **Asynchronous Value Iteration**  
 *(stores one copy of value function - updates using mixed old/new values)*  
 
-1. For all states $$s \in S$$:  
+1. For all states $s \in S$:  
 $$
 V(s) \leftarrow \max_{a \in A} \left[ r(s, a) + \gamma \sum_{s' \in S} P(s'|s, a) V(s') \right]
 $$
@@ -532,7 +533,7 @@ $$
 Algorithm
 
 1. Randomly initialize policy 𝜋
-2. Repeat untFil convergence {
+2. Repeat until convergence {
    a) Execute 𝜋 in MDP, collect experienced data
    b) Use the collected experience in MDP to update the estimation of 𝑃 and 𝑟
    c) Value iteration by using the estimation of 𝑃 and 𝑟 to get new estimation of value function V
@@ -541,47 +542,25 @@ Algorithm
 
 -: action space is too large. -> model-free (not learn an MDP, but to learn value function and policy directly from experience).
 
-
-Symbols:
-- $t$: discrete time step.
-- $\color{turquoise}\text{s, s' : current state, next state}$,  $\color{turquoise}\text{basis for making the choices}$
-- $a$: an action made my the agent
-- $\color{turquoise}\text{ r}$: a reward, $\color{turquoise}\text{basis for evaluating the choices}$
-- $S$: set of all nonterminal states
-- $S^+$: set of all states, including the **terminal state**
-- $A(s)$: set of all actions available in state $s$
-- $R$: set of all possible rewards, a finite subset of $\mathbb{R}$
-- $\rho \subseteq \mathbb{R}$: subset of $\mathbb{R}$
-- $|S|$: number of elements in set $S$
-- $T, T(t)$ final time step of an episode; the episode including time step t.
-- $A(t)$ : Action at t
-- $S(t)$ : state at t
-- $R(t)$ : reward at t
-- $\color{turquoise} \pi$: policy (stochastic decision-making rule),is a $\color{turquoise}\text{mapping from states to actions}$
-- $\pi(s)$ : action taken in state s under deterministic policy $\pi$
-- $\pi(a|s)$ : <mark> probability </mark> of taking action a in state s under stochastic policy $\pi$
 # 4 Model-free method
 
-If a problem cannot be modeled as MDP, it is not a reinforcement learning problem.
-Can be modeled does not mean that we know all the parameters.
+A problem must be **at least approximately modelable** as a Markov Decision Process (MDP) — or a generalization like a POMDP (partially observed) — for reinforcement learning to be applicable.  
+
+**This doesn’t require knowing all parameters** of the MDP; it only requires that the problem **has a structure that fits** the MDP formalism (states, actions, transitions, rewards).
 
 Here comes the model-free method:
-
 Learn value function and policy directly from experiences.
+Do not know $r(s,\pi(s)), P(s'|s,\pi(s))$ in theory and formula.
+Notice, the r(s,a) appears in the diagram below represents the sampled immediate reward, just the observation.
 
-Key steps:
+1. **Key steps:**
+(1) **Estimating** value function (Policy evaluation) from series of experiences
+(2) **Optimizing policy** (Policy improvement)/ control
 
-(1) Estimating value function (Policy evaluation)
-
-(2) Optimizing policy (Policy improvement)/ control
-
-2 kinds of policy learning
-
-on-policy learning:Sampling policy and learning policy is the same!
-
-off-policy: Sampling policy and learning policy is different!
-
-- target policy $\pi(a|s)$: evluate value function $V^\pi(s)$ or $Q^\pi(s,a)$
+2. **2 kinds of policy learning**:
+   on-policy learning:Sampling policy and learning policy is the same!
+   off-policy: Sampling policy and learning policy is different!
+- target policy $\pi(a|s)$: evaluate value function $V^\pi(s)$ or $Q^\pi(s,a)$
 - Behavior policy $\mu(a|s)$: collect data $\{s_t,a_t,r_t, s_{t+1},...,s_{T-1},a_{T-1},r_{T-1},s_T,a_T,r_T \}～\mu$
 - why:
   - Balance exploration and exploitation
@@ -591,54 +570,46 @@ off-policy: Sampling policy and learning policy is different!
   - Learn multiple policies when following one policy in exploration
   - An example of MSR research in Cambridge
 
-#### 4.1 Monte Carlo value estimation
+### 4.1 Estimating value function
 
+MC & TD method.
+#### 4.1.1 Monte Carlo value estimation
 MC: repeated random sampling to obtain numerical results.
-can only be applied to MDP with finite length (all episode has a terminate state).
-learns from the complete episode: no bootstrapping
-
-work in a fragmented (terminated) environment.
-
-must wait for the end of the episode until the cumulative reward is  known
+Update value function 𝑉 to make it close to the cumulative reward of a trajectory observation.
 
 Steps:
-
 1. Sampling a lot of episodes using policy $\pi$
-2. For the state 𝑠 of each time step 𝑡 in each episode:Incremental counter 𝑁(𝑠) ←𝑁(𝑠) +1
-
-   Incremental total cumulative reward 𝑀(𝑠) ←𝑀(𝑠) + 𝐺𝑡
-
+2. For the state 𝑠 of each time step 𝑡 in each episode: Incremental counter 𝑁(𝑠) ←𝑁(𝑠) +1
+   Incremental total cumulative reward $𝑀(𝑠) ←𝑀(𝑠) + 𝐺_𝑡$
    Value is estimated as the average of the cumulative rewards 𝑉(s)=  𝑀(𝑠)/𝑁(𝑠)
 3. According to the law of large numbers: $V(s) -> V^\pi(s) \text{ as } N(s) -> \infty$
-
    Update 𝑉(𝑠) immediately after sampling an episode
 4. For each state $𝑠_𝑡$ and its cumulative reward $g_t$
-
+   $$\begin{aligned}
+   &N(s_t) \leftarrow N(s_t) +1\\
+   &V(s_t) \leftarrow V(s_t) + \frac{1}{N(s_t)}(g_t-V(s_t))
+   \end{aligned}
    $$
-   N(s_t) \leftarrow N(s_t) +1
-   \\ V(s_t) \leftarrow V(s_t) + \frac{1}{N(s_t)}(g_t-V(s_t))
-   $$
-
-   For nonn-stationary problems (that is, the environment will change over time), we can track a current average (that is, we don't consider episodes that are too long ago). Take $\alpha$ as a constant.
-
+   For non-stationary problems (that is, the environment will change over time), we can track a current average (that is, we don't consider episodes that are too long ago). Take $\alpha$ as a constant.
    $$
    V(s_t) \leftarrow V(s_t) + \alpha(g_t-V(s_t))
    $$
-Analogy: You finish a whole chess game before adjusting your opinion about your opening moves.
 
-Analysis:
 
-The cummulative reward $g_t$ is the unbiased estimation of $V(s_t)$
+**Summary**:
+The cumulative reward $g_t$ is the unbiased estimation of $V(s_t)$
+learns from the complete episode: no bootstrapping, only applied on finite episode.
+Value = mean return
 
- Good convergence property (This is still true when using functional  approximation)
- Insensitive to initial values
- Easy to understand and use
+Good convergence property (This is still true when using functional  approximation)
+Insensitive to initial values
+Easy to understand and use
 
-#### 4.2 Temporal difference
+#### 4.1.2 Temporal difference
 
 By bootstrapping, TD learns from incomplete fragment.
 
-updates the current prediction value to make it close to  the estimated cumulative reward (untrue value).
+updates the V to make it close to the estimated cumulative reward which is the TD target.
 
 works in a continuous (non-terminating) environment.
 
@@ -646,27 +617,29 @@ can do real-time learning at each step.
 
 Steps:
 
-1. Update value function $V(s_t)$, make it close to the estimated cummulative reward (TD target) $r_t+\gamma V(s_{t+1})$. the braket content in the $\alpha$ is the TD error.
+1. Update value function $V(s_t)$, make it close to the **estimated cumulative reward** (TD target) $r_t+\gamma V(s_{t+1})$. the bracket content in the $\alpha$ is the TD error.
 
 $$
 V(s_t) \leftarrow V(s_t) + \alpha(\color{green}{r_t+\gamma V(s_{t+1})}- \color{orange}V(s_t))
 $$
 
-Analysis:
+**Analysis:**
 
 Real target $r_t+\gamma V^\pi (s_{t+1})$ is the unbiased estimation of $V(s_t)$
 
-TD target $r_t+\gamma V(s_{t+1})$ is biased, $\gamma V(s_{t+1})$ is the current estimation
+TD target $r_t+\gamma V(s_{t+1})$ is biased, which is the current estimation
 
 TD target has a lower variance:
 
- Cumulative reward: depend on multi-step random action, multi-step state  transition and multi-step reward   TD target: depend on single-step random action, single-step state transition and single-step reward
+Cumulative reward: depend on multi-step random action, multi-step state  transition and multi-step reward.
 
- Usually more efficient than MC
+TD target: depend on single-step random action, single-step state transition and single-step reward
 
- TD finally converges to $𝑉^\pi (𝑠_{𝑡+1})$ (but it is not always the case when using function approximation)
+Usually more efficient than MC
 
- More sensitive to initial values than MC
+TD finally converges to $𝑉^\pi (𝑠_{𝑡+1})$ (but it is not always the case when using function approximation)
+
+More sensitive to initial values than MC
 
 #### 4.3 Multi-step TD Learning
 
@@ -675,7 +648,7 @@ TD target has a lower variance:
 * It is useful when time constraints make full-episode learning impractical.
 * The update rule still remains model-free because it doesn’t rely on knowing the full environment dynamics.
 
-𝑛 step cummulative reward:
+𝑛 step cumulative reward:
 
 $$
 g_t^{(n)}= r_\text{t}+\gamma r_\text{t+1}+...+\gamma^{n-1} R_\text{t+n-1}++\gamma^{n} R_\text{t+n}
@@ -1309,7 +1282,7 @@ $$
 $$
 ---
 
-#### 8.1. Deterministic Actor-Critic Training Comparison
+## 8.1 Deterministic Actor-Critic Training Comparison
  On-Policy (SARSA-style)
 1. **Sampling**:  
    Collect transitions using current policy $\mu_\theta$:  
@@ -1347,9 +1320,9 @@ $$
    Same as on-policy:  
    $\phi \leftarrow \phi + \beta \delta_t \nabla_\phi Q_\phi(s_t, a_t)$
 
----
-#### 8.2 Compatible Function Approximation
-当函数 $Q_\phi(s,a)$ 和策略 $\mu_\theta(s)$ 满足以下两个条件时，称为兼容compatible的：
+
+## 8.2 Compatible Function Approximation
+当函数 $Q_\phi(s,a)$ 和策略 $\mu_\theta(s)$ 满足以下两个条件时，称为兼容compatible的:
 
  1. Q 梯度与 $\mu_\theta(s)$ 用线性关系估计
 $$
@@ -1360,11 +1333,14 @@ $$
 $$
 \phi \text{ minimize the mean-squared error: } \text{MSE}(\theta, \phi) = \mathbb{E}\left[ \epsilon(s; \theta, \phi)^T \epsilon(s; \theta, \phi) \right]
 $$
-where $$
+
+where 
+$$
 \epsilon(s; \theta, \phi) = \nabla_a Q_\phi(s, a)\big|_{a = \mu_\theta(s)} - \nabla_a Q^{\mu_\theta}(s, a)\big|_{a = \mu_\theta(s)}
 $$
----
-e.g. $$
+
+e.g. 
+$$
 Q_\phi(s, a) = x(s, a)^T \phi
 $$
 
@@ -1372,17 +1348,19 @@ where
 $$
 x(s, a)^T = a^T \nabla_\theta \mu_\theta(s)
 $$
-#### 8.3 Deep Deterministic Policy Gradient (DDPG)
+## 8.3 Deep Deterministic Policy Gradient (DDPG)
 solve the unstability of AC with neural function approximator, combines DPG and DQN.
 key words: experience replay (off-policy), target networks, batch normalization Q-network before action input. add continuous noise.
+
 ![[DDPG.png]]
-#### 8.4 Twin delayed DDPG (TD3)
+## 8.4 Twin delayed DDPG (TD3)
 Overestimation problem exists in DDPG.
 Learn two (twin) critics simultaneously, select the smaller Q estimation to avoid overestimation.
 Smooth the policy’s output, make it difficult to exploit the vulnerability of the Q function.
 Actor is updated at a lower frequency and critic is updated at a higher frequency. Usually, Critic : Actor = 2 : 1
+
 ![[TD3.png]]
-#### 8.5 Maximum Entropy RL
+## 8.5 Maximum Entropy RL
 For the deterministic policy of continuous action, gradient can be directly returned to the action from the critic, and then the gradient can be further returned to policy network through the chain rule.
 
 Soft Q-Learning and Soft AC are very popular, and they are equivalent.

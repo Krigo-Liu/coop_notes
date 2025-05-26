@@ -49,6 +49,7 @@ Black-box ↔ Model-free
 Not 100%, because: sometimes you may learn a model (transition dynamics) when the model is unknown, that is a model-based, but black-box.
 
 
+
 # 2 Multi-Armed Bandit Problem (MAB)
 
 It can be viewed as a state-less RL problem.
@@ -299,6 +300,7 @@ $\color{red}\text{Bellman expectation equations }$
 - State-value function $V^\pi(s)$: Expected reward by following policy $\pi$ from state s
 - Action-value function $Q^\pi(s, a)$: Expected reward while following policy $\pi$ from state s and take action a
   - q: quality
+lines that used the env model has P(s′∣s,a)
 
 $$
 \begin{aligned}
@@ -572,7 +574,7 @@ Notice, the r(s,a) appears in the diagram below represents the sampled immediate
 
 ### 4.1 Estimating value function
 
-MC & TD method.
+MC & TD method. Do not care about the action, so use V function.
 #### 4.1.1 Monte Carlo value estimation
 MC: repeated random sampling to obtain numerical results.
 Update value function 𝑉 to make it close to the cumulative reward of a trajectory observation.
@@ -594,26 +596,12 @@ Steps:
    $$
    V(s_t) \leftarrow V(s_t) + \alpha(g_t-V(s_t))
    $$
-
-
-**Summary**:
-The cumulative reward $g_t$ is the unbiased estimation of $V(s_t)$
-learns from the complete episode: no bootstrapping, only applied on finite episode.
-Value = mean return
-
-Good convergence property (This is still true when using functional  approximation)
-Insensitive to initial values
-Easy to understand and use
-
+![[MCbackup.png]]
 #### 4.1.2 Temporal difference
 
 By bootstrapping, TD learns from incomplete fragment.
 
 updates the V to make it close to the estimated cumulative reward which is the TD target.
-
-works in a continuous (non-terminating) environment.
-
-can do real-time learning at each step.
 
 Steps:
 
@@ -622,26 +610,21 @@ Steps:
 $$
 V(s_t) \leftarrow V(s_t) + \alpha(\color{green}{r_t+\gamma V(s_{t+1})}- \color{orange}V(s_t))
 $$
+![[TDbackup.png]]
 
-**Analysis:**
+|                              | MC                                                                           | TD                                                                                                    |
+| ---------------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| learns from                  | complete fragment, wait for the end of the episode for the cumulative reward | each step, imcomplete fragment                                                                        |
+| works in                     | fragmented(terminated) env                                                   | continuous (non-terminating) environment                                                              |
+| bias                         | cumulative reward g_t is unbiased est of V(s_t)                              | TD target is biased                                                                                   |
+| variance                     | higher: depend on multi-step random action,  transition, and reward.         | lower: depend on single-step random action, transition, and reward                                    |
+| convergence                  | good                                                                         | converges to ($𝑉^\pi (𝑠_{𝑡+1})$ (but it is not always the case when using function approximation)) |
+| sensitive to initial values? | no                                                                           | yes                                                                                                   |
+| efficiency                   | low                                                                          | high                                                                                                  |
 
-Real target $r_t+\gamma V^\pi (s_{t+1})$ is the unbiased estimation of $V(s_t)$
-
-TD target $r_t+\gamma V(s_{t+1})$ is biased, which is the current estimation
-
-TD target has a lower variance:
-
-Cumulative reward: depend on multi-step random action, multi-step state  transition and multi-step reward.
-
-TD target: depend on single-step random action, single-step state transition and single-step reward
-
-Usually more efficient than MC
-
-TD finally converges to $𝑉^\pi (𝑠_{𝑡+1})$ (but it is not always the case when using function approximation)
-
-More sensitive to initial values than MC
-
-#### 4.3 Multi-step TD Learning
+DP backup:
+![[DPbackup.png]]
+#### 4.1.3 Multi-step TD Learning
 
 * Instead of updating based on a single reward, we update using a sum of rewards over **𝑛** steps.
 * This helps balance between **speed (shorter horizon)** and **accuracy (longer horizon)**.
@@ -651,7 +634,7 @@ More sensitive to initial values than MC
 𝑛 step cumulative reward:
 
 $$
-g_t^{(n)}= r_\text{t}+\gamma r_\text{t+1}+...+\gamma^{n-1} R_\text{t+n-1}++\gamma^{n} R_\text{t+n}
+g_t^{(n)}= r_\text{t}+\gamma r_\text{t+1}+...+\gamma^{n-1} R_\text{t+n-1}++\gamma^{n} V(s_{t+n})
 $$
 
 𝑛 step TD learning:
@@ -659,10 +642,11 @@ $$
 $$
 V(s_t) \leftarrow V(s_t) + \alpha(g_t^{(n)}-V(s_t))
 $$
+![[Estimating value in RL.png]]
 
-#### 4.4 Off-policy MC by importance sampling
+#### 4.1.4 Off-policy MC by importance sampling
 
-Evaluate policy 𝜋 using the cumulative rewarded generated by policy 𝜇
+**Evaluate policy** **𝜋** using the cumulative rewarded generated by policy **𝜇**
 
 Cumulative reward 𝑔𝑡 should be weighted according by the importance ratio between two policies:
 
@@ -682,27 +666,102 @@ V(s_t) \leftarrow V(s_t) + \alpha(g_t^{\pi/\mu}-V(s_t))
 $$
 
 
-#### 4.4 Off-policy MC by importance sampling
+#### 4.1.5 Off-policy TD by importance sampling
 
 TD target is weighted by the importance sampling
 
 $$
 V(s_t) \leftarrow V(s_t) + \alpha \left( \frac{\pi(a_t | s_t)}{\mu(a_t | s_t)} (r_t + \gamma V(s_{t+1})) - V(s_t) \right)
 $$
-
-Lower variance than MC importance sampling.
-
+**Lower variance than MC importance sampling.**
 The policy only needs to be approximated in a single step.
-.
 
-#### 4.5 $\epsilon$ greedy policy improvement
+### 4.2 Policy optimization
+Now that we know how to evaluate the good by estimating $V^\pi(s_t)$ in MC and TD.
 
+In this session, we hope to improve a policy step by step by evaluating (s,a) expected return (So use Q function), and ultimately find an optimal policy.
+
+In model-free, we can only do policy iteration without 𝑃 and 𝑟
+Policy improvement can be carried out when policy eval. is not finished!
+####  Greedy action selection
+$$\pi(s)=arg \max_aQ(s,a)$$
+####  $\epsilon$-greedy policy improvement
+
+---
+Theorem: For any $\epsilon$-greedy policy $\pi$, $\epsilon$-greedy policy $\pi'$ based on $Q^\pi$ is a policy improvement of $\pi$
+$$V^{\pi'}(s)>= V^{\pi}(s)$$
+
+---
+Proof:
+$Q^π(s,π′(s))$ represents the expected return when taking action π′(s)(the action chosen by π′) in state s and then following the original policy π thereafter. Since π′ is an improved policy (specifically, an ϵ-greedy version of ππ), the value of π′π′ should be at least as good as following π after taking the first action π′(s).
 ![image.png](pic/epsilongdimp.png)
+#### 4.2.1 MC Control
 
-#### 4.6 Summery
+![[onpMC.png]]
+![[offpMC.png]]
 
-Model-free RL
+#### 4.2.2 TD Control
+![[SARSA 1.png]]
 
+![image.png](pic/QLearning.png)
+
+Q learning's objective function:
+
+  t, get s_t, a_t, r_t -> Q. $\max_{a'} Q(s_{t+1},a')$ Select a', no need to sample.
+
+$$
+\begin{aligned}
+r_{t+1} &= \gamma Q(s_{t+1}, a'_{t+1}) \\
+&=r_{t+1}+\gamma Q(s_{t+1}, arg \max_{a'} Q(s_{t+1},a'))\\
+&=r_{t+1}+\gamma \max_{a'}Q(s_{t+1},a')
+\end{aligned}
+$$
+  Target policy $\pi$, Greedy on Q(s,a)
+$$\pi(s_{t+1})=arg \max_{a'}Q(s_{t+1},a')$$
+  Behavior policy $\mu$: $\epsilon$-greedy on Q(s,a)
+  
+  ---
+  Theorem: Q-learning control converges to the optimal action-value function: 𝑄(𝑠,𝑎) →𝑄*(𝑠,a)
+  
+  ---
+  
+efficient than SARSA
+
+Do not need importance sampling:
+- Use action-value function
+* It **never explicitly computes expectations** over the target policy π, and
+* It **doesn’t need to reweight samples** using importance sampling because it directly **uses the greedy action** in its update
+
+$\color{Lime} \text{PROOF Q-learning converge 52}$
+
+| Algorithm          | Update Type        | Stability | Exploration-Aware | Risk Profile |
+| ------------------ | ------------------ | --------- | ----------------- | ------------ |
+| **SARSA**          | Sampled on-policy  | Noisy     | Yes               | Conservative |
+| **Q-learning**     | Sampled off-policy | Noisy     | No                | Risky        |
+| **Expected SARSA** | Averaged on-policy | Stable    | Yes               | Balanced     |
+
+**Expected SARSA** subsumes and generalizes Q learning while reliably improving over SARSA 
+
+$$Q(s_t,a_t) \leftarrow Q(s_t,a_t)+\alpha(r_t + \gamma \mathbb{E}_\pi[ Q(s_{t+1}, a_{t+1})] - Q(s_t, a_t)) $$
+ >Think of π as a **"lens"** you're using to look at the future:
+- In SARSA: You sample **one** future and update from that.
+- In Expected SARSA: You **look at all possible futures**, weighted by the lens π.
+- π can be any policy you're interested in — **you don’t have to act according to it**, just know how it would act.
+
+That’s especially useful when:
+
+- π is stochastic (e.g., ε-greedy),
+- You want to reduce update variance,
+- You still want to be **on-policy**, i.e., learning about the current behavior.
+
+ > If policy π is greedy (i.e., π picks best action deterministically),  
+ > Then **Expected SARSA becomes Q-learning**.
+
+
+### 4.3 Summary
+
+Model-free RL:
+**Estimation:**
 - On-policy MC:
 
   $$
@@ -713,42 +772,26 @@ Model-free RL
   $$
   V(s_t) \leftarrow V(s_t) + \alpha (r_t + \gamma V(s_{t+1}) - V(s_t))
   $$
+**Control:**
 - On-policy TD (SARSA):state-action-reward-state-action
   In each time step:
-
   $$
   Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t))
   $$
 
-  Policy improvement: 𝝐-greedy
-
-  ![image.png](pic/SARSA.png)
 - Off-policy TD (Q-learning):
 
 $$
 Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t))
 $$
+- Expected SARSA:
+$$Q(s_t,a_t) \leftarrow Q(s_t,a_t)+\alpha(r_t + \gamma \mathbb{E}_\pi[ Q(s_{t+1}, a_{t+1})] - Q(s_t, a_t)) $$
 
-Q learning's objective function:
-
-t, get s_t, a_t, r_t -> Q. $\max_{a'} Q(s_{t+1},a')$ Select a', no need to sample.
-
-$$
-r_{t+1} = \gamma Q(s_{t+1}, a'_{t+1})=r_{t+1}+\gamma Q(s_{t+1}, arg \max_{a'} Q(s_{t+1},a'))=r_{t+1}+\gamma \max_{a'}Q(s_{t+1},a')
-$$
-
-efficient than SARSA
-
-Do not need importance sampling:
-
-* It **never explicitly computes expectations** over the target policy π, and
-* It **doesn’t need to reweight samples** using importance sampling because it directly **uses the greedy action** in its update:
-
-![image.png](pic/QLearning.png)
-
-$\color{Lime} \text{PROOF Q-learning converge 52}$
-
-![image.png](pic/Q-learning convergence.png?t=1743929995986)
+| Algorithm          | Sampling?                         | Learn About      | Behavior = Target?     | Can Be Off-policy? |
+| ------------------ | --------------------------------- | ---------------- | ---------------------- | ------------------ |
+| **SARSA**          | Samples at+1a_{t+1} from behavior | Behavior policy  | ✅ Must be same         | ❌ No               |
+| **Q-learning**     | Max over QQ (target = greedy)     | Greedy policy    | ❌ Always different     | ✅ Yes              |
+| **Expected SARSA** | Expected value over π             | Any π you define | ✅ or ❌ — both possible | ✅ Yes              |
 
 # 5 Multi-step bootsrtrapping
 
@@ -963,7 +1006,7 @@ Value-based RL vs. policy-based RL:
 		can learn stochastic policy by $\color{red}\text{stochastic policy gradient (SPG)}$.
 		better convergence property but usually converges into the local minimum. Because, NN is non-convex (gradient formula), non linearity.
 		inefficient in evaluation policy, and having large variance.
- 
+
 ### 7.2 SPG
 
 Stochastic policy $\pi_\theta(a|s)=\pi_\theta(a|s;\theta)=P(a|s;\theta)$

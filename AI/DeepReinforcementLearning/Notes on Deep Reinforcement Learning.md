@@ -48,8 +48,6 @@ Black-box ↔ Model-free
 
 Not 100%, because: sometimes you may learn a model (transition dynamics) when the model is unknown, that is a model-based, but black-box.
 
-
-
 # 2 Multi-Armed Bandit Problem (MAB)
 
 It can be viewed as a state-less RL problem.
@@ -564,13 +562,14 @@ Notice, the r(s,a) appears in the diagram below represents the sampled immediate
    off-policy: Sampling policy and learning policy is different!
 - target policy $\pi(a|s)$: evaluate value function $V^\pi(s)$ or $Q^\pi(s,a)$
 - Behavior policy $\mu(a|s)$: collect data $\{s_t,a_t,r_t, s_{t+1},...,s_{T-1},a_{T-1},r_{T-1},s_T,a_T,r_T \}～\mu$
-- why:
+
+3.  why off-policy:
   - Balance exploration and exploitation
   - Learning policy by observing human beings or other agents
   - Experience from reusing old policies
   - Learn the optimal policy when following the policy used in exploration
   - Learn multiple policies when following one policy in exploration
-  - An example of MSR research in Cambridge
+  - An example of MSR research in Cambridge. Collective Noise Contrastive Estimation for Policy Transfer Learning. AAAI 2016
 
 ### 4.1 Estimating value function
 
@@ -722,7 +721,7 @@ $$\pi(s_{t+1})=arg \max_{a'}Q(s_{t+1},a')$$
   
   ---
   Theorem: Q-learning control converges to the optimal action-value function: 𝑄(𝑠,𝑎) →𝑄*(𝑠,a)
-  
+
   ---
   
 efficient than SARSA
@@ -793,9 +792,64 @@ $$Q(s_t,a_t) \leftarrow Q(s_t,a_t)+\alpha(r_t + \gamma \mathbb{E}_\pi[ Q(s_{t+1}
 | **Q-learning**     | Max over QQ (target = greedy)     | Greedy policy    | ❌ Always different     | ✅ Yes              |
 | **Expected SARSA** | Expected value over π             | Any π you define | ✅ or ❌ — both possible | ✅ Yes              |
 
-# 5 Multi-step bootsrtrapping
+DP vs. TD
+![[DPvsTD.png]]
+![[DPvsTD2.png]]
+# 5 Multi-step bootstrapping
 
-折中4, 采样几步就更新几次，剩下的值函数估计
+Find a better way between MC and TD.
+We are at step t, we need to predict steps from t to Terminate, upmost forecast T-t steps.
+#### 5.1 Multi-step TD prediction
+
+1-step TD = TD.             return $g_t^{(1)}=r_{t+1}+\gamma V(s_{t+1})$
+$\infty$  - step TD = MC        return $g_t^{(\infty)}=r_{t+1}+ \gamma r_{t+2}+...+\gamma^{T-t-1} r_{T}$
+
+n-step return.                           $g_t^{(n)}=r_{t+1}+ \gamma r_{t+2}+...+\gamma^{n-1} r_{t+n}+ \gamma^{n} V(s_{t+n})$
+
+
+n-step TD learning:
+$$V(s_t) \leftarrow V(s_t) + \alpha(g_t^{(n)}-V(s_t))$$
+![[n-step TD.png]]
+#### 5.2 TD(𝝀) Algorithm
+
+Combine all the information between different time step, and set sum of their weights to 1.
+$$g_t^{(1)}, g_t^{(2)}, g_t^{(3)},...$$
+Simple case for endless episode, decay by lambda:
+$$\sum_{i=1}^{\infty} w_i g_t^{(i)} = \sum_{i=1}^{\infty}(1-\lambda)\lambda^{i-1}g_t^{(i)}$$ , where $\lambda \in [0,1]$
+
+If trajectory length is T, Average n-step Return:
+$$g_t^{\lambda}=(1-\lambda) \sum_{n=1}^{T-t-1}\lambda^{n-1}g_t^{(n)}+\lambda^{T-t-1}g_t$$
+$\lambda =1$, this is MC.
+$\lambda =0$, this is TD learning.
+actual, final return (return for the total episode): $g_t$
+![[TDlambda.png]]
+When using the optimal 𝛼 and 𝜆, offline 𝜆-return algorithm (TD(𝜆)) can get a slightly better experimental result.
+
+#### 5.3 Multi-step TD learning
+In theoretical view, the multi-step TD learning is forward, but in engineering it is backward uses **eligibility traces** (faster). 
+- - It allows **online**, **incremental** updates without waiting for future rewards.
+    - Computationally efficient and easy to implement in a loop.
+- Every time a new `(s, a, r, s')` arrives:
+    - All past states' **eligibility traces** are decayed.
+    - Then they are updated proportionally to their traces.
+##### 5.3.1 n-step SARSA
+$$\begin{aligned}
+&g_t^{(n)}=r_{t+1}+ \gamma r_{t+2}+...+\gamma^{n-1} r_{t+n}+ \gamma^{n} Q(s_{t+n},a_{t+n})\\
+&Q(s_{t},a_{t}) \leftarrow Q(s_{t},a_{t}) + \alpha(g_t^{(n)}-Q(s_{t},a_{t}))
+\end{aligned}
+$$
+##### 5.3.2 SARSA($\lambda$)
+$$\begin{aligned}
+&g_t^{\lambda}=(1-\lambda) \sum_{n=1}^{T-t-1}\lambda^{n-1}g_t^{(n)}\\
+&g_t^{\lambda}=(1-\lambda) \sum_{n=1}^{T-t-1}\lambda^{n-1}g_t^{(n)}+\lambda^{T-t-1}g_t \text{ ,when length=T}\\
+&Q(s_{t},a_{t}) \leftarrow Q(s_{t},a_{t}) + \alpha(g_t^{\lambda}-Q(s_{t},a_{t}))
+\end{aligned}
+$$
+##### 5.3.3 off-policy n-step SARSA
+![[off-policy n stp SARSA.png]]
+skip n-step Tree Backup Alg
+
+
 
 # 6 Value-based DRL
 

@@ -425,7 +425,7 @@ $$
    a) For each state 𝑠 ∈ 𝒮, update:
 
 $$
-V(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
+V(s) = \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
 
    }
@@ -847,20 +847,130 @@ $$\begin{aligned}
 $$
 ##### 5.3.3 off-policy n-step SARSA
 ![[off-policy n stp SARSA.png]]
-skip n-step Tree Backup Alg
-
-
+skip n-step Tree Backup Alg.
 
 # 6 Value-based DRL
 
-这一讲终于跳脱出了前面传统的强化学习（解决相对简单的问题），用神经网络拟合Q, V函数，适用于更大的状态空间。
-
+Approximate Q, V function by nn, which fit larger state space.
 focus on learning **how good** a state (or action) is.
 We don't directly learn *what action* to take — we learn *values* first.
 
-$\large \color{violet}\text{DQN family}$
+#### 6.1 Review
+---
+**Model-based RL**:
+Policy iteration:
+$$
+\pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
+$$
+Value iteration:
+$$
+V(s) = \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
+$$
+**Model-free RL:**
+ **Estimation:**
+- On-policy MC:
+  $$
+  V(s_t) \leftarrow V(s_t) + \alpha (g_t - V(s_t))
+  $$
+- On-policy TD:
+  $$
+  V(s_t) \leftarrow V(s_t) + \alpha (r_t + \gamma V(s_{t+1}) - V(s_t))
+  $$
+ **Control:**
+- On-policy TD (SARSA):state-action-reward-state-action
+  In each time step:
+  $$
+  Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t))
+  $$
 
-Q-Learning: learns a function $Q_\theta(s,a)$ with para $\theta$
+- Off-policy TD (Q-learning):
+$$
+Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t))
+$$
+- Expected SARSA:
+$$Q(s_t,a_t) \leftarrow Q(s_t,a_t)+\alpha(r_t + \gamma \mathbb{E}_\pi[ Q(s_{t+1}, a_{t+1})] - Q(s_t, a_t)) $$
+---
+-: All previous models are based on creating a query table, and maintaining the Q, V in the table.
+ -> problems when deals with large scale MDPs, continuous state/action space. (Go game, helicopter, self-driving).
+ Lets try to discretize an large continuous state space: bucketing. too simple, dimension disaster.
+
+So it is better to have some functional approximations like linear model, nn, decision tree, nearest neighbors, fourier/wavelet base. However, due to non-IID and non-stationary data in RL, we hope the model is parameterized and differentiable. Therefore, the linear model and nn are the main choices.
+#### 6.2 Parameterize Value Functions
+##### 6.2.1 V-function approximation
+Represent state with a feature vector
+$$x(s) = \begin{bmatrix}
+x_1(s) \\
+\vdots \\
+x_k(s)
+\end{bmatrix}$$
+Linear combination to represent the stat-value function.
+$$
+V_\theta(s) = \theta^T x(s)
+$$
+
+Goal: find the parameter $\theta$ to minimize the MSE.
+$$J(\theta) = \mathbb{E}_\pi[\frac{1}{2}(V^\pi(s)-V_\theta(s))^2]$$
+Gradient direction of error reduction
+$$\frac{\partial J(\theta)}{\partial \theta} = -\mathbb{E}_{\pi} \left[ (V^\pi(s) - V_\theta(s)) \frac{\partial V_\theta(s)}{\partial \theta} \right]$$
+
+Gradient descent on SGD (1 sample)
+$$
+\begin{aligned}
+\theta &\leftarrow \theta - \alpha \frac{\partial f(\theta)}{\partial \theta}\\ 
+&= \theta + \alpha (V^\pi(s) - V_\theta(s)) \frac{\partial V_\theta(s)}{\partial \theta}\\
+&= \theta + \alpha (V^\pi(s) - \theta^Tx(s))\cdot x(s)\\
+\end{aligned}
+$$
+For the true value of state-value function $V^\pi(s)$, estimated by
+- **MC**
+   MC prediction at least converge to a local optimal solution. 
+   When the value function is linear, it can converge to the global optimum.
+   training data: $<s_t, g_t>$
+   $$\theta \leftarrow \theta + \alpha (g_t - \theta^Tx(s_t))\cdot x(s_t)$$
+- **TD**
+   When the value function is linear, it can converge to the global optimum.
+   training data: $<s_t, r_t+\gamma V_\theta(s_{t+1})>$
+   $$\theta \leftarrow \theta + \alpha (r_t+\gamma V_\theta(s_{t+1}) - \theta^Tx(s_t))\cdot x(s_t)$$
+##### 6.2.2 Q-function approximation
+Represent state with a feature vector
+$$x(s,a) = \begin{bmatrix}
+x_1(s,a) \\
+\vdots \\
+x_k(s,a)
+\end{bmatrix}$$
+Linear combination to represent the stat-value function.
+$$
+Q_\theta(s,a) = \theta^T x(s,a)
+$$
+
+Goal: find the parameter $\theta$ to minimize the MSE.
+$$J(\theta) = \mathbb{E}_\pi[\frac{1}{2}(Q^\pi(s,a)-Q_\theta(s,a))^2]$$
+Gradient direction of error reduction
+$$\frac{\partial f(\theta)}{\partial \theta} = -\mathbb{E}_{\pi} \left[ (Q^\pi(s,a) - Q_\theta(s,a)) \frac{\partial Q_\theta(s,a)}{\partial \theta} \right]$$
+
+Gradient descent on SGD (1 sample)
+$$
+\begin{aligned}
+\theta &\leftarrow \theta - \alpha \frac{\partial J(\theta)}{\partial \theta}\\ 
+&= \theta + \alpha (Q^\pi(s,a) - Q_\theta(s,a)) \frac{\partial Q_\theta(s,a)}{\partial \theta}\\
+&= \theta + \alpha (Q^\pi(s,a) - \theta^Tx(s,a))\cdot x(s,a)\\
+\end{aligned}
+$$
+For the true value of state-value function $Q^\pi(s,a)$, estimated by
+- **MC**
+   MC prediction at least converge to a local optimal solution. 
+   When the value function is linear, it can converge to the global optimum.
+   training data: $<s_t, g_t>$
+   $$\theta \leftarrow \theta + \alpha (g_t - \theta^Tx(s_t,a_t))\cdot x(s_t,a_t)$$
+- **TD**
+   When the value function is linear, it can converge to the global optimum.
+   training data: $<s_t, r_t+\gamma Q_\theta(s_{t+1},a_{t+1})>$
+   $$\theta \leftarrow \theta + \alpha (r_t+\gamma Q_\theta(s_{t+1},a_{t+1}) - \theta^Tx(s_t,a_t))\cdot x(s_t,a_t)$$
+Although 𝜃 appears in the TD target, we do not need to calculate the gradient of the target function. **TD target is a pseudo-constant**: it depends on θ, but for gradient computation, we treat it as constant.
+$V^\pi$ is constant (for a fixed policy), but we're approximating it with a parameterized function.
+
+#### 6.3  Deep-Q Network family
+1. Q-Learning: learns a function $Q_\theta(s,a)$ with para $\theta$
 
 - given a segment {(s,a,s',r)}
 - $\color{turquoise}\text{target }$ $y=r+\gamma max_\text{a'}Q_\theta(s',a')$
@@ -871,33 +981,31 @@ Q-Learning: learns a function $Q_\theta(s,a)$ with para $\theta$
   $$
 
   α后面类似梯度下降
-- optimization objective:
-
-  $$
+- optimization objective:$$
   \theta^* \leftarrow arg \min_\theta E_\text{(s,a,s',r) ∼ U(D)} \frac{1}{2}[(r+\gamma \max\limits_{a'}Q_\theta(s',a'))-Q_\theta(s,a)]^2
   $$
 
-  - $(r+\gamma max_\text{a'}Q_\theta(s',a')$ TD target, no gradient here???
+  - $(r+\gamma max_\text{a'}Q_\theta(s',a')$ TD target, no gradient here.
   - $\text{(s,a,s',r) ∼ U(D)}$: a transition **(state, action, next state, reward)** is **randomly sampled** from the replay buffer D using a **uniform distribution** **U**.
-  - $Q_\theta(s',a')$ 如果不固定，会连续更新，不稳定
+  - $Q_\theta(s',a')$ continuously update, unstable
 
-$\color{orange}\text{Deep Q-Networks (DQN)}$ represents Q function $Q_\theta(s,a)$ by using neural networks.
+##### 6.3.1 Deep Q-Network (DQN)
+represents Q function $Q_\theta(s,a)$ by using neural networks.
+One input, multiple actions Q value output, target network, and random sampling experience
 
-- Input:s.   Not（s,a), because too large
-- Last layer: a.  #of elements $|A|$
+- Input:  s.   Not（s,a), because too large
+- Last layer: a.  # of elements $|A|$
 - Output:(s,a)
 
 -:
-
 - unstable
   - continuously sampled (s,a,s',r) is not IID
   - $Q_\theta(s',a')$ updates freq
 - output is discrete (only fit for discrete action space)
 
 sol:
-
 - Experience replay: non IID data -> IID data
-  - Store sample $e_t = (s_t, a_t, s_\text{t+1}, r_t)$ in each step of training INTO replay buffer D.
+  - Store sample $e_t = (s_t, a_t, s_\text{t+1}, r_t)$ in each step of training into replay buffer D.
   - Sampling, uniformly distributed
 - Build 2 nw:
   - Evaluations nw: $Q_\theta(s,a)$
@@ -906,35 +1014,35 @@ sol:
     - $\color{turquoise}\text{target }$ $y=r+\gamma \max\limits_{a'} Q_{\theta^-}(s',a')$
 
 **Algorithm:**
-
 1. Randomly initialize evaluation network $\theta; \theta^- \leftarrow \theta$
 2. Initialize experience replay buffer D
-3. Repeat until convergence{
-
-- Get initial state $s_0$
-- For each step t=0,1,...,T
-
-  - take action $a_t$ by $\epsilon$-greedy based on $Q_\theta$
-  - Get reward $r_t$ and the next state $s_{t+1}$
-  - Store ($s_t, a_t, s_{t+1}, r_t$) in D
-  - If D is large enough, sampling N samples $\{(s_t, a_t, s_{t+1}, r_t)\}^N_{i=1}$
-  - For each sample, calculate target $y_i =r_i+ \gamma \max\limits_{a'} Q_{\theta^-}(s_{i+1},a')$
-  - Update $\theta$ by minimize loss $L = \frac{1}{2N}\sum_i(y_i-Q_\theta(s_i,a_i))^2$
-  - If t mod C=0, then update $\theta^- \leftarrow \theta$
-    }
-
-$\color{orange}\text{Double DQN (DDQN)}$,improved version of DQN
-
+3. Repeat until convergence {
+  - Get initial state $s_0$
+  - For each step t=0,1,...,T:
+    - take action $a_t$ by $\epsilon$-greedy based on $Q_\theta$
+    - Get reward $r_t$ and the next state $s_{t+1}$
+    - Store ($s_t, a_t, s_{t+1}, r_t$) in D
+    - If D is large enough, sampling N samples $\{(s_t, a_t, s_{t+1}, r_t)\}^N_{i=1}$
+    - For each sample, calculate target $y_i =r_i+ \gamma \max\limits_{a'} Q_{\theta^-}(s_{i+1},a')$
+    - Update $\theta$ by minimize loss $L = \frac{1}{2N}\sum_i(y_i-Q_\theta(s_i,a_i))^2$
+    - If t mod C=0, then update $\theta^- \leftarrow \theta$
+   }
+##### 6.3.2 Double DQN (DDQN)
+improved version of DQN.
+Decouple action selection and value estimation, and solve the DQN’s overestimation.
 Due to the Jensen's inequality, max operation makes the est Q always larger than real Q value. And it will be more serious when #candidate actions increase.
 
 $$
 E[\hat Q(s,a)]=Q(s,a) \\E[\max\limits_{a} \hat Q(s,a)] \ge \max\limits_{a} Q(s,a)
 $$
-
 $$
-\max\limits_{a'}Q_{\theta^-}(s',a')=Q_{\theta^{-}}(s', arg \max\limits_{a'}Q_{\theta^-}(s',a')) \\=E[R|s', arg \max\limits_{a'}Q_{\theta^-}(s',a'),{\theta^-}] \\ \ge \max(E[R|s', a_1,{\theta^-}], E[R|s', a_2,{\theta^-}],...  a_i \in A
+\begin{aligned}
+\max\limits_{a'}Q_{\theta^-}(s',a') 
+&=Q_{\theta^{-}}(s', arg \max\limits_{a'}Q_{\theta^-}(s',a')) \\
+&=E[R|s', arg \max\limits_{a'}Q_{\theta^-}(s',a'),{\theta^-}] \\ 
+&\ge \max(E[R|s', a_1,{\theta^-}], E[R|s', a_2,{\theta^-}],...  a_i \in A
+\end{aligned}
 $$
-
 $$
 \text{Where } E[\max(X_1, X_2)] \ge \max(E[X_1], E[X_2])
 $$
@@ -943,7 +1051,7 @@ In DDQN, $Q_\theta$ is used to select next action.
 
 ![image.png](pic/DDQN.png)
 
-$\color{pink}\text{Prioritized Experience Replay}$ : find more experience samples
+Prioritized Experience Replay: find more experience samples
 
 Calculate the priority $p_t$ (value of learning)
 
@@ -959,16 +1067,18 @@ Weight in importance sampling $w_t=(N\times P(t))^{-\beta}/(\max\limits_{i} w_i)
 
 ![image.png](pic/DDQN+pp.png)
 
-$\color{orange}\text{Dueling DQN}$, improved version of DQN. parallel with DDQN
-
+##### 6.3.3 Dueling DQN
+improved version of DQN. parallel with DDQN.
+Fine capture of the subtle relationship between value and action, modeling of various advantage functions.
 Inputs of s are processed by CNN to extract features.
+Core:Advantage function A
 
-Core:Advantage funciton A
-
+$$\begin{aligned}
+&A^\pi(s,a)=Q^\pi(s,a)-V^\pi(s)\\
+&Q^\pi(s,a)=E[G_t|s,a]\\
+&V^\pi(s)=E_{a  ∼ \pi(·|s)}[Q^\pi(s,a)]
+\end{aligned}
 $$
-A^\pi(s,a)=Q^\pi(s,a)-V^\pi(s)\\Q^\pi(s,a)=E[G_t|s,a]\\V^\pi(s)=E_{a  ∼ \pi(·|s)}[Q^\pi(s,a)]
-$$
-
 $V^\pi(s) \text{ is the avagerage value of }Q^\pi(s,a)\text{. }A^\pi(s,a) \text{ measures the effect after taking an action.}$
 
 To obtain V, A separately (fc layer), Q in the DQN is decomposed. And they are combined into Q finally. *Subscript denotes parameters.*
@@ -982,7 +1092,11 @@ However, this version is unstable in training because the non-uniqueness in mode
 For sol 1, max two sides of Q=V+A (max limits a only operates the f with para a), define the optimal A function($\max\limits_aA(s,a)-\max\limits_aA(s,a)$) equals to 0.
 
 $$
-Q(s,a)=V(s)+A(s,a) \\ \max\limits_aQ(s,a)=V(s)+\max\limits_aA(s,a)-\max\limits_aA(s,a)\\V(s)=\max\limits_aQ(s,a)
+\begin{aligned}
+&Q(s,a)=V(s)+A(s,a) \\ 
+&\max\limits_aQ(s,a)=V(s)+\max\limits_aA(s,a)-\max\limits_aA(s,a)\\
+&V(s)=\max\limits_aQ(s,a)
+\end{aligned}
 $$
 
 So is the sol 2.
@@ -994,13 +1108,10 @@ Therefore the two sols:
 $$
 Q_{\theta,\alpha,\beta}(s,a) = V_{\theta,\alpha}(s)+A_{\theta,\beta}(s,a)-\max\limits_{a'}A_{\theta,\beta}(s,a')
 $$
-
 2. Set $V_{\theta,\alpha}(s)=\frac{1}{|A|}\sum_{a' \in A}Q_{\theta,\alpha,\beta}(s,a')$
-
 $$
 Q_{\theta,\alpha,\beta}(s,a) = V_{\theta,\alpha}(s)+A_{\theta,\beta}(s,a)-\frac{1}{|A|}\sum_{a' \in A}A_{\theta,\beta}(s,a')
 $$
-
 The sol ensure the uniqueness of V function,
 
 but not satisfy with the Bellman f, the outputs of A,V,Q of the network are no longer the real A,V,Q.
@@ -1010,44 +1121,11 @@ We do not care of it, because the standard of doing greedy is the order of Q.
 The relative order of Q remains the same. s.t.$Q(s,a_1) > Q(s,a_2) \rightarrow A(s,a_1) > A(s,a_2)$$
 
 + +:
-
   + Handle states that are less associated with actions. 没人的路上怎么开都行。
   + effective in learning state-value f: one state  value function corresponds to multiple Advantage. functions. Share the same state-value function; Easy Training, fast convergence.
-#### 6.3 Challenges in Large MDPs
-
-Maintaining a table of $V(s)$ or $Q(s,a)$ becomes infeasible in large or continuous spaces.
-
-Solutions:
-- Discretization: split continuous spaces into grids.
-- Bucketing: group similar states.
-- Parameterized value functions: approximate $V_\theta(s)$ or $Q_\theta(s,a)$ using models.
-#### 6.4 Value Function Approximation
-
-  ??? Approximate $V(s)$ using parameters $\theta$:
-
-  $$Vθ(s)=θTx(s)V_\theta(s) = \theta^T x(s)Vθ(s)=θ^Tx(s)$$
-  
-  where:
-
-  * $x(s)$ is a feature vector extracted from state $s$.
-
-Objective:
-
-$$J(\theta) = \mathbb{E}_\pi \left[\frac{1}{2}(V_\pi(s) - V_\theta(s))^2\right]$$
-
-Gradient descent update:
-
-$$\theta \leftarrow \theta + \alpha (V_\pi(s) - V_\theta(s)) \nabla_\theta V_\theta(s)$$
-
-If true $V_\pi(s)$ is unknown, use Monte Carlo or TD targets instead.
-
-  > **Advantage**: Approximation generalizes to unseen states. **Weakness**: Bad approximators can give wrong value everywhere!
-  > **Analogy**: Instead of remembering every person's favorite food, you learn that *"teenagers like fast food"*. You generalize!
-  
 
 # 7 Stochastic Policy Gradient (SPG)
-
-### 7.1 Goal
+#### 7.1 Goal
 This chapter considers the neural network (parameters $\theta$) that model the stochastic policy $\pi_\theta(a|s)=\pi_\theta(a|s;\theta)$ directly, which outputs a probability distribution over actions. Notice, the final outcome here does not mean the choose the largest probability.
 
 Value-based RL vs. policy-based RL:
@@ -1060,9 +1138,7 @@ Value-based RL vs. policy-based RL:
 		can learn stochastic policy by $\color{red}\text{stochastic policy gradient (SPG)}$.
 		better convergence property but usually converges into the local minimum. Because, NN is non-convex (gradient formula), non linearity.
 		inefficient in evaluation policy, and having large variance.
-
 ### 7.2 SPG
-
 Stochastic policy $\pi_\theta(a|s)=\pi_\theta(a|s;\theta)=P(a|s;\theta)$
 Trajectory $\tau$ is sampled by $\pi_\theta$: $\tau = \{s_0,a_0,r_0,...\}\sim \pi_\theta$ 
 Total return of the $\tau$  
@@ -1081,9 +1157,7 @@ $$
 	where, $v_0$ is the distribution of the initial states
 	
 $\color{red}\text{Goal}$: Gradient ascent to maximize the $J(\theta)$
-
   1-step MDP:
-
 Starting state 𝑠\~𝑑(𝑠),The MDP ends after one-step decision-making, and reward is 𝑟(𝑠,𝑎)
 
 
@@ -1169,6 +1243,7 @@ $$
 \end{aligned}
 $$
 The next step is to estimate the Q.
+
 
 ### 7.3 REINFORCE Algorithm： MC policy gradient
 Cumulative reward $g_t$ to estimate $Q^{\pi_\theta} (s_t,a_t)$, by running multiple rollout (sampling multiple episode) ->  full-episode returns ->high variance, slow learning.

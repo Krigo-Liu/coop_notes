@@ -158,26 +158,19 @@ $$
 
 
 $\color {red}\text{Policy }\pi(a|s)=P(a|s)$
-
 - prob of taking action a in state s
 - Markov property: policy only needs to be related to current s
-
 $$
 \sum_a \pi(a|s)=1
 $$
-
 - **deterministic** policy: for a given s, the agent always chooses the same a, without any randomness or probabilities involved.
-
 $$
 \pi(a \mid s)=\pi(s)=\mu(s)=\begin{cases}1 & \text{if } a = \mu(s) \\0 & \text{otherwise} \end{cases}
 $$
-
-- **stochastic** policy: a is sampled from the distribution $\pi$
-
+- **stochastic** policy: a is sampled from the distribution $\pi$.
 $$
 \pi(a \mid s)\in[0,1]
 $$
-
 $\color {red}\text{Convert MDP to MRP by marginalization}$
 - MRP is MDP's simplified version, removing the action part, which focuses on state transition, reward function and discount factor (γ). 
 - Under each state, after selecting a certain action: 
@@ -187,13 +180,11 @@ P'(s'| s)=\sum_a \pi(a|s)P(s'| s, a)
 $$
 
 - reward at s
-
 $$
 r'(s)=\sum_a \pi(a|s)r(s,a)
 $$
 
 So, MRP <S,P',r',$\gamma$>
-
 ### 3.2 Stats about the trajectory
 
 $\color {red}\text{State-action occupancy measure}$
@@ -226,7 +217,7 @@ $$
 \hat{v}^\pi(s) &= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}(S_t = s | \pi)
 \\ &= \sum_{t=0}^{\infty} \gamma^t \mathbb{P}( s | \pi) \sum_{a} \pi(a|s)
 \\ &= \sum_{t=0}^{\infty} \sum_{a} \gamma^t \mathbb{P}( s | \pi) \pi(a|s)
-\\ &= \sum_{a} \sum_{t=0}^{\infty} \mathbb{P}( s,a | \pi)
+\\ &= \sum_{a} \sum_{t=0}^{\infty} \gamma^t \mathbb{P}( s,a | \pi)
 \\ &= \sum_{a} \hat{\rho}^\pi(s, a)
 \end{aligned}
 $$
@@ -363,7 +354,6 @@ So it is able to improve our policy iteratively.
 - **Policy Iteration** (PI) = alternating evaluation and improvement
 - **Value Iteration** (VI) = single-step updates combining evaluation + improvement
 
-
 | Property                        | Description                                                | Value Iteration & Policy Iteration                                                                      |
 | ------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | **White-box or Black-box**      | Do we know the model (transitions & rewards)?              | ✅ **White-box** — both require full knowledge of the MDP                                                |
@@ -393,7 +383,6 @@ $$
    Given a MDP with limited action space and state space: $|S| < \infty, |A| < \infty$
 
 - PI based on V
-
   1. Randomly initialize policy 𝜋
   2. Repeat until convergence {
      a) Calculate $𝑉 ≔ 𝑉^𝜋$ (Updating is time consuming)
@@ -402,7 +391,6 @@ $$
 \pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
   }
-
 - PI based on Q
   1. Randomly initialize policy 𝜋
   2. Repeat until convergence {
@@ -412,7 +400,6 @@ $$
 \pi(s) = arg \max_a Q(s,a)
 $$
   }
-
   Skip PI for stochastic policy.
 
 
@@ -423,31 +410,26 @@ $$
 1. For each state, initialize V(s)=0
 2. Repeat until convergence {
    a) For each state 𝑠 ∈ 𝒮, update:
-
 $$
 V(s) = \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
-
    }
 3. Return a deterministic policy
 $$
 \pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
-
-
 2.Value Iteration
 $$
 V_0 \rightarrow V_1 \rightarrow V_2 \rightarrow \cdots \rightarrow V^*
 $$
-**Value Iteration (Q value)**
-5. For each state, initialize Q(s)=0
-6. Repeat until convergence {
-   a) For each state 𝑠 ∈ 𝒮, update:
 
+**Value Iteration (Q value)**
+1. For each state, initialize Q(s)=0
+2. Repeat until convergence {
+   a) For each state 𝑠 ∈ 𝒮, update:
 $$
 Q(s,a) = r(s,a) + \gamma \sum_{s'}P(s'|s,a)\max_{a'}Q(s',a')
 $$
-
    }
 3. Return a deterministic policy
 $$
@@ -585,14 +567,11 @@ Steps:
    Value is estimated as the average of the cumulative rewards 𝑉(s)=  𝑀(𝑠)/𝑁(𝑠)
 3. According to the law of large numbers: $V(s) -> V^\pi(s) \text{ as } N(s) -> \infty$
    Update 𝑉(𝑠) immediately after sampling an episode
-4. For each state $𝑠_𝑡$ and its cumulative reward $g_t$
-   $$\begin{aligned}
+4. For each state $𝑠_𝑡$ and its cumulative reward $g_t$   $$\begin{aligned}
    &N(s_t) \leftarrow N(s_t) +1\\
    &V(s_t) \leftarrow V(s_t) + \frac{1}{N(s_t)}(g_t-V(s_t))
    \end{aligned}
-   $$
-   For non-stationary problems (that is, the environment will change over time), we can track a current average (that is, we don't consider episodes that are too long ago). Take $\alpha$ as a constant.
-   $$
+   $$   For non-stationary problems (that is, the environment will change over time), we can track a current average (that is, we don't consider episodes that are too long ago). Take $\alpha$ as a constant.$$
    V(s_t) \leftarrow V(s_t) + \alpha(g_t-V(s_t))
    $$
 ![[MCbackup.png]]
@@ -603,7 +582,6 @@ By bootstrapping, TD learns from incomplete fragment.
 updates the V to make it close to the estimated cumulative reward which is the TD target.
 
 Steps:
-
 1. Update value function $V(s_t)$, make it close to the **estimated cumulative reward** (TD target) $r_t+\gamma V(s_{t+1})$. the bracket content in the $\alpha$ is the TD error.
 
 $$
@@ -659,14 +637,10 @@ $$
 Update value function to approximate revised cumulative reward.
 
 Cannot be used when 𝜋≠0 but 𝜇=0; and significantly increase variance.
-
 $$
 V(s_t) \leftarrow V(s_t) + \alpha(g_t^{\pi/\mu}-V(s_t))
 $$
-
-
 #### 4.1.5 Off-policy TD by importance sampling
-
 TD target is weighted by the importance sampling
 
 $$
@@ -689,10 +663,10 @@ $$\pi(s)=arg \max_aQ(s,a)$$
 ---
 Theorem: For any $\epsilon$-greedy policy $\pi$, $\epsilon$-greedy policy $\pi'$ based on $Q^\pi$ is a policy improvement of $\pi$
 $$V^{\pi'}(s)>= V^{\pi}(s)$$
-
 ---
 Proof:
 $Q^π(s,π′(s))$ represents the expected return when taking action π′(s)(the action chosen by π′) in state s and then following the original policy π thereafter. Since π′ is an improved policy (specifically, an ϵ-greedy version of ππ), the value of π′π′ should be at least as good as following π after taking the first action π′(s).
+
 ![image.png](pic/epsilongdimp.png)
 #### 4.2.1 MC Control
 
@@ -740,19 +714,15 @@ $\color{Lime} \text{PROOF Q-learning converge 52}$
 | **Expected SARSA** | Averaged on-policy | Stable    | Yes               | Balanced     |
 
 **Expected SARSA** subsumes and generalizes Q learning while reliably improving over SARSA 
-
 $$Q(s_t,a_t) \leftarrow Q(s_t,a_t)+\alpha(r_t + \gamma \mathbb{E}_\pi[ Q(s_{t+1}, a_{t+1})] - Q(s_t, a_t)) $$
  >Think of π as a **"lens"** you're using to look at the future:
 - In SARSA: You sample **one** future and update from that.
 - In Expected SARSA: You **look at all possible futures**, weighted by the lens π.
 - π can be any policy you're interested in — **you don’t have to act according to it**, just know how it would act.
-
 That’s especially useful when:
-
 - π is stochastic (e.g., ε-greedy),
 - You want to reduce update variance,
 - You still want to be **on-policy**, i.e., learning about the current behavior.
-
  > If policy π is greedy (i.e., π picks best action deterministically),  
  > Then **Expected SARSA becomes Q-learning**.
 
@@ -761,25 +731,16 @@ That’s especially useful when:
 
 Model-free RL:
 **Estimation:**
-- On-policy MC:
-
-  $$
+- On-policy MC:$$
   V(s_t) \leftarrow V(s_t) + \alpha (g_t - V(s_t))
-  $$
-- On-policy TD:
-
-  $$
+  $$- On-policy TD:  $$
   V(s_t) \leftarrow V(s_t) + \alpha (r_t + \gamma V(s_{t+1}) - V(s_t))
   $$
 **Control:**
 - On-policy TD (SARSA):state-action-reward-state-action
-  In each time step:
-  $$
+  In each time step:$$
   Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t))
-  $$
-
-- Off-policy TD (Q-learning):
-
+  $$- Off-policy TD (Q-learning):
 $$
 Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t))
 $$
@@ -800,23 +761,17 @@ DP vs. TD
 Find a better way between MC and TD.
 We are at step t, we need to predict steps from t to Terminate, upmost forecast T-t steps.
 #### 5.1 Multi-step TD prediction
-
 1-step TD = TD.             return $g_t^{(1)}=r_{t+1}+\gamma V(s_{t+1})$
 $\infty$  - step TD = MC        return $g_t^{(\infty)}=r_{t+1}+ \gamma r_{t+2}+...+\gamma^{T-t-1} r_{T}$
-
 n-step return.                           $g_t^{(n)}=r_{t+1}+ \gamma r_{t+2}+...+\gamma^{n-1} r_{t+n}+ \gamma^{n} V(s_{t+n})$
-
 
 n-step TD learning:
 $$V(s_t) \leftarrow V(s_t) + \alpha(g_t^{(n)}-V(s_t))$$
 ![[n-step TD.png]]
 #### 5.2 TD(𝝀) Algorithm
-
 Combine all the information between different time step, and set sum of their weights to 1.
 $$g_t^{(1)}, g_t^{(2)}, g_t^{(3)},...$$
-Simple case for endless episode, decay by lambda:
-$$\sum_{i=1}^{\infty} w_i g_t^{(i)} = \sum_{i=1}^{\infty}(1-\lambda)\lambda^{i-1}g_t^{(i)}$$ , where $\lambda \in [0,1]$
-
+Simple case for endless episode, decay by lambda:$$\sum_{i=1}^{\infty} w_i g_t^{(i)} = \sum_{i=1}^{\infty}(1-\lambda)\lambda^{i-1}g_t^{(i)}$$ , where $\lambda \in [0,1]$
 If trajectory length is T, Average n-step Return:
 $$g_t^{\lambda}=(1-\lambda) \sum_{n=1}^{T-t-1}\lambda^{n-1}g_t^{(n)}+\lambda^{T-t-1}g_t$$
 $\lambda =1$, this is MC.
@@ -862,33 +817,24 @@ Policy iteration:
 $$
 \pi(s) = arg \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
 $$
-Value iteration:
-$$
+Value iteration:$$
 V(s) = \max_a r(s,a) + \gamma \sum_{s'}P(s'|s,a)V(s')
-$$
-**Model-free RL:**
+$$**Model-free RL:**
  **Estimation:**
-- On-policy MC:
-  $$
+- On-policy MC:  $$
   V(s_t) \leftarrow V(s_t) + \alpha (g_t - V(s_t))
-  $$
-- On-policy TD:
-  $$
+  $$- On-policy TD:  $$
   V(s_t) \leftarrow V(s_t) + \alpha (r_t + \gamma V(s_{t+1}) - V(s_t))
   $$
  **Control:**
 - On-policy TD (SARSA):state-action-reward-state-action
-  In each time step:
-  $$
+  In each time step:  $$
   Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t))
-  $$
-
-- Off-policy TD (Q-learning):
+  $$- Off-policy TD (Q-learning):
 $$
 Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha (r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t))
 $$
-- Expected SARSA:
-$$Q(s_t,a_t) \leftarrow Q(s_t,a_t)+\alpha(r_t + \gamma \mathbb{E}_\pi[ Q(s_{t+1}, a_{t+1})] - Q(s_t, a_t)) $$
+- Expected SARSA:$$Q(s_t,a_t) \leftarrow Q(s_t,a_t)+\alpha(r_t + \gamma \mathbb{E}_\pi[ Q(s_{t+1}, a_{t+1})] - Q(s_t, a_t)) $$
 ---
 -: All previous models are based on creating a query table, and maintaining the Q, V in the table.
  -> problems when deals with large scale MDPs, continuous state/action space. (Go game, helicopter, self-driving).
@@ -971,20 +917,16 @@ $V^\pi$ is constant (for a fixed policy), but we're approximating it with a para
 
 #### 6.3  Deep-Q Network family
 1. Q-Learning: learns a function $Q_\theta(s,a)$ with para $\theta$
-
 - given a segment {(s,a,s',r)}
 - $\color{turquoise}\text{target }$ $y=r+\gamma max_\text{a'}Q_\theta(s',a')$
 - update:
-
   $$
   Q_\theta(s,a) \leftarrow Q_\theta(s,a)+\alpha(r+\gamma \max\limits_{a'}Q_\theta(s',a')-Q_\theta(s,a))
   $$
-
   α后面类似梯度下降
 - optimization objective:$$
   \theta^* \leftarrow arg \min_\theta E_\text{(s,a,s',r) ∼ U(D)} \frac{1}{2}[(r+\gamma \max\limits_{a'}Q_\theta(s',a'))-Q_\theta(s,a)]^2
   $$
-
   - $(r+\gamma max_\text{a'}Q_\theta(s',a')$ TD target, no gradient here.
   - $\text{(s,a,s',r) ∼ U(D)}$: a transition **(state, action, next state, reward)** is **randomly sampled** from the replay buffer D using a **uniform distribution** **U**.
   - $Q_\theta(s',a')$ continuously update, unstable
@@ -992,11 +934,9 @@ $V^\pi$ is constant (for a fixed policy), but we're approximating it with a para
 ##### 6.3.1 Deep Q-Network (DQN)
 represents Q function $Q_\theta(s,a)$ by using neural networks.
 One input, multiple actions Q value output, target network, and random sampling experience
-
 - Input:  s.   Not（s,a), because too large
 - Last layer: a.  # of elements $|A|$
 - Output:(s,a)
-
 -:
 - unstable
   - continuously sampled (s,a,s',r) is not IID
@@ -1104,7 +1044,6 @@ So is the sol 2.
 Therefore the two sols:
 
 1.Set $V_{\theta,\alpha}(s)=\max\limits_{a'}Q_{\theta,\alpha,\beta}(s,a')$
-
 $$
 Q_{\theta,\alpha,\beta}(s,a) = V_{\theta,\alpha}(s)+A_{\theta,\beta}(s,a)-\max\limits_{a'}A_{\theta,\beta}(s,a')
 $$
@@ -1118,8 +1057,7 @@ but not satisfy with the Bellman f, the outputs of A,V,Q of the network are no l
 
 We do not care of it, because the standard of doing greedy is the order of Q.
 
-The relative order of Q remains the same. s.t.$Q(s,a_1) > Q(s,a_2) \rightarrow A(s,a_1) > A(s,a_2)$$
-
+The relative order of Q remains the same. s.t.$Q(s,a_1) > Q(s,a_2) \rightarrow A(s,a_1) > A(s,a_2)$
 + +:
   + Handle states that are less associated with actions. 没人的路上怎么开都行。
   + effective in learning state-value f: one state  value function corresponds to multiple Advantage. functions. Share the same state-value function; Easy Training, fast convergence.
@@ -1138,7 +1076,7 @@ Value-based RL vs. policy-based RL:
 		can learn stochastic policy by $\color{red}\text{stochastic policy gradient (SPG)}$.
 		better convergence property but usually converges into the local minimum. Because, NN is non-convex (gradient formula), non linearity.
 		inefficient in evaluation policy, and having large variance.
-### 7.2 SPG
+#### 7.2 SPG
 Stochastic policy $\pi_\theta(a|s)=\pi_\theta(a|s;\theta)=P(a|s;\theta)$
 Trajectory $\tau$ is sampled by $\pi_\theta$: $\tau = \{s_0,a_0,r_0,...\}\sim \pi_\theta$ 
 Total return of the $\tau$  
@@ -1155,12 +1093,10 @@ J(\theta) &= \mathbb{E}_{\tau \sim \pi_\theta(\tau)}[G(\tau)] \\
 \end{aligned}
 $$
 	where, $v_0$ is the distribution of the initial states
-	
+
 $\color{red}\text{Goal}$: Gradient ascent to maximize the $J(\theta)$
   1-step MDP:
 Starting state 𝑠\~𝑑(𝑠),The MDP ends after one-step decision-making, and reward is 𝑟(𝑠,𝑎)
-
-
 $$
 \begin{aligned}
 J(\theta) &= \mathbb{E}_{s \sim d, a \sim \pi_\theta(·|s)}[r(s,a)] \\
@@ -1178,7 +1114,6 @@ $$\begin{aligned}
 &= \pi_\theta(a|s) \cdot \nabla_\theta \log \pi_\theta(a|s)
 && \text{(Final policy gradient form)}
 \end{aligned}$$
-
 $$
 \begin{aligned}
 \nabla_\theta J(\theta) 
@@ -1200,10 +1135,8 @@ Parameters are put in into the learning rate.
 
 - policy gradient algorithm: on-policy, sampling by $\pi_\theta$
 ---
-
 Go deeper into the calculation of the gradient.
-The NN-implemented scoring function $$f_\theta(s,a)$$
-For a stochastic policy in a continuous action problem (does not cover in this lecture):
+The NN-implemented scoring function $$f_\theta(s,a)$$For a stochastic policy in a continuous action problem (does not cover in this lecture):
 $$
 \pi_\theta(a|s) \propto exp\{(a-f_\theta(s))^2\}$$
 For a stochastic policy in a discrete action problem, the probability of sampling an action is implemented by softmax:
@@ -1247,7 +1180,6 @@ The next step is to estimate the Q.
 
 ### 7.3 REINFORCE Algorithm： MC policy gradient
 Cumulative reward $g_t$ to estimate $Q^{\pi_\theta} (s_t,a_t)$, by running multiple rollout (sampling multiple episode) ->  full-episode returns ->high variance, slow learning.
-
 The variance can be reduced in some sense by the baseline $b(s)$, typically $b(s)=V_w(s)$, and it will not cause the bias. Reason:
 $$
 \begin{aligned}
@@ -1283,7 +1215,6 @@ The best baseline is $V^\pi(s)$.
    - **b)** For each step $t = 0, 1, \cdots, T$:
      - $g_t \leftarrow \sum_{\tau=t}^T \gamma^{\tau-t} r_\tau$
      - $\theta \leftarrow \theta + \alpha g_t \nabla_\theta \log \pi_\theta (a_t | s_t)$
-
 #### REINFORCE (with b(s))
 1. **Episode generation**:
    - **a)** Generate an episode $\{s_0, a_0, r_0, \cdots, s_T, a_T, r_t\} \sim \pi_\theta$
@@ -1299,7 +1230,7 @@ Still having problems: task needs to have a terminate state before REINFORCE, Lo
 Build a trainable action-value function $Q_\phi$ to replace the Q estimation.
 Actor network $\pi_\theta$ learns to take actions to satisfy the critic. Loss:
 $$L(\phi)=\frac{1}{2} (r_t+\gamma Q_\phi(s_{t+1},a_{t+1})-Q_\phi(s_t,a_t))^2$$
-Critic $Q_\phi(s,a)$ learns to accurately estimate the value function of the actions taken by policies.  Policy gradient
+Critic $Q_\phi(s,a)$ learns to accurately estimate the value function of the actions taken by policies.  Policy gradient.
 $$\nabla_\theta J(\theta) \propto \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\left[ \nabla_\theta \log \pi_\theta(a|s) \cdot Q^{\pi_\theta}(s,a) \right]$$
 #### Actor-Critic Algorithm
 1. **Initialize parameters**:
@@ -1309,12 +1240,7 @@ $$\nabla_\theta J(\theta) \propto \mathbb{E}_{(s, a) \sim \rho^{\pi_\theta}}\lef
    - b) For each step $t = 0, 1, \cdots, T$:
      - Receive reward $r_t$ and next state $s_{t+1}$
      - Take next action $a_{t+1} \sim \pi_\theta(\cdot|s_{t+1})$
-     - **Compute TD error**:
-       $$\delta_t \leftarrow r_t + \gamma Q_\phi(s_{t+1}, a_{t+1}) - Q_\phi(s_t, a_t)$$
-     - **Update Actor (policy)**:
-       $$\theta \leftarrow \theta + \alpha \nabla_\theta \log \pi_\theta(a_t|s_t) Q_\phi(s_t, a_t)$$
-     - **Update Critic (value function)**:
-       $$\phi \leftarrow \phi + \beta \delta_t \nabla_\phi Q_\phi(s_t, a_t)$$
+     - **Compute TD error**:       $$\delta_t \leftarrow r_t + \gamma Q_\phi(s_{t+1}, a_{t+1}) - Q_\phi(s_t, a_t)$$     - **Update Actor (policy)**:       $$\theta \leftarrow \theta + \alpha \nabla_\theta \log \pi_\theta(a_t|s_t) Q_\phi(s_t, a_t)$$     - **Update Critic (value function)**:       $$\phi \leftarrow \phi + \beta \delta_t \nabla_\phi Q_\phi(s_t, a_t)$$
 1. **Note**: This is essentially a Deep Learning version of SARSA, using the transition tuple $(s_t, a_t, r_t, s_{t+1}, a_{t+1})$. On-policy.
    It can be -> off-policy with importance sampling.
 ![[AC.png]]
@@ -1334,20 +1260,15 @@ A^\pi &= Q^\pi(s,a)-V^\pi(s)
 $$
 #### Training: $V^{\pi_\theta}(s) \approx V_\phi(s)$
 1. **TD Error Calculation**:
-   - Compute temporal difference (TD) error using current critic $V_\phi$:
-     $$
+   - Compute temporal difference (TD) error using current critic $V_\phi$:     $$
      \delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)
-     $$
-     where $s_{t+1}$ is the sampled next state.
+     $$     where $s_{t+1}$ is the sampled next state.
 1. **Actor Update**:
-   - Update policy parameters $\theta$ using the advantage estimate:
-     $$
+   - Update policy parameters $\theta$ using the advantage estimate:     $$
      \nabla_\theta J(\theta) \approx \nabla_\theta \log \pi_\theta(a_t|s_t) \cdot \delta_t
-     $$
-     (Here $\delta_t$ serves as an estimate of the advantage function $A(s_t,a_t)$)
-2. **Critic Update**:
-   - Minimize the mean squared TD error:
-     $$
+     $$     (Here $\delta_t$ serves as an estimate of the advantage function $A(s_t,a_t)$)
+1. **Critic Update**:
+   - Minimize the mean squared TD error:     $$
      \mathcal{L}(\phi) = \frac{1}{2} \left( r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t) \right)^2
      $$
 ![[A3C.png]]
@@ -1438,7 +1359,6 @@ $$
 $$
 \nabla_\theta J(\theta) = \mathbb{E}_{s \sim \hat v^{\mu_\theta}}\left[\nabla_\theta \mu_\theta(s) \nabla_a Q^{\mu_\theta}(s,a)\big|_{a=\mu_\theta(s)}\right]
 $$
-
 **Deterministic off-policy learning objective**
 $$
 \begin{aligned}
@@ -1522,6 +1442,7 @@ x(s, a)^T = a^T \nabla_\theta \mu_\theta(s)
 $$
 ## 8.3 Deep Deterministic Policy Gradient (DDPG)
 solve the unstability of AC with neural function approximator, combines DPG and DQN.
+DPG can deal with continuous action space, but cannot learn policy from high-dimensional input; DQN can learn in an end-to-end manner, but only used in discrete action space.
 key words: experience replay (off-policy), target networks, batch normalization Q-network before action input. add continuous noise.
 
 ![[DDPG.png]]
@@ -1620,6 +1541,9 @@ $$\mathcal{L}(\alpha) = \mathbb{E}_{s \sim U(D), a \sim \pi(\cdot|s)} [\alpha (-
 | 软Q学习 | 离散/连续 | 能量基策略     | 强探索性  |
 | SAC  | 连续    | 双Q网络+自适应熵 | 稳定高效  |
 | 传统RL | 任意    | 无熵正则      | 可能欠探索 |
+
+## Summary for 6,7,8
+![[L678summary.png]]
 # 9 Model-based RL
 #### 9.1 Review: Learn an MDP Model
 - **Motivation**: In real applications, the MDP model (state transition $P$ and reward function $r$) is often unknown. We need to learn it from observed episodes.
@@ -1645,7 +1569,7 @@ $$\mathcal{L}(\alpha) = \mathbb{E}_{s \sim U(D), a \sim \pi(\cdot|s)} [\alpha (-
 
 - **Advantages of Sample Model**: Computationally cheaper for large state spaces.
 - **Weaknesses of Distribution Model**: High memory and computation requirements for complex environments.
-## Planning & Learning: Introduction&Sampling&Decision-time Planning
+## Planning & Learning: Introduction & Sampling & Decision-time Planning
 ## 9.2 Planning
 - **Definition**: Planning is the process of using a model to derive a policy.
 - **Types**:
@@ -1709,7 +1633,7 @@ $$\mathcal{L}(\alpha) = \mathbb{E}_{s \sim U(D), a \sim \pi(\cdot|s)} [\alpha (-
   - Efficient for deterministic environments.
 - **Weaknesses**:
   - May overfit to frequently visited states.
-## Model-based Deep Reinforcement Learning
+
 ## 9.7 Model-based Deep RL (MBRL)
 - **Key Questions**:
   1. How to train a deep model accurately?
